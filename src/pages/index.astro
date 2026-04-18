@@ -9,6 +9,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <script async src="https://subscribe-forms.beehiiv.com/embed.js"></script>
   </head>
   <body>
     <Header />
@@ -26,7 +27,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         <div class="badges">
           <span class="badge a">AI-Powered</span>
           <span class="badge">100% Practical</span>
-          <span class="badge g">Free Content</span>
+          <span class="badge">No Paywalls</span>
           <span class="badge">Real Scenarios</span>
         </div>
         <div class="cta-row">
@@ -69,7 +70,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         <div><div class="stat-n">100%</div><div class="stat-l">Practical Content</div></div>
         <div><div class="stat-n">0</div><div class="stat-l">Vendor Fluff</div></div>
         <div><div class="stat-n">AI</div><div class="stat-l">Powered Workflows</div></div>
-        <div><div class="stat-n">Free</div><div class="stat-l">Forever</div></div>
+        <div><div class="stat-n">No</div><div class="stat-l">Paywalls</div></div>
       </div>
     </div>
 
@@ -152,16 +153,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
         <h2 class="sec-h">Popular Guides</h2>
         <ul class="article-list">
           <li>
-            <span>How to Use AI to Generate Network Configurations</span>
-            <span class="arrow">→</span>
+            <a href="/blog/ai-generate-network-configs/">
+              <span>How to Use AI to Generate Network Configurations</span>
+              <span class="arrow">→</span>
+            </a>
           </li>
           <li>
-            <span>Automate Network Tasks with Python — Beginner Guide</span>
-            <span class="arrow">→</span>
-          </li>
-          <li>
-            <span>Troubleshoot Slow Network Performance Step-by-Step</span>
-            <span class="arrow">→</span>
+            <a href="/blog/troubleshoot-slow-network-performance/">
+              <span>Troubleshoot Slow Network Performance Step-by-Step</span>
+              <span class="arrow">→</span>
+            </a>
           </li>
         </ul>
       </div>
@@ -176,11 +177,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
       <p style="font-size:17px;color:var(--text-dim);max-width:460px;margin:0 auto 2.5rem;line-height:1.75;font-weight:400">
         Use AI to save time, reduce errors, and troubleshoot faster. New guides delivered to your inbox.
       </p>
-      <div class="cta-row">
-        <a href="/blog" class="btn-p">Browse All Guides →</a>
-        <a href="#" class="btn-s">Subscribe Free</a>
-      </div>
-      <p class="cta-note">FREE &nbsp;·&nbsp; NO SPAM &nbsp;·&nbsp; UNSUBSCRIBE ANYTIME</p>
+      <a href="/blog" class="btn-p" style="margin-bottom:2.5rem;display:inline-block">Browse All Guides →</a>
+      <iframe src="https://subscribe-forms.beehiiv.com/29f9e65f-4f54-4279-84c7-13b055c79420" class="beehiiv-embed" data-test-id="beehiiv-embed" frameborder="0" scrolling="no" style="width:100%;max-width:480px;height:471px;margin:0 auto;display:block;border-radius:0!important;background-color:transparent;box-shadow:0 0 #0000;"></iframe>
     </div>
 
     <Footer />
@@ -426,26 +424,29 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
   }
   .article-list li {
     counter-increment: articles;
-    display: flex; align-items: center; gap: 20px;
-    padding: 22px 0;
     border-top: 1px solid var(--border);
-    cursor: pointer;
-    transition: padding-left 0.2s;
+    display: flex; align-items: center;
   }
   .article-list li:last-child { border-bottom: 1px solid var(--border); }
-  .article-list li:hover { padding-left: 6px; }
   .article-list li::before {
     content: "0" counter(articles);
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px; color: var(--text-dim);
-    letter-spacing: 1px; flex-shrink: 0; width: 28px;
+    letter-spacing: 1px; flex-shrink: 0; width: 48px;
   }
-  .article-list li span { font-size: 16px; color: var(--text); flex: 1; }
-  .article-list li .arrow {
+  .article-list li a {
+    display: flex; align-items: center; gap: 20px;
+    padding: 22px 0; flex: 1;
+    text-decoration: none; color: inherit;
+    transition: padding-left 0.2s;
+  }
+  .article-list li a:hover { padding-left: 6px; opacity: 1; }
+  .article-list li a span { font-size: 16px; color: var(--text); flex: 1; }
+  .article-list li a .arrow {
     color: var(--text-dim); font-size: 16px;
     transition: color 0.15s, transform 0.2s;
   }
-  .article-list li:hover .arrow { color: var(--accent); transform: translateX(4px); }
+  .article-list li a:hover .arrow { color: var(--accent); transform: translateX(4px); }
 
   /* ── CTA BAND ── */
   .cta-wrap {
@@ -459,6 +460,27 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
     font-family: 'Share Tech Mono', monospace;
     font-size: 10px; color: var(--text-dim);
     letter-spacing: 2.5px; margin-top: 2rem;
+  }
+  .sub-form {
+    display: flex; gap: 0; justify-content: center;
+    flex-wrap: wrap; max-width: 480px; margin: 0 auto;
+  }
+  .sub-input {
+    flex: 1; min-width: 220px;
+    background: var(--panel2); color: var(--text-bright);
+    border: 1px solid var(--border); border-right: none;
+    padding: 14px 18px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; letter-spacing: 1px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .sub-input:focus { border-color: var(--accent); }
+  .sub-input::placeholder { color: var(--text-dim); }
+  .sub-btn { flex-shrink: 0; white-space: nowrap; }
+  @media (max-width: 540px) {
+    .sub-input { border-right: 1px solid var(--border); border-bottom: none; }
+    .sub-form { flex-direction: column; }
   }
 </style>
 
