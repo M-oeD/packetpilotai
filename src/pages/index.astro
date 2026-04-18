@@ -1,49 +1,471 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow">// For Network Administrators</p>
+        <h1>Automate Networks.<br/><span class="accent">Troubleshoot Faster.</span></h1>
+        <p class="hero-sub">AI-powered guides, automation scripts &amp; hands-on labs</p>
+        <p class="hero-desc">
+          PacketPilot AI helps network admins automate repetitive tasks and solve
+          real-world network problems using AI — no vendor fluff, just results.
+        </p>
+        <div class="badges">
+          <span class="badge a">AI-Powered</span>
+          <span class="badge">100% Practical</span>
+          <span class="badge g">Free Content</span>
+          <span class="badge">Real Scenarios</span>
+        </div>
+        <div class="cta-row">
+          <a href="/blog" class="btn-p">Explore Guides →</a>
+          <a href="#subscribe" class="btn-s">Get Updates</a>
+        </div>
+
+        <!-- Terminal -->
+        <div class="terminal">
+          <div class="t-bar">
+            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+            <span class="t-title">AI-Assisted Network Config — PacketPilot AI</span>
+          </div>
+          <div class="t-body">
+            <div><span class="tc"># Ask AI to generate a VLAN config</span></div>
+            <div><span class="tp">$</span> <span class="tk">Invoke-PacketPilot "Create VLAN 10 for guest WiFi on Cisco IOS"</span></div>
+            <div style="margin-top:6px">
+              <span class="tok">  [+] Generating config for Cisco IOS...</span>
+            </div>
+            <div><span class="tok">  [+] vlan 10</span></div>
+            <div><span class="tok">  [+]   name GUEST_WIFI</span></div>
+            <div><span class="tok">  [+] interface GigabitEthernet0/1</span></div>
+            <div><span class="tok">  [+]   switchport mode access</span></div>
+            <div><span class="tok">  [+]   switchport access vlan 10</span></div>
+            <div style="margin-top:8px"><span class="tc"># Diagnose a slow network issue</span></div>
+            <div><span class="tp">$</span> <span class="tk">Invoke-PacketPilot "Diagnose high latency on 192.168.1.0/24"</span></div>
+            <div><span class="tw">  [~] Checking ping RTT across subnet...</span></div>
+            <div><span class="ta">  [!] Packet loss detected on 192.168.1.45 — possible duplex mismatch</span></div>
+            <div><span class="tok">  [+] Recommended fix: set interface duplex to full on both ends</span></div>
+            <div><span class="ti" style="animation:blink 1s step-end infinite">█</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── STATS ── -->
+    <div class="stats-bar">
+      <div class="stats-in">
+        <div><div class="stat-n">3</div><div class="stat-l">Learning Tracks</div></div>
+        <div><div class="stat-n">100%</div><div class="stat-l">Practical Content</div></div>
+        <div><div class="stat-n">0</div><div class="stat-l">Vendor Fluff</div></div>
+        <div><div class="stat-n">AI</div><div class="stat-l">Powered Workflows</div></div>
+        <div><div class="stat-n">Free</div><div class="stat-l">Forever</div></div>
+      </div>
+    </div>
+
+    <!-- ── WHAT YOU'LL LEARN ── -->
+    <section class="sec">
+      <div class="sec-in">
+        <p class="sec-label">// What You'll Learn</p>
+        <h2 class="sec-h">Skills That Move<br/>The Needle</h2>
+        <p class="sec-sub">Three tracks built around the tools and problems you face every day — not textbook theory.</p>
+        <div class="feat-grid">
+          <div class="feat-card">
+            <div class="feat-n">TRACK 01</div>
+            <div class="feat-title">⚙️ AI-Powered Automation</div>
+            <div class="feat-desc">Use LLMs and Python to eliminate the repetitive work eating your day.</div>
+            <ul class="feat-list">
+              <li>Generate network configs with AI</li>
+              <li>Automate backups, VLANs &amp; provisioning</li>
+              <li>Build Python scripts for real tasks</li>
+              <li>Integrate AI into existing workflows</li>
+            </ul>
+          </div>
+          <div class="feat-card">
+            <div class="feat-n">TRACK 02</div>
+            <div class="feat-title">🔍 Real-World Troubleshooting</div>
+            <div class="feat-desc">Proven methodologies for diagnosing and fixing network issues fast.</div>
+            <ul class="feat-list">
+              <li>Diagnose slow networks step-by-step</li>
+              <li>Fix packet loss, DNS &amp; connectivity</li>
+              <li>Proven troubleshooting workflows</li>
+              <li>AI-assisted root cause analysis</li>
+            </ul>
+          </div>
+          <div class="feat-card">
+            <div class="feat-n">TRACK 03</div>
+            <div class="feat-title">🧪 Hands-On Labs</div>
+            <div class="feat-desc">Practice real scenarios before they hit you in production.</div>
+            <ul class="feat-list">
+              <li>Build practical home lab environments</li>
+              <li>Real-world scenario walkthroughs</li>
+              <li>Download ready-to-use configs</li>
+              <li>Scripts you can run today</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── WHY ── -->
+    <section class="sec" style="padding-top:0">
+      <div class="sec-in">
+        <div class="rule"></div>
+        <p class="sec-label">// Why PacketPilot AI</p>
+        <h2 class="sec-h">Built For Practitioners,<br/>Not Just Learners</h2>
+        <ul class="why-list">
+          <li>
+            <span class="why-icon">✓</span>
+            <span>Real-world scenarios, not just theory</span>
+          </li>
+          <li>
+            <span class="why-icon">✓</span>
+            <span>Practical automation workflows you can use immediately</span>
+          </li>
+          <li>
+            <span class="why-icon">✓</span>
+            <span>AI tools that actually save time on the job</span>
+          </li>
+          <li>
+            <span class="why-icon">✓</span>
+            <span>Step-by-step solutions you can apply today</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── START HERE ── -->
+    <section class="sec" style="padding-top:0" id="guides">
+      <div class="sec-in">
+        <div class="rule"></div>
+        <p class="sec-label">// Start Here</p>
+        <h2 class="sec-h">Popular Guides</h2>
+        <ul class="article-list">
+          <li>
+            <span>How to Use AI to Generate Network Configurations</span>
+            <span class="arrow">→</span>
+          </li>
+          <li>
+            <span>Automate Network Tasks with Python — Beginner Guide</span>
+            <span class="arrow">→</span>
+          </li>
+          <li>
+            <span>Troubleshoot Slow Network Performance Step-by-Step</span>
+            <span class="arrow">→</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <div class="cta-wrap" id="subscribe">
+      <p class="sec-label" style="margin-bottom:1rem">// Level Up Your Workflow</p>
+      <h2 style="font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--text-bright);margin-bottom:1rem;line-height:1.1">
+        Stop Doing It<br/>The Hard Way.
+      </h2>
+      <p style="font-size:17px;color:var(--text-dim);max-width:460px;margin:0 auto 2.5rem;line-height:1.75;font-weight:400">
+        Use AI to save time, reduce errors, and troubleshoot faster. New guides delivered to your inbox.
+      </p>
+      <div class="cta-row">
+        <a href="/blog" class="btn-p">Browse All Guides →</a>
+        <a href="#" class="btn-s">Subscribe Free</a>
+      </div>
+      <p class="cta-note">FREE &nbsp;·&nbsp; NO SPAM &nbsp;·&nbsp; UNSUBSCRIBE ANYTIME</p>
+    </div>
+
+    <Footer />
+  </body>
 </html>
+
+<style>
+  /* ── HERO ── */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 7rem 2rem 4rem;
+    text-align: center;
+  }
+  .hero-inner { max-width: 860px; }
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 1.5rem; opacity: 0.7;
+  }
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    line-height: 1; letter-spacing: -2px;
+    color: var(--text-bright);
+    margin-bottom: 0.75rem;
+    animation: fadeUp 0.7s ease both;
+  }
+  .hero h1 .accent {
+    color: var(--accent);
+    text-shadow: 0 0 60px rgba(0,240,255,0.35);
+  }
+  .hero-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; color: var(--text-dim);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-desc {
+    font-size: 18px; color: var(--text);
+    max-width: 560px; margin: 0 auto 2.5rem;
+    line-height: 1.75; font-weight: 400;
+  }
+  .badges {
+    display: flex; gap: 8px;
+    justify-content: center; flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; padding: 5px 12px;
+    border: 1px solid var(--border);
+    color: var(--text-dim); letter-spacing: 1.5px;
+  }
+  .badge.a { border-color: var(--accent); color: var(--accent); }
+  .badge.g { border-color: var(--green); color: var(--green); }
+  .cta-row {
+    display: flex; gap: 1rem;
+    justify-content: center; flex-wrap: wrap;
+    margin-bottom: 4rem;
+  }
+  .btn-p {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 14px 32px;
+    background: var(--accent); color: var(--bg);
+    border: none; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-p:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(0,240,255,0.3);
+    opacity: 1;
+  }
+  .btn-s {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 14px 32px;
+    background: transparent; color: var(--text);
+    border: 1px solid var(--border); text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-s:hover { border-color: var(--accent); color: var(--accent); opacity: 1; }
+
+  /* ── TERMINAL ── */
+  .terminal {
+    max-width: 720px; margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .t-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 16px;
+    background: var(--panel2);
+    border-bottom: 1px solid var(--border);
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot.r { background: #ff3c5c; }
+  .dot.y { background: #ffd166; }
+  .dot.g { background: #00ffa6; }
+  .t-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    margin-left: 8px; letter-spacing: 1px;
+  }
+  .t-body {
+    padding: 1.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12.5px; line-height: 1.9;
+  }
+  .tc { color: var(--text-dim); }
+  .tp { color: var(--accent); }
+  .tk { color: var(--text-bright); }
+  .tok { color: var(--green); }
+  .tw { color: var(--yellow); }
+  .ta { color: var(--red); }
+  .ti { color: var(--text); }
+
+  /* ── STATS ── */
+  .stats-bar {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2.5rem;
+    position: relative; z-index: 1;
+  }
+  .stats-in {
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 2rem; text-align: center;
+  }
+  .stat-n {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.5rem; font-weight: 900;
+    color: var(--accent); line-height: 1; margin-bottom: 0.4rem;
+  }
+  .stat-l {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+
+  /* ── SECTIONS ── */
+  .sec {
+    position: relative; z-index: 1;
+    padding: 5.5rem 2.5rem;
+  }
+  .sec-in { max-width: 1100px; margin: 0 auto; }
+  .sec-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--accent);
+    letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .sec-h {
+    font-family: 'Orbitron', monospace;
+    font-weight: 800; line-height: 1.1;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    color: var(--text-bright); margin-bottom: 1rem;
+  }
+  .sec-sub {
+    font-size: 16px; color: var(--text-dim);
+    max-width: 520px; margin-bottom: 3rem; line-height: 1.75;
+  }
+  .rule {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin-bottom: 4rem;
+  }
+
+  /* ── FEATURE CARDS ── */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .feat-card {
+    background: var(--panel); padding: 2.5rem;
+    transition: background 0.25s;
+  }
+  .feat-card:hover { background: var(--panel2); }
+  .feat-n {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 3px; margin-bottom: 1.25rem;
+  }
+  .feat-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700; font-size: 14px;
+    color: var(--text-bright); margin-bottom: 0.75rem;
+    letter-spacing: 0.5px;
+  }
+  .feat-desc {
+    font-size: 15px; color: var(--text-dim);
+    line-height: 1.7; margin-bottom: 1.5rem;
+  }
+  .feat-list { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+  .feat-list li {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .feat-list li::before { content: "▸"; color: var(--accent); font-size: 9px; margin-top: 2px; flex-shrink: 0; }
+
+  /* ── WHY LIST ── */
+  .why-list {
+    list-style: none; padding: 0;
+    display: grid; gap: 0;
+    max-width: 680px;
+  }
+  .why-list li {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    font-size: 17px; color: var(--text);
+  }
+  .why-list li:last-child { border-bottom: 1px solid var(--border); }
+  .why-icon {
+    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: var(--bg);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+
+  /* ── ARTICLE LIST ── */
+  .article-list {
+    list-style: none; padding: 0;
+    display: grid; gap: 0;
+    counter-reset: articles;
+    max-width: 720px;
+  }
+  .article-list li {
+    counter-increment: articles;
+    display: flex; align-items: center; gap: 20px;
+    padding: 22px 0;
+    border-top: 1px solid var(--border);
+    cursor: pointer;
+    transition: padding-left 0.2s;
+  }
+  .article-list li:last-child { border-bottom: 1px solid var(--border); }
+  .article-list li:hover { padding-left: 6px; }
+  .article-list li::before {
+    content: "0" counter(articles);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+    letter-spacing: 1px; flex-shrink: 0; width: 28px;
+  }
+  .article-list li span { font-size: 16px; color: var(--text); flex: 1; }
+  .article-list li .arrow {
+    color: var(--text-dim); font-size: 16px;
+    transition: color 0.15s, transform 0.2s;
+  }
+  .article-list li:hover .arrow { color: var(--accent); transform: translateX(4px); }
+
+  /* ── CTA BAND ── */
+  .cta-wrap {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center; padding: 6rem 2rem;
+    position: relative; z-index: 1;
+  }
+  .cta-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 2.5px; margin-top: 2rem;
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.feat-card, .stats-bar, .why-list, .article-list').forEach(el => observer.observe(el));
+</script>
