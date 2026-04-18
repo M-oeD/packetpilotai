@@ -23,6 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# personal reference files
+STACK.md
+
 # wrangler files
 .wrangler
 .dev.vars*
