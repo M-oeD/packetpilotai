@@ -13,7 +13,7 @@ const blog = defineCollection({
 			'!markdown-style-guide.md',
 			'!using-mdx.mdx',
 		],
-		// v5
+		// v6
 	}),
 	schema: ({ image }) =>
 		z.object({
@@ -23,6 +23,7 @@ const blog = defineCollection({
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.optional(image()),
 			draft: z.boolean().optional(),
+			heroAscii: z.string().optional(),
 		}),
 });
 
