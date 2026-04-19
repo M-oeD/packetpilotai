@@ -25,6 +25,7 @@ pnpm-debug.log*
 
 # personal reference files
 STACK.md
+products/
 
 # wrangler files
 .wrangler
