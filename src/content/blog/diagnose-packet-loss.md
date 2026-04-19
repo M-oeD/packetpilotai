@@ -2,7 +2,18 @@
 title: 'How to Diagnose Packet Loss Fast'
 description: 'Packet loss kills voice calls, video, and file transfers — but the cause is rarely obvious. This step-by-step guide walks you from complaint to root cause using ping, traceroute, switch commands, and Wireshark.'
 pubDate: '2026-04-18'
-heroImage: '../../assets/blog-placeholder-3.jpg'
+heroAscii: |
+  $ ping 192.168.1.1 -n 100
+
+  Packets: Sent=100  Received=83  Lost=17 (17% loss)
+
+  SW01# show interfaces GigabitEthernet0/4
+    Input errors:  3,847
+    CRC:           3,201   ← bad cable or duplex mismatch
+    Runts:           646
+
+  [!] Root cause: CRC errors on Gi0/4
+  [→] Replace cable on port 4. Recheck in 5 min.
 ---
 
 Packet loss is sneaky. It doesn't always take down a connection — it just makes everything feel broken. Voice calls cut out. Video freezes. File transfers stall and retry. Users complain that "the network is acting weird."

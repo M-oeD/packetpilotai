@@ -2,7 +2,21 @@
 title: 'Introducing the Claude Prompt Pack for Network Admins'
 description: '60 production-ready Claude prompts for network administrators — configs, troubleshooting, Python scripts, documentation, and security audits. Stop writing prompts from scratch.'
 pubDate: '2026-04-19'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroAscii: |
+  ┌─ PROMPT PACK v1 ─────────────────────────────┐
+  │                                               │
+  │  60 production-ready prompts                  │
+  │                                               │
+  │  ⚙️  Config Generation      →  7 prompts      │
+  │  🔍  Troubleshooting        →  7 prompts      │
+  │  🐍  Python Automation      →  6 prompts      │
+  │  📄  Documentation          →  5 prompts      │
+  │  🔒  Security & Auditing    →  5 prompts      │
+  │  🤖  AI Workflows           → 10 prompts      │
+  │  ⚡  Quick-Fire             → 10 prompts      │
+  │                                               │
+  │  packetpilotai.gumroad.com  ·  $29            │
+  └───────────────────────────────────────────────┘
 ---
 
 If you've used Claude for network work, you've probably noticed the gap.

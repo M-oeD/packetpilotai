@@ -2,7 +2,16 @@
 title: 'Troubleshoot Slow Network Performance Step-by-Step'
 description: 'A systematic methodology for diagnosing slow networks — from end-user complaint to root cause. Covers ping, traceroute, packet capture, interface stats, and common fixes.'
 pubDate: '2026-04-18'
-heroImage: '../../assets/blog-placeholder-2.jpg'
+heroAscii: |
+  $ tracert 8.8.8.8
+
+  Hop  1   192.168.1.1      2ms    2ms    2ms   gateway
+  Hop  2   10.0.0.1         4ms    4ms    5ms   isp-edge
+  Hop  3   203.0.113.1    182ms  179ms  184ms   ← spike here
+  Hop  4   8.8.8.8        185ms  183ms  186ms   destination
+
+  [!] Latency jumped 178ms at hop 3 — ISP segment
+  [→] Open a ticket with your ISP. Data in hand.
 ---
 
 "The network is slow." It's the vaguest complaint in IT, and it lands on your desk at least once a week. Without a methodology, you're guessing. With one, you find the cause in minutes.

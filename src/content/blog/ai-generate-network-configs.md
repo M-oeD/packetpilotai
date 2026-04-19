@@ -2,7 +2,17 @@
 title: 'How to Use AI to Generate Network Configurations'
 description: 'Stop hand-writing configs. Learn how to use AI tools like ChatGPT and GitHub Copilot to generate accurate Cisco IOS, Junos, and MikroTik configurations in seconds.'
 pubDate: '2026-04-18'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroAscii: |
+  $ claude "Create VLAN 10 for guest WiFi on Cisco IOS"
+
+  [+] Generating config for Cisco IOS...
+  [+] vlan 10
+  [+]   name GUEST_WIFI
+  [+] interface GigabitEthernet0/1
+  [+]   switchport mode access
+  [+]   switchport access vlan 10
+  [+]   spanning-tree portfast
+  [+] Done. Config ready to paste. ✓
 ---
 
 Every network admin has been there — staring at a blank config file, trying to remember the exact syntax for a VLAN trunk, an OSPF neighbor statement, or an ACL that does exactly what you need. You know *what* you want. Getting it written correctly is the friction.
