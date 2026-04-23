@@ -3,7 +3,8 @@ import rss from '@astrojs/rss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function GET(context) {
-	const posts = await getCollection('blog');
+	const HIDDEN = new Set(['first-post', 'second-post', 'third-post', 'markdown-style-guide', 'using-mdx']);
+	const posts = (await getCollection('blog')).filter(({ id }) => !HIDDEN.has(id));
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
