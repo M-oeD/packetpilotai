@@ -1,0 +1,198 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import StatusBar from '../components/react/StatusBar';
+import FooterBar from '../components/react/FooterBar';
+import CopilotDock from '../components/react/CopilotDock';
+import TweaksPanel from '../components/react/TweaksPanel';
+
+const packAscii = `┌─ PROMPT PACK v1 ────────────────────────────────────────────────────────┐
+│                                                                    │
+│  ⚙  Config Generation      7 prompts                              │
+│     VLAN configs, ACLs, BGP peering, OSPF, NTP, syslog            │
+│                                                                    │
+│  🔍  Troubleshooting        7 prompts                              │
+│     Packet loss, DNS failures, slow WAN, MTU, spanning-tree        │
+│                                                                    │
+│  🐍  Python & Automation    6 prompts                              │
+│     Netmiko scripts, NAPALM, Nornir, SNMP polling                  │
+│                                                                    │
+│  📄  Documentation          5 prompts                              │
+│     Runbooks, change requests, network diagrams, post-mortems      │
+│                                                                    │
+│  🔒  Security & Audit       5 prompts                              │
+│     Firewall review, ACL audit, CVE triage, hardening checklist    │
+│                                                                    │
+│  🤖  AI Workflows          10 prompts                              │
+│     Claude Projects setup, context templates, chaining prompts     │
+│                                                                    │
+│  ⚡  Quick-Fire            10 prompts                              │
+│     One-liners for common admin tasks — fast, no setup             │
+│                                                                    │
+│  packetpilot.ai/prompt-pack                        ──── $29 ──── │
+└────────────────────────────────────────────────────────────────────┘`;
+---
+
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead
+      title="Prompt Pack v1 — PacketPilot AI"
+      description="60 production-ready Claude prompts for network admins. Config generation, troubleshooting, Python automation, security audits, and more. $29."
+    />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
+
+    <StatusBar client:load />
+
+    <header class="ppc-nav">
+      <div class="ppc-nav-inner">
+        <a class="ppc-brand" href="/">
+          <span class="ppc-brand-glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="1" />
+              <path d="M2.5 12 H 21.5 M 12 2.5 V 21.5" />
+              <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span>packet<span class="ppc-brand-em">pilot</span><span class="ppc-brand-tld">.ai</span></span>
+          <span class="ppc-brand-caret">_</span>
+        </a>
+        <nav class="ppc-nav-items">
+          <a href="/" class="ppc-nav-item">/home</a>
+          <a href="/blog" class="ppc-nav-item">/blog</a>
+          <a href="/prompt-pack" class="ppc-nav-item is-active">/prompt-pack</a>
+          <a href="/about" class="ppc-nav-item">/about</a>
+        </nav>
+        <div class="ppc-nav-cli">
+          <span class="ppc-nav-prompt">~</span>
+          <span class="ppc-nav-prompt-sigil">$</span>
+          <span class="ppc-nav-cli-hint">press ⌘K</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="ppc-shell">
+      <main class="ppc-main">
+
+        <!-- Hero -->
+        <section class="ppc-hero" style="margin-bottom:32px">
+          <div class="ppc-article-kicker" style="margin-bottom:14px">
+            <span class="ppc-section-bracket">[</span>prompt-pack.v1<span class="ppc-section-bracket">]</span>
+          </div>
+          <h1 class="ppc-hero-h1" style="max-width:20ch">
+            60 prompts.<br /><em class="ppc-hero-em">One PDF.</em> $29.
+          </h1>
+          <p class="ppc-hero-lede">
+            Stop writing prompts from scratch every time you open Claude.
+            These templates have <span class="mono">[brackets]</span> for your specifics — drop one in, get CLI-ready output on the first try.
+          </p>
+        </section>
+
+        <!-- ASCII Pack diagram -->
+        <section class="ppc-section" style="margin-top:0">
+          <pre class="ppc-pack-ascii mono" style="font-size:14px;line-height:1.6;border:1px solid var(--ppc-border);padding:24px;background:var(--ppc-surface)">{packAscii}</pre>
+        </section>
+
+        <!-- Section grid -->
+        <section class="ppc-section">
+          <div class="ppc-section-title">
+            <div>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>what's inside<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Every section, unpacked.</h2>
+            </div>
+          </div>
+          <div class="ppc-post-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+            {[
+              { name: 'Config Generation', count: 7, examples: ['VLAN + ACL for multi-tenant office', 'BGP peering config with route-maps', 'Full pfSense firewall ruleset'] },
+              { name: 'Troubleshooting', count: 7, examples: ['Systematic packet-loss workflow', 'DNS failure triage (wired vs wifi)', 'MTU black-hole detection'] },
+              { name: 'Python & Automation', count: 6, examples: ['Netmiko backup script (all devices)', 'SNMP poller with alerting', 'Nornir parallel config push'] },
+              { name: 'Documentation', count: 5, examples: ['Change request template', 'Post-mortem with root cause', 'Network diagram from topology data'] },
+              { name: 'Security & Audit', count: 5, examples: ['Firewall rule review + shadow detection', 'CIS benchmark checklist', 'CVE triage for network gear'] },
+              { name: 'AI Workflows', count: 10, examples: ['Claude Projects system prompt', 'Multi-step troubleshooting chain', 'Context window management'] },
+              { name: 'Quick-Fire', count: 10, examples: ['Convert subnet to CIDR notation', 'Generate SNMP trap receiver config', 'Summarize show run output'] },
+            ].map(({ name, count, examples }) => (
+              <article class="ppc-post">
+                <div class="ppc-post-meta">
+                  <span class={`ppc-pill accent`}>{count} prompts</span>
+                </div>
+                <h3 class="ppc-post-title" style="font-size:16px">{name}</h3>
+                <ul class="ppc-pack-list" style="margin:0;font-size:12px">
+                  {examples.map((ex: string) => <li><span class="muted">▸</span> {ex}</li>)}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- How to use -->
+        <section class="ppc-section">
+          <div class="ppc-section-title">
+            <div>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>how to use it<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Three steps.</h2>
+            </div>
+          </div>
+          <div class="ppc-pack" style="grid-template-columns:1fr">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px">
+              {[
+                { n: '01', title: 'Open the PDF', body: 'Find the prompt for your task — organized by category and labeled with use-case.' },
+                { n: '02', title: 'Fill the brackets', body: 'Replace [device], [interface], [VLAN] with your specifics. Takes 10 seconds.' },
+                { n: '03', title: 'Paste into Claude', body: 'Get CLI-ready configs, working Python, or a structured audit on the first try.' },
+              ].map(({ n, title, body }) => (
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <span class="mono" style="color:var(--ppc-accent);font-size:24px;font-weight:600">{n}</span>
+                  <h3 style="font-size:16px;font-weight:600;margin:0">{title}</h3>
+                  <p class="muted" style="font-size:14px;margin:0">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="ppc-section">
+          <div class="ppc-section-title">
+            <div>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>faq<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Common questions.</h2>
+            </div>
+          </div>
+          <div style="display:grid;gap:1px;border:1px solid var(--ppc-border)">
+            {[
+              { q: 'Which Claude plan do I need?', a: 'Any tier works — Sonnet is recommended for config generation. The prompts are written to work with Claude.ai (free or Pro) or the API.' },
+              { q: 'What vendors are covered?', a: 'Cisco IOS, pfSense, Linux (Debian/RHEL), Junos, and MikroTik. Most prompts are vendor-agnostic with a [vendor] bracket.' },
+              { q: 'Do I need to know Python?', a: 'No. The Python prompts include working scripts you can run immediately with Netmiko or NAPALM installed. Comments explain each section.' },
+              { q: 'Is there a refund policy?', a: "Yes — if the pack isn't useful after one real task, email for a full refund. No questions." },
+              { q: 'Will it get updates?', a: 'Yes. Lifetime updates are included. New prompts ship when Claude models improve or new networking workflows get requested.' },
+            ].map(({ q, a }) => (
+              <details style="background:var(--ppc-surface);padding:16px 20px;cursor:pointer">
+                <summary class="mono" style="font-size:13px;color:var(--ppc-text);list-style:none;display:flex;justify-content:space-between">
+                  {q}
+                  <span class="muted" style="font-size:11px">▸</span>
+                </summary>
+                <p class="muted" style="margin:12px 0 0;font-size:14px;line-height:1.6">{a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Sticky CTA -->
+    <div style="position:fixed;bottom:0;left:0;right:0;z-index:25;background:var(--ppc-bg-2);border-top:1px solid var(--ppc-border);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:20px">
+      <span class="mono muted" style="font-size:12px">60 prompts · PDF · lifetime updates</span>
+      <a class="ppc-btn primary" href="https://packetpilotai.gumroad.com/l/vepip" target="_blank" rel="noopener">
+        <span class="mono">▸ get the pack · $29</span>
+      </a>
+    </div>
+
+    <div style="padding-bottom:60px"></div>
+
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
+</html>

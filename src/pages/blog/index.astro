@@ -1,237 +1,74 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { POSTS_META } from '../../data/posts-meta';
+import BlogIndex from '../../components/react/BlogIndex';
+import FooterBar from '../../components/react/FooterBar';
+import StatusBar from '../../components/react/StatusBar';
+import CopilotDock from '../../components/react/CopilotDock';
+import TweaksPanel from '../../components/react/TweaksPanel';
 
-const HIDDEN = new Set(['first-post', 'second-post', 'third-post', 'markdown-style-guide', 'using-mdx']);
-const posts = (await getCollection('blog'))
-	.filter(({ id }) => !HIDDEN.has(id))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-const [featured, ...rest] = posts;
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((p) => ({
+    slug: p.id,
+    title: p.data.title,
+    desc: p.data.description,
+    date: p.data.pubDate.toISOString().slice(0, 10),
+    ...(POSTS_META[p.id] ?? { tags: [], ascii: [], accent: 'ok', read: '5 min' }),
+  }));
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={`Blog — ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead title="Blog — PacketPilot AI" description="Network admin guides covering troubleshooting, AI automation, Cisco configs, and more." />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
 
-		<main>
-			<div class="page-header">
-				<p class="sec-label">// All Posts</p>
-				<h1>The Blog</h1>
-				<p class="page-sub">Practical guides on AI automation, network troubleshooting, and hands-on labs.</p>
-			</div>
+    <StatusBar client:load />
 
-			<!-- Featured post -->
-			{featured && (
-				<div class="featured">
-					<a href={`/blog/${featured.id}/`} class="featured-link">
-						{featured.data.heroImage && (
-							<div class="featured-img">
-								<Image width={1200} height={500} src={featured.data.heroImage} alt={featured.data.title} />
-							</div>
-						)}
-						<div class="featured-body">
-							<span class="post-badge">Latest</span>
-							<h2 class="featured-title">{featured.data.title}</h2>
-							<p class="featured-desc">{featured.data.description}</p>
-							<p class="post-date"><FormattedDate date={featured.data.pubDate} /></p>
-						</div>
-					</a>
-				</div>
-			)}
+    <header class="ppc-nav">
+      <div class="ppc-nav-inner">
+        <a class="ppc-brand" href="/">
+          <span class="ppc-brand-glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="1" />
+              <path d="M2.5 12 H 21.5 M 12 2.5 V 21.5" />
+              <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span>packet<span class="ppc-brand-em">pilot</span><span class="ppc-brand-tld">.ai</span></span>
+          <span class="ppc-brand-caret">_</span>
+        </a>
+        <nav class="ppc-nav-items">
+          <a href="/" class="ppc-nav-item">/home</a>
+          <a href="/blog" class="ppc-nav-item is-active">/blog</a>
+          <a href="/prompt-pack" class="ppc-nav-item">/prompt-pack</a>
+          <a href="/about" class="ppc-nav-item">/about</a>
+        </nav>
+        <div class="ppc-nav-cli">
+          <span class="ppc-nav-prompt">~</span>
+          <span class="ppc-nav-prompt-sigil">$</span>
+          <span class="ppc-nav-cli-hint">press ⌘K</span>
+        </div>
+      </div>
+    </header>
 
-			<!-- Rest of posts -->
-			{rest.length > 0 && (
-				<ul class="post-grid">
-					{rest.map((post) => (
-						<li>
-							<a href={`/blog/${post.id}/`} class="post-card">
-								{post.data.heroImage && (
-									<div class="card-img">
-										<Image width={720} height={360} src={post.data.heroImage} alt={post.data.title} />
-									</div>
-								)}
-								<div class="card-body">
-									<h3 class="card-title">{post.data.title}</h3>
-									<p class="card-desc">{post.data.description}</p>
-									<p class="post-date"><FormattedDate date={post.data.pubDate} /></p>
-								</div>
-							</a>
-						</li>
-					))}
-				</ul>
-			)}
-		</main>
+    <div class="ppc-shell">
+      <main class="ppc-main">
+        <section class="ppc-section">
+          <BlogIndex posts={posts} client:load />
+        </section>
+      </main>
+    </div>
 
-		<Footer />
-	</body>
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
 </html>
-
-<style>
-	main {
-		max-width: 1100px;
-		margin: 0 auto;
-		padding: 4rem 2rem 6rem;
-		position: relative;
-		z-index: 1;
-	}
-
-	/* ── PAGE HEADER ── */
-	.page-header {
-		margin-bottom: 3.5rem;
-	}
-	.sec-label {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 10px;
-		color: var(--accent);
-		letter-spacing: 4px;
-		text-transform: uppercase;
-		margin-bottom: 0.75rem;
-	}
-	.page-header h1 {
-		font-family: 'Orbitron', monospace;
-		font-weight: 900;
-		font-size: clamp(2rem, 5vw, 3.5rem);
-		color: var(--text-bright);
-		margin-bottom: 0.75rem;
-		letter-spacing: -1px;
-	}
-	.page-sub {
-		font-size: 16px;
-		color: var(--text-dim);
-		max-width: 520px;
-		margin: 0;
-	}
-
-	/* ── FEATURED ── */
-	.featured {
-		border: 1px solid var(--border);
-		background: var(--panel);
-		margin-bottom: 3rem;
-		transition: border-color 0.2s;
-	}
-	.featured:hover { border-color: var(--accent); }
-	.featured-link {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		text-decoration: none;
-		color: inherit;
-	}
-	@media (max-width: 720px) {
-		.featured-link { grid-template-columns: 1fr; }
-	}
-	.featured-img { overflow: hidden; }
-	.featured-img img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		display: block;
-		border-radius: 0;
-		transition: transform 0.4s ease;
-	}
-	.featured:hover .featured-img img { transform: scale(1.03); }
-	.featured-body {
-		padding: 2.5rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 1rem;
-	}
-	.post-badge {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 10px;
-		color: var(--accent);
-		border: 1px solid var(--accent);
-		padding: 3px 10px;
-		letter-spacing: 2px;
-		text-transform: uppercase;
-		width: fit-content;
-	}
-	.featured-title {
-		font-family: 'Orbitron', monospace;
-		font-weight: 800;
-		font-size: clamp(1.2rem, 2.5vw, 1.7rem);
-		color: var(--text-bright);
-		line-height: 1.2;
-		margin: 0;
-	}
-	.featured-desc {
-		font-size: 15px;
-		color: var(--text-dim);
-		line-height: 1.7;
-		margin: 0;
-	}
-
-	/* ── POST GRID ── */
-	.post-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: 1px;
-		background: var(--border);
-		border: 1px solid var(--border);
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-	.post-card {
-		display: flex;
-		flex-direction: column;
-		background: var(--panel);
-		text-decoration: none;
-		color: inherit;
-		transition: background 0.2s;
-	}
-	.post-card:hover { background: var(--panel2); opacity: 1; }
-	.card-img { overflow: hidden; }
-	.card-img img {
-		width: 100%;
-		height: 200px;
-		object-fit: cover;
-		display: block;
-		border-radius: 0;
-		transition: transform 0.4s ease;
-	}
-	.post-card:hover .card-img img { transform: scale(1.04); }
-	.card-body {
-		padding: 1.75rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.6rem;
-		flex: 1;
-	}
-	.card-title {
-		font-family: 'Orbitron', monospace;
-		font-weight: 700;
-		font-size: 14px;
-		color: var(--text-bright);
-		line-height: 1.3;
-		margin: 0;
-		letter-spacing: 0.3px;
-	}
-	.card-desc {
-		font-size: 14px;
-		color: var(--text-dim);
-		line-height: 1.65;
-		margin: 0;
-		flex: 1;
-	}
-
-	/* ── DATE ── */
-	.post-date {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 10px;
-		color: var(--text-dim);
-		letter-spacing: 1.5px;
-		text-transform: uppercase;
-		margin: 0;
-	}
-</style>

@@ -1,286 +1,100 @@
 ---
-import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import { POSTS_META } from '../data/posts-meta';
+import StatusBar from '../components/react/StatusBar';
+import FooterBar from '../components/react/FooterBar';
+import CopilotDock from '../components/react/CopilotDock';
+import TweaksPanel from '../components/react/TweaksPanel';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & { id: string };
 
-const { title, description, pubDate, updatedDate, heroImage, heroAscii } = Astro.props;
+const { title, description, pubDate, updatedDate, heroAscii, id } = Astro.props;
+const meta = POSTS_META[id] ?? { tags: [], read: '5 min', accent: 'ok', ascii: [] };
+const dateStr = pubDate.toISOString().slice(0, 10);
+const updatedStr = updatedDate?.toISOString().slice(0, 10);
+const tagLabel = meta.tags[0] ?? 'guide';
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-	</head>
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead title={`${title} — PacketPilot AI`} description={description} />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
 
-	<body>
-		<Header />
-		<main>
-			<article>
+    <StatusBar client:load />
 
-				<!-- ASCII terminal hero -->
-				{heroAscii && (
-					<div class="ascii-hero">
-						<div class="ascii-bar">
-							<div class="ascii-dots">
-								<span class="dot r"></span>
-								<span class="dot y"></span>
-								<span class="dot g"></span>
-							</div>
-							<span class="ascii-bar-title">packetpilotai.com — terminal</span>
-						</div>
-						<pre class="ascii-body">{heroAscii}</pre>
-					</div>
-				)}
+    <header class="ppc-nav">
+      <div class="ppc-nav-inner">
+        <a class="ppc-brand" href="/">
+          <span class="ppc-brand-glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="1" />
+              <path d="M2.5 12 H 21.5 M 12 2.5 V 21.5" />
+              <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span>packet<span class="ppc-brand-em">pilot</span><span class="ppc-brand-tld">.ai</span></span>
+          <span class="ppc-brand-caret">_</span>
+        </a>
+        <nav class="ppc-nav-items">
+          <a href="/" class="ppc-nav-item">/home</a>
+          <a href="/blog" class="ppc-nav-item is-active">/blog</a>
+          <a href="/prompt-pack" class="ppc-nav-item">/prompt-pack</a>
+          <a href="/about" class="ppc-nav-item">/about</a>
+        </nav>
+        <div class="ppc-nav-cli">
+          <span class="ppc-nav-prompt">~</span>
+          <span class="ppc-nav-prompt-sigil">$</span>
+          <span class="ppc-nav-cli-hint">press ⌘K</span>
+        </div>
+      </div>
+    </header>
 
-				<!-- Fallback image hero -->
-				{!heroAscii && heroImage && (
-					<div class="hero-image">
-						<Image width={1020} height={510} src={heroImage} alt="" />
-					</div>
-				)}
+    <div class="ppc-shell">
+      <div class="ppc-article">
+        <header class="ppc-article-header">
+          <div class="ppc-article-kicker">
+            <span class="ppc-section-bracket">[</span>
+            post · {tagLabel}
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <div class="ppc-article-meta">
+            <span>{dateStr}</span>
+            {updatedStr && <><span>·</span><span>updated {updatedStr}</span></>}
+            <span>·</span>
+            <span>{meta.read}</span>
+            <span>·</span>
+            <span class={`ppc-pill ${meta.accent}`}>{tagLabel}</span>
+          </div>
+          <h1 class="ppc-article-h1">{title}</h1>
+          <p class="ppc-article-lede">{description}</p>
+        </header>
 
-				<div class="prose">
-					<div class="post-header">
-						<p class="post-date">
-							<FormattedDate date={pubDate} />
-							{updatedDate && (
-								<span class="updated"> · Updated <FormattedDate date={updatedDate} /></span>
-							)}
-						</p>
-						<h1>{title}</h1>
-						<p class="post-desc">{description}</p>
-						<div class="post-rule"></div>
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+        {heroAscii && (
+          <pre class="ppc-article-ascii">{heroAscii}</pre>
+        )}
+
+        <div class="ppc-prose">
+          <slot />
+        </div>
+
+        <footer class="ppc-article-footer">
+          <div class="ppc-article-tags">
+            {meta.tags.map((t: string) => (
+              <a class="ppc-article-tag" href={`/blog`}>#{t}</a>
+            ))}
+          </div>
+          <a class="ppc-link" href="/blog">▸ all posts</a>
+        </footer>
+      </div>
+    </div>
+
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
 </html>
-
-<style>
-	body {
-		background: var(--bg);
-		color: var(--text);
-	}
-
-	main {
-		max-width: 780px;
-		margin: 0 auto;
-		padding: 0 1.5rem 6rem;
-	}
-
-	/* ── ASCII HERO ── */
-	.ascii-hero {
-		border: 1px solid var(--border);
-		background: var(--panel);
-		margin: 2.5rem 0 3rem;
-		overflow: hidden;
-	}
-	.ascii-bar {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 0.6rem 1rem;
-		background: var(--panel2, #0d1117);
-		border-bottom: 1px solid var(--border);
-	}
-	.ascii-dots {
-		display: flex;
-		gap: 6px;
-	}
-	.dot {
-		width: 11px;
-		height: 11px;
-		border-radius: 50%;
-		display: inline-block;
-	}
-	.dot.r { background: #ff5f57; }
-	.dot.y { background: #febc2e; }
-	.dot.g { background: #28c840; }
-	.ascii-bar-title {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 11px;
-		color: var(--text-dim);
-		letter-spacing: 1px;
-	}
-	.ascii-body {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 13px;
-		line-height: 1.7;
-		color: var(--accent);
-		padding: 1.75rem 2rem;
-		margin: 0;
-		white-space: pre;
-		overflow-x: auto;
-		background: transparent;
-	}
-
-	/* ── IMAGE HERO ── */
-	.hero-image {
-		margin: 2.5rem 0 3rem;
-	}
-	.hero-image img {
-		display: block;
-		width: 100%;
-		border-radius: 4px;
-	}
-
-	/* ── POST HEADER ── */
-	.prose {
-		width: 100%;
-		max-width: 100%;
-	}
-	.post-header {
-		margin-bottom: 3rem;
-	}
-	.post-date {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 11px;
-		color: var(--accent);
-		letter-spacing: 2px;
-		text-transform: uppercase;
-		margin-bottom: 1rem;
-	}
-	.updated {
-		color: var(--text-dim);
-	}
-	.post-header h1 {
-		font-family: 'Orbitron', monospace;
-		font-weight: 900;
-		font-size: clamp(1.6rem, 4vw, 2.6rem);
-		color: var(--text-bright);
-		line-height: 1.15;
-		margin: 0 0 1rem;
-		letter-spacing: -0.5px;
-	}
-	.post-desc {
-		font-size: 16px;
-		color: var(--text-dim);
-		line-height: 1.75;
-		margin: 0 0 2rem;
-		max-width: 600px;
-	}
-	.post-rule {
-		height: 1px;
-		background: var(--border);
-		width: 100%;
-	}
-
-	/* ── PROSE CONTENT ── */
-	.prose :global(h2) {
-		font-family: 'Orbitron', monospace;
-		font-weight: 800;
-		font-size: 1.2rem;
-		color: var(--text-bright);
-		margin: 3rem 0 1rem;
-		letter-spacing: 0.3px;
-	}
-	.prose :global(h3) {
-		font-family: 'Orbitron', monospace;
-		font-weight: 700;
-		font-size: 1rem;
-		color: var(--text-bright);
-		margin: 2rem 0 0.75rem;
-	}
-	.prose :global(p) {
-		font-size: 16px;
-		line-height: 1.8;
-		color: var(--text);
-		margin-bottom: 1.5rem;
-	}
-	.prose :global(ul), .prose :global(ol) {
-		padding-left: 1.5rem;
-		margin-bottom: 1.5rem;
-	}
-	.prose :global(li) {
-		font-size: 16px;
-		line-height: 1.75;
-		color: var(--text);
-		margin-bottom: 0.4rem;
-	}
-	.prose :global(a) {
-		color: var(--accent);
-		text-decoration: none;
-		border-bottom: 1px solid rgba(0, 240, 255, 0.3);
-		transition: border-color 0.2s;
-	}
-	.prose :global(a:hover) {
-		border-color: var(--accent);
-		opacity: 1;
-	}
-	.prose :global(strong) {
-		color: var(--text-bright);
-		font-weight: 700;
-	}
-	.prose :global(code) {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 13px;
-		color: var(--accent);
-		background: var(--panel);
-		padding: 2px 6px;
-		border: 1px solid var(--border);
-	}
-	.prose :global(pre) {
-		background: var(--panel);
-		border: 1px solid var(--border);
-		border-left: 3px solid var(--accent);
-		padding: 1.5rem;
-		overflow-x: auto;
-		margin-bottom: 2rem;
-	}
-	.prose :global(pre code) {
-		background: none;
-		border: none;
-		padding: 0;
-		font-size: 13px;
-		color: var(--text);
-		line-height: 1.6;
-	}
-	.prose :global(table) {
-		width: 100%;
-		border-collapse: collapse;
-		margin-bottom: 2rem;
-		font-size: 14px;
-	}
-	.prose :global(th) {
-		font-family: 'Share Tech Mono', monospace;
-		font-size: 11px;
-		color: var(--accent);
-		letter-spacing: 1.5px;
-		text-transform: uppercase;
-		padding: 0.75rem 1rem;
-		border-bottom: 1px solid var(--accent);
-		text-align: left;
-	}
-	.prose :global(td) {
-		padding: 0.75rem 1rem;
-		border-bottom: 1px solid var(--border);
-		color: var(--text);
-		vertical-align: top;
-	}
-	.prose :global(tr:last-child td) {
-		border-bottom: none;
-	}
-	.prose :global(blockquote) {
-		border-left: 3px solid var(--accent);
-		padding: 0.5rem 1.5rem;
-		margin: 0 0 1.5rem;
-		background: var(--panel);
-	}
-	.prose :global(blockquote p) {
-		color: var(--text-dim);
-		font-style: italic;
-		margin: 0;
-	}
-	.prose :global(hr) {
-		border: none;
-		border-top: 1px solid var(--border);
-		margin: 2.5rem 0;
-	}
-</style>
