@@ -1,63 +1,117 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import BaseHead from '../components/BaseHead.astro';
+import StatusBar from '../components/react/StatusBar';
+import FooterBar from '../components/react/FooterBar';
+import CopilotDock from '../components/react/CopilotDock';
+import TweaksPanel from '../components/react/TweaksPanel';
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead
+      title="About — PacketPilot AI"
+      description="PacketPilot AI is built by network admins, for network admins — practical guides on troubleshooting, AI automation, and CLI-ready networking workflows."
+    />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+    <StatusBar client:load />
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+    <header class="ppc-nav">
+      <div class="ppc-nav-inner">
+        <a class="ppc-brand" href="/">
+          <span class="ppc-brand-glyph" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="1" />
+              <path d="M2.5 12 H 21.5 M 12 2.5 V 21.5" />
+              <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+            </svg>
+          </span>
+          <span>packet<span class="ppc-brand-em">pilot</span><span class="ppc-brand-tld">.ai</span></span>
+          <span class="ppc-brand-caret">_</span>
+        </a>
+        <nav class="ppc-nav-items">
+          <a href="/" class="ppc-nav-item">/home</a>
+          <a href="/blog" class="ppc-nav-item">/blog</a>
+          <a href="/prompt-pack" class="ppc-nav-item">/prompt-pack</a>
+          <a href="/about" class="ppc-nav-item is-active">/about</a>
+        </nav>
+        <div class="ppc-nav-cli">
+          <span class="ppc-nav-prompt">~</span>
+          <span class="ppc-nav-prompt-sigil">$</span>
+          <span class="ppc-nav-cli-hint">press ⌘K</span>
+        </div>
+      </div>
+    </header>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+    <div class="ppc-shell">
+      <main class="ppc-main">
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+        <!-- Hero -->
+        <section class="ppc-hero" style="margin-bottom:32px">
+          <div class="ppc-article-kicker" style="margin-bottom:14px">
+            <span class="ppc-section-bracket">[</span>about.system<span class="ppc-section-bracket">]</span>
+          </div>
+          <h1 class="ppc-hero-h1" style="max-width:22ch">
+            Built by network admins,<br /><em class="ppc-hero-em">for network admins.</em>
+          </h1>
+        </section>
+
+        <!-- 2-column content -->
+        <section class="ppc-section" style="margin-top:0;display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start">
+          <div>
+            <p style="font-size:17px;line-height:1.7;color:var(--ppc-text-2);margin:0 0 20px">
+              PacketPilot AI started as a personal notebook — a place to document the workflows, prompt patterns,
+              and CLI sequences that actually work in production, not the sanitized examples you find in vendor docs.
+            </p>
+            <p style="font-size:16px;line-height:1.7;color:var(--ppc-muted);margin:0 0 20px">
+              The goal is simple: every guide should end with something you can copy into a terminal or paste into Claude
+              and get a useful result on the first try. No hand-waving, no "consult your vendor." Real commands,
+              real output, real root causes.
+            </p>
+            <p style="font-size:16px;line-height:1.7;color:var(--ppc-muted);margin:0 0 32px">
+              AI tools like Claude are genuinely useful for network automation — but only if you know how to prompt them
+              correctly for networking contexts. That's what the prompt pack is for, and why every blog post includes
+              the Claude workflow alongside the CLI commands.
+            </p>
+
+            <div style="border-top:1px dashed var(--ppc-border-soft);padding-top:24px">
+              <div class="ppc-section-kicker mono" style="margin-bottom:12px">
+                <span class="ppc-section-bracket">[</span>contact<span class="ppc-section-bracket">]</span>
+              </div>
+              <p style="font-size:14px;color:var(--ppc-muted);margin:0 0 8px">
+                Questions, feedback, or just want to talk networking:
+              </p>
+              <a class="mono" href="mailto:mc69080vill@gmail.com" style="color:var(--ppc-accent);font-size:14px">
+                mc69080vill@gmail.com
+              </a>
+            </div>
+          </div>
+
+          <!-- whoami card -->
+          <div class="ppc-topo" style="position:sticky;top:80px">
+            <div class="ppc-card-head">
+              <span class="mono kicker">whoami</span>
+              <span class="ppc-dot ppc-dot-ok" style="width:8px;height:8px" aria-hidden="true"></span>
+            </div>
+            <pre class="mono" style="font-size:12px;padding:18px;margin:0;line-height:1.8;color:var(--ppc-text-2)">{`role      network admin / netsec
+focus     ai-assisted networking
+stack     cisco · pfsense · linux
+tools     claude · netmiko · wireshark
+location  midwest, US
+contact   mc69080vill@gmail.com
+site      packetpilotai.com`}</pre>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
+</html>
