@@ -16,9 +16,7 @@ heroAscii: |
   [→] Replace cable on port 4. Recheck in 5 min.
 ---
 
-Packet loss is sneaky. It doesn't always take down a connection — it just makes everything feel broken. Voice calls cut out. Video freezes. File transfers stall and retry. Users complain that "the network is acting weird."
-
-The good news: packet loss always has a cause, and there's a repeatable process for finding it. This guide walks you through it step by step — from the first complaint to the fix.
+To diagnose packet loss, start with `ping <gateway-ip> -n 100`. Any loss to your own default gateway is a local problem — check the switch port's interface counters for CRC errors and duplex mismatch. Loss that only appears beyond the gateway points to the ISP. Use traceroute to find the exact hop where loss begins, then use Wireshark to confirm with TCP retransmission counts. The steps below walk the full process from complaint to root cause.
 
 ---
 
@@ -30,7 +28,7 @@ At 0.1% loss, most users won't notice. At 1%, voice and video start degrading. A
 
 ---
 
-## Step 1: Confirm It's Actually Packet Loss
+## Step 1: How Do You Confirm You Have Packet Loss?
 
 Start by confirming the symptom. Run an extended ping — 100 packets gives you a statistically meaningful result:
 
@@ -59,7 +57,7 @@ If you're losing packets to your own gateway, stop here — the problem is local
 
 ---
 
-## Step 2: Use Traceroute to Find the Hop
+## Step 2: How Do You Find Which Hop Is Dropping Packets?
 
 Traceroute sends packets to every router between you and a destination, measuring the response at each hop. It tells you exactly where packets start dropping.
 
@@ -84,7 +82,7 @@ If loss appears at **hop 1**, you don't need to go further — the problem is on
 
 ---
 
-## Step 3: Check the Physical Layer
+## Step 3: What Physical Layer Problems Cause Packet Loss?
 
 Most LAN packet loss comes down to physical issues — bad cables, failing ports, or misconfigured duplex settings. SSH into the switch connected to the affected device and check the interface:
 
@@ -153,7 +151,7 @@ Anything below -70 dBm will cause problems. Below -80 dBm and you'll see signifi
 
 ---
 
-## Step 5: Check for Bandwidth Saturation
+## Step 5: Can Bandwidth Saturation Cause Packet Loss?
 
 A saturated link drops packets when the queue overflows. Check utilization on the uplink:
 
@@ -170,7 +168,7 @@ Look at the `5 minute input rate` and `5 minute output rate`. If either is near 
 
 ---
 
-## Step 6: Verify with a Packet Capture
+## Step 6: How Do You Confirm Packet Loss with Wireshark?
 
 If the above steps haven't pinpointed the cause, a Wireshark capture will. Filter to the affected host and look for retransmissions — the clearest sign that packets are being lost and resent.
 
@@ -198,7 +196,7 @@ Use **Analyze → Expert Information** in Wireshark for a summary — it categor
 
 ---
 
-## Step 7: Is It the ISP?
+## Step 7: How Do You Tell If Packet Loss Is Coming from the ISP?
 
 If loss only appears beyond your network edge (hop 3+ in traceroute), run a few tests to confirm before calling your ISP:
 
@@ -220,7 +218,7 @@ If you're seeing CRC errors on the WAN port, that's a physical layer issue betwe
 
 ---
 
-## Root Cause Quick Reference
+## What Are the Most Common Packet Loss Root Causes?
 
 | Symptom | Most likely cause | Where to look |
 |---|---|---|
@@ -255,3 +253,22 @@ User reports packet loss / degraded connection
 ```
 
 Packet loss has a cause. Work the steps, and you'll find it.
+
+---
+
+## Frequently Asked Questions
+
+**How much packet loss is normal on a LAN?**
+Zero, essentially. A healthy wired LAN connection should show 0% loss on an extended ping. Any loss to your own default gateway is abnormal and warrants investigation. Even 0.1% loss on a local segment matters for voice and video quality.
+
+**How do I check for packet loss on Windows?**
+Run `ping <target> -n 100` from Command Prompt or PowerShell. At the end of the output, look at the "Lost" count in the packets summary. For longer monitoring, run `ping <target> -t` continuously, then press Ctrl+C to see the final statistics.
+
+**What causes packet loss on a local network?**
+The most common causes are: a bad cable or damaged SFP, a duplex mismatch between the switch port and the NIC, a failing switch port, or a saturated uplink. Check interface error counters with `show interfaces` — CRC errors and runts point to physical layer problems; output drops point to congestion.
+
+**How do I tell if packet loss is my problem or the ISP's?**
+Ping your default gateway with 100 packets. If you see any loss to the gateway, it's local — the ISP is not involved. If the gateway is clean and loss only appears at hop 3 or beyond in a traceroute, call your ISP and provide the traceroute output as evidence.
+
+**Does packet loss show up in a speed test?**
+Sometimes, but speed tests are optimized to maximize throughput and compensate for loss through retransmission — they may not surface moderate packet loss as a visible metric. A 100-packet extended ping to your gateway is a more reliable indicator of actual packet loss than a speed test score.

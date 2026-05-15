@@ -15,15 +15,11 @@ heroAscii: |
   [→] Recommend reordering or removing lines 20, 30, 40
 ---
 
-Every firewall rulebase tells a story. The first ten rules are intentional. The next twenty are reactions to specific tickets. By rule fifty, nobody remembers whether `permit tcp any any eq 8443` was for the legacy app that retired in 2022 or the new one that went live last quarter — and nobody wants to be the person who removes it and breaks something.
-
-That's why audits don't happen. They're tedious, they require deep context, and the cost of getting one wrong is bigger than the cost of doing nothing. AI doesn't fix the political problem, but it absolutely fixes the tedious one. Claude will read a 400-line rulebase faster than you can pour coffee, and it'll flag the things that take a human hours to spot.
-
-This post walks through five prompts I've used against real configs (sanitized). Each one is paste-ready.
+To audit firewall rules with Claude, export your rulebase, replace real public IPs with RFC 5737 placeholders (`198.51.100.x`), strip embedded secrets, then paste the sanitized config with a prompt asking Claude to find shadowed rules, overly permissive entries, and dead code. Claude reads a 400-line ACL in seconds and catches issues — like a `permit ip any any` buried mid-rulebase — that take humans hours to find manually. This post has five paste-ready prompts, each targeting a specific class of firewall problem.
 
 ---
 
-## Step 0: Export and Sanitize the Config First
+## Step 0: How Do You Safely Export a Firewall Config for AI Review?
 
 **Don't paste production firewall configs into any AI without thinking about it.** Even with a paid plan, even with privacy guarantees, treat the export like you'd treat any other place sensitive data shouldn't go.
 
@@ -55,7 +51,7 @@ For most audits, the sanitized version is just as auditable as the real one — 
 
 ---
 
-## Prompt 1: Find Shadowed and Redundant Rules
+## Prompt 1: How Do You Find Shadowed and Redundant Firewall Rules?
 
 A shadowed rule is one that never matches because an earlier rule already handles its traffic. They clutter the rulebase and trick you into thinking a policy is in effect when it isn't.
 
@@ -82,7 +78,7 @@ Two cleanups in 30 seconds. A human doing this manually checks every rule agains
 
 ---
 
-## Prompt 2: Find Overly Permissive Rules
+## Prompt 2: How Do You Find Overly Permissive Firewall Rules?
 
 `permit ip any any` is the obvious one, but the dangerous version is subtler — rules that look specific but effectively allow far more than intended.
 
@@ -115,7 +111,7 @@ Rule 80: permit tcp any 10.0.0.0/8 eq 3389
 
 ---
 
-## Prompt 3: Detect Misordered Rules
+## Prompt 3: How Do You Find Firewall Rules That Are in the Wrong Order?
 
 Firewall rules are evaluated top-down, first-match-wins. A `deny` placed below a `permit` for the same traffic is dead code. So is a specific `permit` placed below a broad `permit`.
 
@@ -133,7 +129,7 @@ This one finds the bugs that look fine line-by-line but break when you read them
 
 ---
 
-## Prompt 4: Generate Inline Documentation
+## Prompt 4: How Do You Auto-Generate Firewall Rule Comments with AI?
 
 Half of every old firewall rulebase is "what does this rule even do?" Claude can read the rule, infer the intent, and produce inline comments — which is the version your future self will thank you for.
 
@@ -163,7 +159,7 @@ The "review" tags are gold. They give you a punch list of rules to ask owners ab
 
 ---
 
-## Prompt 5: Translate Rules Between Vendors
+## Prompt 5: How Do You Translate Firewall Rules Between Vendors?
 
 Migrating from one platform to another is where ACL audits suddenly become unavoidable. Claude is unusually good at vendor-to-vendor syntax translation, and it'll preserve the policy intent rather than just doing a literal command swap.
 
@@ -181,7 +177,7 @@ This gets you a policy you can review and refine, not a literal translation that
 
 ---
 
-## What This Workflow Doesn't Replace
+## What Can't AI Replace in a Firewall Audit?
 
 A few things to be honest about:
 
@@ -192,7 +188,7 @@ A few things to be honest about:
 
 ---
 
-## Privacy and Data Handling
+## How Do You Handle Privacy When Auditing Firewall Configs with AI?
 
 A few practical rules that have aged well:
 
@@ -204,7 +200,7 @@ A few practical rules that have aged well:
 
 ---
 
-## A Workable Audit Cadence
+## How Often Should You Audit Firewall Rules?
 
 Once these prompts are in your toolbox, the audit doesn't have to be a two-week project anymore. A workable cadence:
 
@@ -222,3 +218,22 @@ Annually:
 ```
 
 The goal isn't to let AI run your firewall — it's to take the *parts of the audit a computer should do* off your plate, so the human time goes to the calls that actually need judgment. That's the entire premise of every useful AI workflow, and firewall audits are an unusually good fit.
+
+---
+
+## Frequently Asked Questions
+
+**Is it safe to paste firewall configs into Claude?**
+Not without sanitization first. Replace your real public IP ranges with RFC 5737 documentation addresses (198.51.100.x, 203.0.113.x), strip SNMP community strings, RADIUS keys, IKE pre-shared keys, and any hostnames that identify your internal naming scheme. The `sed` one-liners in Step 0 of this guide do this in under a minute.
+
+**What is a shadowed firewall rule?**
+A shadowed rule is one that can never match because a broader rule above it already covers the same traffic. For example, `permit ip any any` on line 10 shadows any specific rule below it — those rules are dead code. They don't cause harm, but they create confusion and give a false sense of security.
+
+**How do I export my Cisco ACL for Claude review?**
+Run `show run | section ip access-list` or `show access-lists` from privileged EXEC mode. Copy the output, run the sanitization commands from Step 0, and paste the result into Claude with your audit prompt.
+
+**Can Claude audit pfSense, FortiGate, or Palo Alto configs?**
+Yes. Claude handles pfSense XML exports, FortiGate config files, Palo Alto security policies, iptables rules, and most vendor-specific ACL formats. Specify the platform and version in your prompt so Claude applies the correct syntax expectations.
+
+**How accurate is AI at finding firewall problems?**
+Claude reliably finds structural issues: shadowed rules, implicit deny gaps, overly broad permit statements, and dead code. It's less reliable on semantic issues — rules that are syntactically correct but wrong for your specific environment. Always cross-reference AI findings with your hit counters and application owner knowledge before making changes.
