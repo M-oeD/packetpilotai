@@ -62,6 +62,24 @@ export function blogPostingSchema(input: ArticleSchemaInput, site: URL | undefin
 	return schema;
 }
 
+/**
+ * FAQPage node. Note: Google restricted FAQ *rich results* to authoritative
+ * gov/health sites in 2023, so this rarely earns a SERP enhancement — but the
+ * markup is harmless, future-proof, and the underlying visible FAQ content
+ * still helps long-tail / "People Also Ask" coverage.
+ */
+export function faqPageSchema(faqs: { q: string; a: string }[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqs.map((f) => ({
+			'@type': 'Question',
+			name: f.q,
+			acceptedAnswer: { '@type': 'Answer', text: f.a },
+		})),
+	};
+}
+
 /** BreadcrumbList node — improves SERP breadcrumb rendering and crawl signals. */
 export function breadcrumbSchema(
 	crumbs: { name: string; path: string }[],

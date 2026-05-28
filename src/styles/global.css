@@ -939,6 +939,35 @@ button { font-family: inherit; }
 }
 .ppc-continue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
 
+/* ─────────────── FAQ ─────────────── */
+
+.ppc-faq { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--ppc-border-soft); }
+.ppc-faq-kicker {
+  font-family: var(--ppc-mono);
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ppc-accent);
+  margin-bottom: 18px;
+}
+.ppc-faq-list { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.ppc-faq-item {
+  padding: 16px 18px;
+  border: 1px solid var(--ppc-border-soft);
+  border-radius: var(--ppc-radius);
+  background: var(--ppc-surface);
+}
+.ppc-faq-q {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: var(--ppc-sans); font-size: 16px; font-weight: 600;
+  color: var(--ppc-text);
+  margin: 0 0 8px 0;
+}
+.ppc-faq-sigil { color: var(--ppc-accent); font-family: var(--ppc-mono); }
+.ppc-faq-a {
+  margin: 0; padding-left: 24px;
+  font-family: var(--ppc-sans); font-size: 14px; line-height: 1.6;
+  color: var(--ppc-text-2);
+}
+
 /* ─────────────── Related posts ─────────────── */
 
 .ppc-related { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--ppc-border-soft); }

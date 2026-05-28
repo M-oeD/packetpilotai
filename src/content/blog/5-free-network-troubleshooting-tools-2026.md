@@ -15,6 +15,15 @@ heroAscii: |
   │  [!] All five are free. All five are production-ready │
   │  [→] Learn one a week and you have a toolkit in 5     │
   └───────────────────────────────────────────────────────┘
+faqs:
+  - q: "What are the five free network troubleshooting tools every admin should know?"
+    a: "Wireshark for packet-level forensics, Nmap for discovery and audit, iperf3 for throughput testing, LibreNMS for long-term history and alerting, and MTR for per-hop path analysis. All five are free and production-ready."
+  - q: "How do I find the real throughput of a link?"
+    a: "Use iperf3: run iperf3 -s on the receiver and iperf3 -c receiver-ip on the sender. Test inside the LAN, then to the WAN edge, then to the internet; the point where the number falls off a cliff is the bottleneck."
+  - q: "Why do I see packet loss at intermediate hops in MTR that may not be real?"
+    a: "Some routers de-prioritize ICMP, so intermediate hops can show loss that is not actually affecting user traffic. Always check the destination hop loss number to know whether real traffic is impacted."
+  - q: "When are paid network tools worth it over free ones?"
+    a: "Paid tools earn their place in three areas: dashboards a CIO wants, automated alerting at scale, and DPI-class application visibility. Outside of those, free tools handle the overwhelming majority of real troubleshooting."
 ---
 
 The networking software market wants you to believe that real visibility costs five figures a year. It doesn't. The five tools below are free, mature, used by every serious operator on the planet, and together they handle the overwhelming majority of real troubleshooting situations.

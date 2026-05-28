@@ -15,6 +15,17 @@ heroAscii: |
 
   [!] Root cause: CRC errors on Gi0/4
   [→] Replace cable on port 4. Recheck in 5 min.
+faqs:
+  - q: "How much packet loss is too much?"
+    a: "At 0.1% loss most users won’t notice, at 1% voice and video start degrading, and at 5% or more applications become unusable. LAN connections should be near 0%, so even tiny loss on a local network is a red flag."
+  - q: "How do I confirm whether I actually have packet loss?"
+    a: "Run an extended ping of 100 packets (ping -n 100 on Windows, -c 100 on Linux/Mac) and check the loss percentage at the end. Any loss to your default gateway is almost certainly a local problem."
+  - q: "What causes packet loss on a LAN?"
+    a: "Most LAN packet loss is physical: bad cables, failing ports, or duplex mismatches. On a switch interface, non-zero CRC errors point to a bad cable, damaged SFP, or duplex mismatch, while runts indicate a duplex mismatch or collision."
+  - q: "How do I tell if packet loss is my problem or the ISP’s?"
+    a: "Use traceroute. Loss appearing at hop 1 (your gateway) means the problem is on your local segment, while loss starting at hop 3 or beyond is likely the ISP. CRC errors on your WAN port indicate a physical issue between you and the ISP."
+  - q: "How do I confirm packet loss in Wireshark?"
+    a: "Capture traffic filtered to the affected host and apply display filters such as tcp.analysis.retransmission, tcp.analysis.duplicate_ack, and tcp.analysis.out_of_order. Consistent retransmissions mean the path is dropping packets; Expert Information summarizes anomalies."
 ---
 
 Packet loss is sneaky. It doesn't always take down a connection — it just makes everything feel broken. Voice calls cut out. Video freezes. File transfers stall and retry. Users complain that "the network is acting weird."

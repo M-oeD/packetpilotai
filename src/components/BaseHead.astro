@@ -46,6 +46,11 @@ const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 // deployment without committing secrets; tags are omitted when unset.
 const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
+// Optional Google Analytics 4. Off unless PUBLIC_GA4_ID is set. NOTE: GA4 sets
+// cookies — enabling it likely requires a consent banner in some regions,
+// unlike the cookieless Cloudflare beacon above.
+const ga4Id = import.meta.env.PUBLIC_GA4_ID;
 
 // Sitewide WebSite/Organization schema plus any page-specific blocks.
 const structuredData = [websiteSchema(Astro.site), ...jsonLd];
@@ -66,6 +71,7 @@ const structuredData = [websiteSchema(Astro.site), ...jsonLd];
 <link rel="canonical" href={canonicalURL} />
 <meta name="robots" content={robots} />
 {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+{bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
 
 <title>{title}</title>
 <meta name="title" content={title} />
@@ -108,4 +114,16 @@ const structuredData = [websiteSchema(Astro.site), ...jsonLd];
 		src="https://static.cloudflareinsights.com/beacon.min.js"
 		data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
 	/>
+)}
+
+{ga4Id && (
+	<>
+		<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+		<script is:inline define:vars={{ ga4Id }}>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+			gtag('config', ga4Id);
+		</script>
+	</>
 )}
