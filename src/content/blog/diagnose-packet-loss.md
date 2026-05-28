@@ -2,6 +2,7 @@
 title: 'How to Diagnose Packet Loss Fast'
 description: 'Packet loss kills voice calls, video, and file transfers — but the cause is rarely obvious. This step-by-step guide walks you from complaint to root cause using ping, traceroute, switch commands, and Wireshark.'
 pubDate: '2026-04-18'
+image: '/og/diagnose-packet-loss.png'
 heroAscii: |
   $ ping 192.168.1.1 -n 100
 

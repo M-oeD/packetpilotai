@@ -2,6 +2,7 @@
 title: '5 Free Network Troubleshooting Tools Every Admin Should Have in 2026'
 description: 'Paid tools are great. Free tools solve 80% of real problems and run on every machine you already own. Here are five free network troubleshooting tools every admin should be able to drive cold — what each one does, when to reach for it, and the one limitation that bites you.'
 pubDate: '2026-04-24'
+image: '/og/5-free-network-troubleshooting-tools-2026.png'
 heroAscii: |
   ┌─ THE FREE TOOL BELT ──────────────────────────────────┐
   │                                                       │

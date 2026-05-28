@@ -2,6 +2,7 @@
 title: 'Using Claude to Audit Firewall Rules'
 description: 'Firewall rulebases grow until nobody remembers what half the entries do — and the audit nobody wants to run is the one that finds the holes. AI changes the math. Here are five prompts that turn Claude into a tireless firewall reviewer, plus the privacy guardrails to keep you safe.'
 pubDate: '2026-04-24'
+image: '/og/using-claude-to-audit-firewall-rules.png'
 heroAscii: |
   $ claude "audit this ACL — find shadowed and overly permissive rules"
 

@@ -2,6 +2,7 @@
 title: "How to Find What's Saturating Your WAN"
 description: 'A saturated WAN feels like the entire network is broken — but the cause is usually one app, one host, or one runaway backup. This step-by-step guide takes you from "everything is slow" to the exact source using interface stats, NetFlow, DPI, and Wireshark.'
 pubDate: '2026-04-24'
+image: '/og/find-what-saturates-your-wan.png'
 heroAscii: |
   $ show interfaces GigabitEthernet0/0 | include rate
 
