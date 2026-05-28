@@ -2,24 +2,69 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import { POSTS_META } from '../data/posts-meta';
+import { OG_IMAGE, SITE_AUTHOR } from '../consts';
+import { absoluteUrl, blogPostingSchema, breadcrumbSchema } from '../utils/schema';
 import StatusBar from '../components/react/StatusBar';
 import FooterBar from '../components/react/FooterBar';
 import CopilotDock from '../components/react/CopilotDock';
 import TweaksPanel from '../components/react/TweaksPanel';
 
-type Props = CollectionEntry<'blog'>['data'] & { id: string };
+type RelatedPost = { slug: string; title: string; read: string; tag: string };
+type Props = CollectionEntry<'blog'>['data'] & { id: string; related?: RelatedPost[] };
 
-const { title, description, pubDate, updatedDate, heroAscii, id } = Astro.props;
+const { title, description, pubDate, updatedDate, heroAscii, image, draft, id, related = [] } = Astro.props;
 const meta = POSTS_META[id] ?? { tags: [], read: '5 min', accent: 'ok', ascii: [] };
 const dateStr = pubDate.toISOString().slice(0, 10);
 const updatedStr = updatedDate?.toISOString().slice(0, 10);
 const tagLabel = meta.tags[0] ?? 'guide';
+
+// SEO metadata: full ISO dates + absolute URLs for structured data.
+const postPath = `/blog/${id}/`;
+const postUrl = absoluteUrl(postPath, Astro.site);
+const ogImage = image ?? OG_IMAGE;
+const imageUrl = absoluteUrl(ogImage, Astro.site);
+const publishedISO = pubDate.toISOString();
+const modifiedISO = (updatedDate ?? pubDate).toISOString();
+
+const jsonLd = [
+	blogPostingSchema(
+		{
+			title,
+			description,
+			url: postUrl,
+			image: imageUrl,
+			datePublished: publishedISO,
+			dateModified: modifiedISO,
+			keywords: meta.tags,
+		},
+		Astro.site,
+	),
+	breadcrumbSchema(
+		[
+			{ name: 'Home', path: '/' },
+			{ name: 'Blog', path: '/blog/' },
+			{ name: title, path: postPath },
+		],
+		Astro.site,
+	),
+];
 ---
 
 <!doctype html>
 <html lang="en" data-theme="amber" data-density="compact">
   <head>
-    <BaseHead title={`${title} — PacketPilot AI`} description={description} />
+    <BaseHead
+      title={`${title} — PacketPilot AI`}
+      description={description}
+      type="article"
+      image={ogImage}
+      publishedTime={publishedISO}
+      modifiedTime={modifiedISO}
+      author={SITE_AUTHOR}
+      tags={meta.tags}
+      noindex={draft === true}
+      jsonLd={jsonLd}
+    />
   </head>
   <body>
     <div class="ppc-grid-bg" aria-hidden="true"></div>
@@ -81,6 +126,27 @@ const tagLabel = meta.tags[0] ?? 'guide';
         <div class="ppc-prose">
           <slot />
         </div>
+
+        {related.length > 0 && (
+          <section class="ppc-related" aria-label="Related posts">
+            <div class="ppc-related-kicker">
+              <span class="ppc-section-bracket">[</span>
+              related
+              <span class="ppc-section-bracket">]</span>
+            </div>
+            <ul class="ppc-related-list">
+              {related.map((r) => (
+                <li class="ppc-related-item">
+                  <a class="ppc-related-link" href={`/blog/${r.slug}/`}>
+                    <span class="ppc-related-sigil" aria-hidden="true">▸</span>
+                    <span class="ppc-related-title">{r.title}</span>
+                    <span class="ppc-related-meta">{r.tag} · {r.read}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <footer class="ppc-article-footer">
           <div class="ppc-article-tags">

@@ -54,6 +54,31 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 📈 Analytics & SEO
+
+The site emits Open Graph/Twitter cards, JSON-LD structured data (WebSite,
+Organization, BlogPosting, BreadcrumbList), a canonical URL, `robots` meta, and
+ships a `robots.txt` + sitemap. Blog posts carry article metadata, breadcrumbs,
+and related-post internal links automatically.
+
+Two optional integrations are wired through public environment variables (set
+them in the Cloudflare Pages/Workers dashboard or a local `.env`). Both tags are
+omitted entirely when the variable is unset, so nothing breaks without them:
+
+| Variable | Purpose |
+| :------- | :------ |
+| `PUBLIC_CF_BEACON_TOKEN` | [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/) beacon token. Create a site in the CF dashboard → Web Analytics, copy the token from the JS snippet. Privacy-first, cookieless, no banner required. |
+| `PUBLIC_GOOGLE_SITE_VERIFICATION` | `content` value from the Google Search Console HTML-tag verification method. Unlocks organic search impressions/CTR/ranking data. |
+
+> These are baked at **build time** by Astro, so set them before `npm run build`
+> / deploy. Re-deploy after changing them.
+
+### Social share image
+
+`public/og-default.png` (1200×630) is the default share card. Regenerate it with
+`node scripts/generate-og.mjs` (uses `sharp`; run locally, not in CI — Workers
+has no native bindings). Posts can override it via an `image:` frontmatter field.
+
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
