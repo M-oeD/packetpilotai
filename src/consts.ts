@@ -20,3 +20,8 @@ export const OG_IMAGE = '/og-default.png';
 // Social handle for Twitter/X cards (without the leading @). Leave empty to
 // omit twitter:site / twitter:creator tags.
 export const TWITTER_HANDLE = '';
+
+// Google Search Console verification token. This value is intentionally public
+// (it is exposed in the page's HTML for anyone to read), so committing it is
+// safe. The PUBLIC_GOOGLE_SITE_VERIFICATION env var, if set, overrides this.
+export const GOOGLE_SITE_VERIFICATION = 'CwHFqyMgKDxGipUsvqXzJ_kc-Bnb5zOaJkRVJx6gNzA';
