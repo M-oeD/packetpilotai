@@ -3,15 +3,22 @@ import rss from '@astrojs/rss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function GET(context) {
-	const HIDDEN = new Set(['first-post', 'second-post', 'third-post', 'markdown-style-guide', 'using-mdx']);
-	const posts = (await getCollection('blog')).filter(({ id }) => !HIDDEN.has(id));
+	// Publish every non-draft post, newest first. Using the draft flag (rather
+	// than a hardcoded ignore list) keeps the feed in sync with the site.
+	const posts = (await getCollection('blog'))
+		.filter((post) => !post.data.draft)
+		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: context.site,
 		items: posts.map((post) => ({
-			...post.data,
+			title: post.data.title,
+			description: post.data.description,
+			pubDate: post.data.pubDate,
 			link: `/blog/${post.id}/`,
 		})),
+		customData: `<language>en-us</language>`,
 	});
 }
