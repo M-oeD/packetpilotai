@@ -18,7 +18,7 @@ import TweaksPanel from '../components/react/TweaksPanel';
     <div class="ppc-grid-bg" aria-hidden="true"></div>
     <div class="ppc-scanline" aria-hidden="true"></div>
 
-    <StatusBar client:load />
+    <StatusBar client:idle />
 
     <header class="ppc-nav">
       <div class="ppc-nav-inner">
@@ -110,8 +110,8 @@ site      packetpilotai.com`}</pre>
       </main>
     </div>
 
-    <FooterBar client:load />
-    <CopilotDock client:load />
-    <TweaksPanel client:load />
+    <FooterBar client:visible />
+    <CopilotDock client:idle />
+    <TweaksPanel client:idle />
   </body>
 </html>

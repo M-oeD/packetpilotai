@@ -2,6 +2,7 @@
 title: 'Troubleshoot Slow Network Performance Step-by-Step'
 description: 'A systematic methodology for diagnosing slow networks — from end-user complaint to root cause. Covers ping, traceroute, packet capture, interface stats, and common fixes.'
 pubDate: '2026-04-18'
+image: '/og/troubleshoot-slow-network-performance.png'
 heroAscii: |
   $ tracert 8.8.8.8
 
@@ -12,6 +13,15 @@ heroAscii: |
 
   [!] Latency jumped 178ms at hop 3 — ISP segment
   [→] Open a ticket with your ISP. Data in hand.
+faqs:
+  - q: "Where do I start when a user says the network is slow?"
+    a: "First define slow: ask what is slow, where the user is, when it started, and how many people are affected. Then isolate scope by pinging progressively further destinations: localhost, gateway, an internet IP, and a domain name."
+  - q: "What ping latency is acceptable on a LAN?"
+    a: "Run 50 pings and watch for packet loss, average RTT, and jitter. Any loss to the gateway is a red flag, and an average RTT over 5ms on a LAN is worth investigating."
+  - q: "What interface errors indicate a physical problem?"
+    a: "On a switch port, any non-zero counter is a problem. CRC errors suggest a bad cable, damaged SFP, or duplex mismatch; runts suggest a duplex mismatch; collisions mean a half-duplex device on a full-duplex port."
+  - q: "What should I look for in a packet capture when troubleshooting slowness?"
+    a: "Look for TCP retransmissions (upstream dropping packets), TCP Zero Window (an overwhelmed receiver), high TCP RTT via tcp.analysis.ack_rtt, and DNS timeouts. Wireshark Expert Information flags most of these automatically."
 ---
 
 "The network is slow." It's the vaguest complaint in IT, and it lands on your desk at least once a week. Without a methodology, you're guessing. With one, you find the cause in minutes.

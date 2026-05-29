@@ -2,6 +2,7 @@
 title: 'Using Claude to Audit Firewall Rules'
 description: 'Firewall rulebases grow until nobody remembers what half the entries do — and the audit nobody wants to run is the one that finds the holes. AI changes the math. Here are five prompts that turn Claude into a tireless firewall reviewer, plus the privacy guardrails to keep you safe.'
 pubDate: '2026-04-24'
+image: '/og/using-claude-to-audit-firewall-rules.png'
 heroAscii: |
   $ claude "audit this ACL — find shadowed and overly permissive rules"
 
@@ -13,6 +14,15 @@ heroAscii: |
 
   [!] 1 shadowed rule, 1 dead-code rule, 1 catch-all permit
   [→] Recommend reordering or removing lines 20, 30, 40
+faqs:
+  - q: "Should I paste production firewall configs into an AI?"
+    a: "Not without sanitizing first. At minimum replace real public IP ranges with placeholders and strip embedded secrets like SNMP communities, RADIUS keys, and IKE PSKs. Redact public IP space, secrets, customer names, and ticket numbers."
+  - q: "What is a shadowed firewall rule?"
+    a: "A shadowed rule is one that never matches because an earlier rule already handles its traffic. They clutter the rulebase and trick you into thinking a policy is in effect when it is not. Claude can flag them along with redundant rules."
+  - q: "What can an AI firewall audit not do?"
+    a: "It does not see your traffic (only flow logs and hit counters prove a rule is unused), it does not know your business, it can hallucinate platform syntax, and it is not a compliance auditor; a human must attest."
+  - q: "How often should I run an AI-assisted firewall audit?"
+    a: "A workable cadence is quarterly: export and sanitize the rulebase, run the shadowing, permissive, and misorder prompts, pull hit counters to cross-reference unused rules, and email rule owners. Refresh inline docs annually."
 ---
 
 Every firewall rulebase tells a story. The first ten rules are intentional. The next twenty are reactions to specific tickets. By rule fifty, nobody remembers whether `permit tcp any any eq 8443` was for the legacy app that retired in 2022 or the new one that went live last quarter — and nobody wants to be the person who removes it and breaks something.

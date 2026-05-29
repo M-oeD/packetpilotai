@@ -2,6 +2,7 @@
 title: 'Introducing the Claude Prompt Pack for Network Admins'
 description: '60 production-ready Claude prompts for network administrators — configs, troubleshooting, Python scripts, documentation, and security audits. Stop writing prompts from scratch.'
 pubDate: '2026-04-19'
+image: '/og/claude-prompt-pack-network-admins.png'
 heroAscii: |
   ┌─ PROMPT PACK v1 ─────────────────────────────┐
   │                                               │

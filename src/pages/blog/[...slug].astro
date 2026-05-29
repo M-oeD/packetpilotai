@@ -1,20 +1,47 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { POSTS_META } from '../../data/posts-meta';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+	// Drafts are not published: excluding them here keeps them out of the build
+	// and the sitemap, avoiding a "noindex page submitted in sitemap" conflict.
+	const posts = (await getCollection('blog')).filter((p) => !p.data.draft);
+
+	return posts.map((post) => {
+		// Related posts: other non-draft posts that share at least one tag,
+		// ranked by overlap, capped at 3. Powers internal linking for SEO.
+		const tags = new Set(POSTS_META[post.id]?.tags ?? []);
+		const related = posts
+			.filter((p) => p.id !== post.id && !p.data.draft)
+			.map((p) => ({
+				post: p,
+				overlap: (POSTS_META[p.id]?.tags ?? []).filter((t) => tags.has(t)).length,
+			}))
+			.filter((p) => p.overlap > 0)
+			.sort((a, b) => b.overlap - a.overlap)
+			.slice(0, 3)
+			.map(({ post: p }) => ({
+				slug: p.id,
+				title: p.data.title,
+				read: POSTS_META[p.id]?.read ?? '5 min',
+				tag: POSTS_META[p.id]?.tags?.[0] ?? 'guide',
+			}));
+
+		return {
+			params: { slug: post.id },
+			props: { ...post, related },
+		};
+	});
 }
-type Props = CollectionEntry<'blog'>;
+type Props = CollectionEntry<'blog'> & {
+	related: { slug: string; title: string; read: string; tag: string }[];
+};
 
 const post = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data} id={post.id}>
+<BlogPost {...post.data} id={post.id} related={post.related}>
 	<Content />
 </BlogPost>

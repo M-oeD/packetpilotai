@@ -2,6 +2,7 @@
 title: "How to Find What's Saturating Your WAN"
 description: 'A saturated WAN feels like the entire network is broken — but the cause is usually one app, one host, or one runaway backup. This step-by-step guide takes you from "everything is slow" to the exact source using interface stats, NetFlow, DPI, and Wireshark.'
 pubDate: '2026-04-24'
+image: '/og/find-what-saturates-your-wan.png'
 heroAscii: |
   $ show interfaces GigabitEthernet0/0 | include rate
 
@@ -17,6 +18,17 @@ heroAscii: |
 
   [!] One host pushing 13 GB inbound on a 1 Gbps link.
   [→] Find the host. Find the app. Then decide what to do.
+faqs:
+  - q: "How do I tell if my WAN link is saturated?"
+    a: "Pull live interface utilization and convert to a percentage of link capacity. A link consistently above 80% utilization is functionally saturated, and output drops greater than zero confirm packets are being dropped."
+  - q: "Why does egress matter more than ingress on a WAN link?"
+    a: "Egress is what matters most: a 1 Gbps link with 950 Mbps outbound and 50 Mbps inbound is a problem. Asymmetric links, like 1 Gbps down and 100 Mbps up, saturate the small side first, often invisibly."
+  - q: "How do I find which host is using all the bandwidth?"
+    a: "Use NetFlow (Cisco) or sFlow (Juniper, Arista, HP) for per-flow visibility, then sort by bytes descending; the top 5 flows are your suspects. With no flow collector, a port-mirrored capture into ntopng gives the same picture."
+  - q: "How do I identify which application a top-talker host is running?"
+    a: "Reverse DNS or whois the destination IP, or check the TLS SNI in a packet capture with tshark. DPI firewalls like Palo Alto, Fortinet, or Meraki show the app name directly in their Application Visibility view."
+  - q: "When should I upgrade the WAN link versus applying QoS?"
+    a: "Upgrade only when saturation is sustained not bursty, you have eliminated rogue sources, and QoS is not enough to protect critical apps. QoS does not add bandwidth; it decides who suffers when there is not enough."
 ---
 
 A saturated WAN doesn't announce itself politely. It shows up as "the internet is slow," "Teams is choppy," "VPN keeps dropping," and a flood of tickets that all sound different but have the same root cause: one fat link, fully booked.

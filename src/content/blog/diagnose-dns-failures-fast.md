@@ -2,6 +2,7 @@
 title: 'How to Diagnose DNS Failures Fast'
 description: 'When DNS breaks, everything looks broken — but the real cause is rarely obvious. This step-by-step guide takes you from "the internet is down" to root cause using nslookup, dig, and a handful of resolver checks.'
 pubDate: '2026-04-24'
+image: '/og/diagnose-dns-failures-fast.png'
 heroAscii: |
   $ nslookup app.example.com
 
@@ -18,6 +19,17 @@ heroAscii: |
 
   [!] Internal resolver fails. Public resolver works.
   [→] The record is fine. Your DNS server isn't.
+faqs:
+  - q: "How do I confirm a problem is actually DNS?"
+    a: "Ping the destination by name and by IP. If the name fails but the IP works, it is DNS. If both work or both fail, look elsewhere; both failing usually means a connectivity issue, not DNS."
+  - q: "How do I tell if my DNS server is broken or the record itself is wrong?"
+    a: "Test against a public resolver with nslookup name 8.8.8.8 or 1.1.1.1. If public resolvers answer but your internal one does not, your internal DNS server is broken or filtering. If both return the same wrong IP, the record itself is wrong."
+  - q: "What ports does DNS use and how can a firewall break resolution?"
+    a: "DNS uses UDP/53 for normal queries, TCP/53 for large responses and zone transfers, and TCP/853 for DNS-over-TLS. Blocking TCP/53 makes large DNSSEC responses fail, and blocking 853 breaks DoT clients like Android."
+  - q: "Why does a DNS record still resolve to the old value after I changed it?"
+    a: "A long TTL keeps stale answers in caches; a TTL of 86400 survives a full day after a fix. Lower the TTL (300 seconds is common) at least 24 hours before a planned change, or query the authoritative nameserver directly to bypass caches."
+  - q: "What is dig +trace used for?"
+    a: "dig +trace walks the resolution chain manually through root, TLD, and authoritative servers so you see which step fails. A timeout or REFUSED at any level pinpoints the broken layer."
 ---
 
 DNS failures are sneaky. The user doesn't say "DNS is broken" — they say "the website is down," "Outlook can't connect," "VPN won't authenticate." Every one of those can be DNS, and DNS is almost always the last thing anyone checks.

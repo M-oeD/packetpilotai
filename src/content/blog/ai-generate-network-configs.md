@@ -2,6 +2,7 @@
 title: 'How to Use AI to Generate Network Configurations'
 description: 'Stop hand-writing configs. Learn how to use AI tools like ChatGPT and GitHub Copilot to generate accurate Cisco IOS, Junos, and MikroTik configurations in seconds.'
 pubDate: '2026-04-18'
+image: '/og/ai-generate-network-configs.png'
 heroAscii: |
   $ claude "Create VLAN 10 for guest WiFi on Cisco IOS"
 
@@ -13,6 +14,15 @@ heroAscii: |
   [+]   switchport access vlan 10
   [+]   spanning-tree portfast
   [+] Done. Config ready to paste. ✓
+faqs:
+  - q: "How do I write a good prompt for generating network configs?"
+    a: "Be specific. Vague input gives vague output; include the device vendor, model, which ports, and the exact behavior you want. The more context you provide, the more accurate the generated config."
+  - q: "Can I paste AI-generated configs directly into production?"
+    a: "No. Never paste AI output directly into production. Read it line by line, check it against your vendor and IOS version, test it in a lab like GNS3, EVE-NG, or Packet Tracer, then verify with show commands after applying."
+  - q: "Which AI tools work well for network configs?"
+    a: "ChatGPT (GPT-4o) has broad vendor support, GitHub Copilot is great for Python/Netmiko scripts, Claude is strong at structured configs and edge cases, and Gemini is solid for multi-step walkthroughs. The difference is how you prompt, not the tool."
+  - q: "Can AI catch its own config mistakes?"
+    a: "It can surface nuance with good prompting. In the OSPF example the AI flagged that making an interface fully passive would prevent neighbor formation, so it applied passive only to the LAN side. You can also ask it to validate a specific line."
 ---
 
 Every network admin has been there — staring at a blank config file, trying to remember the exact syntax for a VLAN trunk, an OSPF neighbor statement, or an ACL that does exactly what you need. You know *what* you want. Getting it written correctly is the friction.

@@ -1,13 +1,59 @@
 ---
 import '../styles/global.css';
+import { OG_IMAGE, SITE_TITLE, TWITTER_HANDLE } from '../consts';
+import { absoluteUrl, websiteSchema } from '../utils/schema';
 
 interface Props {
 	title: string;
 	description: string;
+	/** 'website' for landing/index pages, 'article' for blog posts. */
+	type?: 'website' | 'article';
+	/** Path or URL to the social-share image. Defaults to the site OG image. */
+	image?: string;
+	/** ISO timestamp the article was published (articles only). */
+	publishedTime?: string;
+	/** ISO timestamp the article was last modified (articles only). */
+	modifiedTime?: string;
+	/** Author / publisher name shown on article cards. */
+	author?: string;
+	/** Article tags, emitted as article:tag meta. */
+	tags?: string[];
+	/** When true, instruct crawlers not to index the page (e.g. drafts). */
+	noindex?: boolean;
+	/** Extra JSON-LD blocks to emit (e.g. BlogPosting, BreadcrumbList). */
+	jsonLd?: Record<string, unknown>[];
 }
 
+const {
+	title,
+	description,
+	type = 'website',
+	image = OG_IMAGE,
+	publishedTime,
+	modifiedTime,
+	author,
+	tags = [],
+	noindex = false,
+	jsonLd = [],
+} = Astro.props;
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const { title, description } = Astro.props;
+const imageURL = absoluteUrl(image, Astro.site);
+const robots = noindex ? 'noindex, nofollow' : 'index, follow';
+
+// CF Web Analytics beacon token + optional Google Search Console verification.
+// Both are sourced from PUBLIC_ env vars so they can be configured per
+// deployment without committing secrets; tags are omitted when unset.
+const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
+// Optional Google Analytics 4. Off unless PUBLIC_GA4_ID is set. NOTE: GA4 sets
+// cookies — enabling it likely requires a consent banner in some regions,
+// unlike the cookieless Cloudflare beacon above.
+const ga4Id = import.meta.env.PUBLIC_GA4_ID;
+
+// Sitewide WebSite/Organization schema plus any page-specific blocks.
+const structuredData = [websiteSchema(Astro.site), ...jsonLd];
 ---
 
 <meta charset="utf-8" />
@@ -16,23 +62,68 @@ const { title, description } = Astro.props;
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" title="PacketPilot AI" href={new URL('rss.xml', Astro.site)} />
 <meta name="generator" content={Astro.generator} />
+<meta name="theme-color" content="#07090f" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <link rel="canonical" href={canonicalURL} />
+<meta name="robots" content={robots} />
+{googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+{bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
 
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+{author && <meta name="author" content={author} />}
 
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content="en_US" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
+<meta property="og:image" content={imageURL} />
+<!-- All share images (default + per-post) are generated at 1200x630. -->
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+
+{type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+{type === 'article' && author && <meta property="article:author" content={author} />}
+{type === 'article' && tags.map((t) => <meta property="article:tag" content={t} />)}
 
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={imageURL} />
+<meta property="twitter:image:alt" content={title} />
+{TWITTER_HANDLE && <meta property="twitter:site" content={`@${TWITTER_HANDLE}`} />}
+{TWITTER_HANDLE && <meta property="twitter:creator" content={`@${TWITTER_HANDLE}`} />}
+
+{structuredData.map((block) => (
+	<script type="application/ld+json" set:html={JSON.stringify(block)} />
+))}
+
+{cfBeaconToken && (
+	<script
+		defer
+		src="https://static.cloudflareinsights.com/beacon.min.js"
+		data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+	/>
+)}
+
+{ga4Id && (
+	<>
+		<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+		<script is:inline define:vars={{ ga4Id }}>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+			gtag('config', ga4Id);
+		</script>
+	</>
+)}
