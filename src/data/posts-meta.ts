@@ -94,6 +94,31 @@ export const POSTS_META: Record<string, {
     accent: 'warn',
     read: '10 min',
   },
+  'why-claude-gives-wrong-network-configs': {
+    tags: ['ai', 'prompting', 'claude'],
+    ascii: [
+      '# bad prompt → generic garbage:',
+      '"write me an ACL for my router"',
+      '→ wrong interface names, no logging',
+      '# context scaffold → paste-ready:',
+      'Platform: IOS-XE 17.9  Gi0/0/0 WAN ✓',
+    ],
+    accent: 'warn',
+    read: '9 min',
+  },
+  'network-incident-checklist': {
+    tags: ['checklist', 'triage', 'incident'],
+    ascii: [
+      'INCIDENT TRIAGE  ·  T+0:00',
+      '[1] scope      ✓  one user, VLAN 20',
+      '[2] ping test  ✓  gateway reachable',
+      '[3] traceroute ✗  hop 3 drops 100%',
+      '[4] DNS        ✓  resolving normally',
+      '→ ISP segment. Open ticket now.',
+    ],
+    accent: 'down',
+    read: '8 min',
+  },
   'using-claude-to-audit-firewall-rules': {
     tags: ['security', 'ai', 'firewall'],
     ascii: [
