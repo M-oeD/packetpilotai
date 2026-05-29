@@ -9,6 +9,12 @@ import react from '@astrojs/react';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://packetpilotai.com',
-    integrations: [mdx(), sitemap(), react()],
+    integrations: [
+        mdx(),
+        // Keep the noindex 404 out of the sitemap to avoid a
+        // "noindex URL submitted in sitemap" conflict in Search Console.
+        sitemap({ filter: (page) => !page.endsWith('/404/') && !page.endsWith('/404') }),
+        react(),
+    ],
     adapter: cloudflare(),
 });

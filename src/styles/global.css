@@ -992,6 +992,50 @@ button { font-family: inherit; }
 .ppc-related-title { flex: 1; }
 .ppc-related-meta { color: var(--ppc-muted); font-size: 11px; white-space: nowrap; }
 
+/* ─────────────── 404 ─────────────── */
+
+.ppc-404 { max-width: 640px; margin: 48px auto; padding: 0 var(--ppc-pad-2); }
+.ppc-404-code {
+  font-family: var(--ppc-mono); font-weight: 500;
+  font-size: clamp(72px, 16vw, 140px); line-height: 1;
+  color: var(--ppc-accent); letter-spacing: -0.04em;
+}
+.ppc-404-trace {
+  font-family: var(--ppc-mono); font-size: 12px; line-height: 1.6;
+  color: var(--ppc-muted);
+  background: var(--ppc-surface);
+  border: 1px solid var(--ppc-border-soft); border-radius: var(--ppc-radius);
+  padding: 14px 16px; margin: 24px 0; overflow-x: auto;
+}
+.ppc-404-down { color: var(--ppc-down); }
+.ppc-404-h1 {
+  font-family: var(--ppc-sans); font-size: clamp(28px, 4vw, 40px); font-weight: 600;
+  letter-spacing: -0.02em; margin: 0 0 12px 0; color: var(--ppc-text);
+}
+.ppc-404-lede {
+  font-family: var(--ppc-sans); font-size: 15px; line-height: 1.6;
+  color: var(--ppc-text-2); margin: 0 0 28px 0;
+}
+.ppc-404-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .ppc-404-links { grid-template-columns: 1fr; } }
+.ppc-404-link {
+  display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid var(--ppc-border-soft); border-radius: var(--ppc-radius);
+  font-family: var(--ppc-mono); font-size: 14px;
+  color: var(--ppc-text); text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.ppc-404-link:hover { border-color: var(--ppc-edge-strong); background: var(--ppc-accent-soft); }
+.ppc-404-sigil { color: var(--ppc-accent); }
+.ppc-404-meta { color: var(--ppc-muted); font-size: 11px; width: 100%; }
+.ppc-404-hint { font-family: var(--ppc-mono); font-size: 12px; color: var(--ppc-muted); margin-top: 24px; }
+.ppc-404-hint kbd {
+  font-family: var(--ppc-mono); font-size: 11px;
+  background: var(--ppc-surface-2); border: 1px solid var(--ppc-border);
+  border-radius: 3px; padding: 1px 6px;
+}
+
 /* ─────────────── Footer ─────────────── */
 
 .ppc-footer {

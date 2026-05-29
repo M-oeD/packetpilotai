@@ -34,7 +34,7 @@ const latestPosts = allPosts
     <div class="ppc-grid-bg" aria-hidden="true"></div>
     <div class="ppc-scanline" aria-hidden="true"></div>
 
-    <StatusBar client:load />
+    <StatusBar client:idle />
 
     <header class="ppc-nav">
       <div class="ppc-nav-inner">
@@ -110,7 +110,7 @@ const latestPosts = allPosts
                     <span></span><span></span><span></span>
                   </span>
                 </div>
-                <HeroBoot client:load />
+                <HeroBoot client:idle />
                 <div class="ppc-hero-window-foot">
                   <span>tmux 0:console*</span>
                   <span>—</span>
@@ -135,7 +135,7 @@ const latestPosts = allPosts
             </div>
             <div class="ppc-section-hint muted">rendered client-side · 60fps · zero photos</div>
           </div>
-          <Topology client:load />
+          <Topology client:visible />
         </section>
 
         <!-- Traceroute -->
@@ -147,7 +147,7 @@ const latestPosts = allPosts
             </div>
             <div class="ppc-section-hint muted">mtr, but on the homepage</div>
           </div>
-          <Traceroute client:load />
+          <Traceroute client:visible />
         </section>
 
         <!-- Latest Posts -->
@@ -230,8 +230,8 @@ const latestPosts = allPosts
       </main>
     </div>
 
-    <FooterBar client:load />
-    <CopilotDock client:load />
-    <TweaksPanel client:load />
+    <FooterBar client:visible />
+    <CopilotDock client:idle />
+    <TweaksPanel client:idle />
   </body>
 </html>
