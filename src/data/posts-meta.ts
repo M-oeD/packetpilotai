@@ -94,6 +94,19 @@ export const POSTS_META: Record<string, {
     accent: 'warn',
     read: '10 min',
   },
+  'network-incident-checklist': {
+    tags: ['checklist', 'triage', 'incident'],
+    ascii: [
+      'INCIDENT TRIAGE  ·  T+0:00',
+      '[1] scope      ✓  one user, VLAN 20',
+      '[2] ping test  ✓  gateway reachable',
+      '[3] traceroute ✗  hop 3 drops 100%',
+      '[4] DNS        ✓  resolving normally',
+      '→ ISP segment. Open ticket now.',
+    ],
+    accent: 'down',
+    read: '8 min',
+  },
   'using-claude-to-audit-firewall-rules': {
     tags: ['security', 'ai', 'firewall'],
     ascii: [
