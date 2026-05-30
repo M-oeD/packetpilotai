@@ -94,6 +94,18 @@ export const POSTS_META: Record<string, {
     accent: 'warn',
     read: '10 min',
   },
+  'wan-down-panic-button': {
+    tags: ['panic', 'incident', 'script'],
+    ascii: [
+      '╔══════════════════════════════╗',
+      '║  [!] WAN DOWN  T+0:00       ║',
+      '║  │  ████████████████ 🔴 │   ║',
+      '╚══════════════════════════════╝',
+      '→ one click. root cause in 90s.',
+    ],
+    accent: 'down',
+    read: '7 min',
+  },
   'why-claude-gives-wrong-network-configs': {
     tags: ['ai', 'prompting', 'claude'],
     ascii: [
