@@ -152,9 +152,9 @@ Rolling roadmap.sh's "interactive structured artifact" format into packetpilotai
 
 ### P0 — Instrument first (observability before more content)
 - [x] Add Cloudflare Web Analytics beacon to `BaseHead.astro`; token via `CF_ANALYTICS_TOKEN` in `consts.ts` (emits only when set) — code done, build verified
-- [ ] **User:** Cloudflare dash -> Web Analytics -> Add site `packetpilotai.com` -> paste token into `consts.ts`
-- [ ] `npm run deploy`, then confirm beacon fires on live `packetpilotai.com` (build ≠ live — see lessons.md)
-- [ ] Confirm Gumroad conversion tracking + Beehiiv signup event are visible
+- [x] Token set in `consts.ts` (public beacon token) + committed — 2026-05-31 (e051c12)
+- [x] Deployed (version `ff8b3c39`) + beacon **confirmed firing live** on `packetpilotai.com` (verified in live HTML, not just build)
+- [ ] Confirm Gumroad conversion tracking + Beehiiv signup event are visible — NOTE: CF Web Analytics = traffic/pageviews ONLY, not conversions. Funnel = 3 surfaces: CF traffic ✅ · Gumroad sales — **per-post UTM attribution WIRED + LIVE** 2026-05-31 (version bfe0f747; `utm_campaign=<post-slug>` on every blog CTA, forwarded to Gumroad checkout via pass-through script on `/prompt-pack`) — confirm it surfaces in Gumroad analytics after the next sale · Beehiiv signups still pending. (Homepage Gumroad buttons not yet UTM-tagged — optional.)
 
 ### P1 — Kill or commit the 3d-printer anomaly (ideas.md #21)
 - [x] Decision: **KILLED** (2026-05-29) — deleted the `.md` + its `POSTS_META` entry; tightens the networking+Claude cluster. (404 acceptable: post was ~9 days live, off-cluster, no inbound links. Add a `/blog` redirect later only if logs show hits.)
