@@ -11,6 +11,10 @@ const blog = defineCollection({
 		updatedDate: z.coerce.date().optional(),
 		draft: z.boolean().optional(),
 		heroAscii: z.string().optional(),
+		// Editorial backbone — see src/data/streams.ts for stream definitions.
+		// Both optional so legacy untagged posts continue to validate.
+		stream: z.string().optional(),
+		streamNum: z.number().int().positive().optional(),
 	}),
 });
 

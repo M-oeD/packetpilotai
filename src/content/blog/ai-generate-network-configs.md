@@ -2,6 +2,7 @@
 title: 'How to Use AI to Generate Network Configurations'
 description: 'Stop hand-writing configs. Learn how to use AI tools like ChatGPT and GitHub Copilot to generate accurate Cisco IOS, Junos, and MikroTik configurations in seconds.'
 pubDate: '2026-04-18'
+stream: 'showdown'
 heroAscii: |
   $ claude "Create VLAN 10 for guest WiFi on Cisco IOS"
 

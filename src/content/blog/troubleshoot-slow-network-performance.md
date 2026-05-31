@@ -2,6 +2,7 @@
 title: 'Troubleshoot Slow Network Performance Step-by-Step'
 description: 'A systematic methodology for diagnosing slow networks — from end-user complaint to root cause. Covers ping, traceroute, packet capture, interface stats, and common fixes.'
 pubDate: '2026-04-18'
+stream: 'failure-library'
 heroAscii: |
   $ tracert 8.8.8.8
 

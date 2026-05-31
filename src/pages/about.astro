@@ -4,6 +4,7 @@ import StatusBar from '../components/react/StatusBar';
 import FooterBar from '../components/react/FooterBar';
 import CopilotDock from '../components/react/CopilotDock';
 import TweaksPanel from '../components/react/TweaksPanel';
+import NewsletterBar from '../components/NewsletterBar.astro';
 ---
 
 <!doctype html>
@@ -110,6 +111,7 @@ site      packetpilotai.com`}</pre>
       </main>
     </div>
 
+    <NewsletterBar />
     <FooterBar client:load />
     <CopilotDock client:load />
     <TweaksPanel client:load />

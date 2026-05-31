@@ -10,6 +10,7 @@ import Traceroute from '../components/react/Traceroute';
 import FooterBar from '../components/react/FooterBar';
 import CopilotDock from '../components/react/CopilotDock';
 import TweaksPanel from '../components/react/TweaksPanel';
+import NewsletterBar from '../components/NewsletterBar.astro';
 
 const allPosts = await getCollection('blog');
 const latestPosts = allPosts
@@ -29,6 +30,23 @@ const latestPosts = allPosts
 <html lang="en" data-theme="amber" data-density="compact">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "PacketPilot AI",
+          "url": "https://packetpilotai.com",
+          "description": "Terminal-first guides for network admins on troubleshooting, Cisco and pfSense configs, and AI-assisted networking workflows."
+        },
+        {
+          "@type": "Organization",
+          "name": "PacketPilot AI",
+          "url": "https://packetpilotai.com",
+          "description": "PacketPilot AI publishes practical guides for network administrators covering packet analysis, network troubleshooting, firewall auditing, and AI-assisted configuration generation."
+        }
+      ]
+    })} />
   </head>
   <body>
     <div class="ppc-grid-bg" aria-hidden="true"></div>
@@ -230,6 +248,7 @@ const latestPosts = allPosts
       </main>
     </div>
 
+    <NewsletterBar />
     <FooterBar client:load />
     <CopilotDock client:load />
     <TweaksPanel client:load />

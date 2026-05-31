@@ -2,6 +2,7 @@
 title: 'How to Diagnose DNS Failures Fast'
 description: 'When DNS breaks, everything looks broken — but the real cause is rarely obvious. This step-by-step guide takes you from "the internet is down" to root cause using nslookup, dig, and a handful of resolver checks.'
 pubDate: '2026-04-24'
+stream: 'failure-library'
 heroAscii: |
   $ nslookup app.example.com
 

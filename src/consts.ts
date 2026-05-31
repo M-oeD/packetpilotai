@@ -3,3 +3,8 @@
 
 export const SITE_TITLE = 'PacketPilot AI';
 export const SITE_DESCRIPTION = 'PacketPilot AI helps network admins automate repetitive tasks and solve real-world network problems using AI.';
+
+// Cloudflare Web Analytics beacon token. PUBLIC by design (ships in client HTML) — safe to commit.
+// Get it: Cloudflare dashboard -> Analytics & Logs -> Web Analytics -> "Add a site" -> copy the token.
+// Leave as '' to disable the beacon (no script is emitted, build stays clean).
+export const CF_ANALYTICS_TOKEN = '';

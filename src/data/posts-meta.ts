@@ -208,36 +208,6 @@ export const POSTS_META: Record<string, {
     related: ['diagnose-packet-loss', 'diagnose-dns-failures-fast', '5-free-network-troubleshooting-tools-2026'],
   },
 
-  '3d-printer-filament-comparison-guide': {
-    tags: ['3d-printing', 'comparison', 'guide'],
-    ascii: [
-      '[1] PLA    → easy · indoor · brittle',
-      '[2] PETG   → outdoor · UV-tol · tough',
-      '[3] ABS    → heat 100°C · acetone',
-      '[4] ASA    → outdoor + UV-proof',
-      '[5] TPU    → flex · grip · rubber',
-      '[6] Nylon  → strongest · dry it',
-      '[7] PC     → engineering · 130°C',
-    ],
-    accent: 'accent',
-    read: '14 min',
-    faq: [
-      {
-        q: 'What is the best 3D printer filament for outdoor parts?',
-        a: 'ASA is the best filament for outdoor 3D prints because it is UV-resistant and does not yellow or crack in sunlight. PETG is the second-best option for shaded outdoor parts. Avoid PLA outdoors — it degrades in heat and UV. Avoid ABS in direct sun — it yellows and cracks within a year.',
-      },
-      {
-        q: 'What is the strongest 3D printer filament?',
-        a: 'Polycarbonate (PC) is the strongest common FDM filament by tensile strength, followed by Nylon (PA) and carbon-fiber-reinforced variants. For most consumer printers, Nylon is the strongest practical choice — PC requires an all-metal hotend rated to 300°C+ and a heated chamber.',
-      },
-      {
-        q: 'What is the difference between PLA and PETG?',
-        a: 'PLA is easier to print and captures more detail but is brittle and has poor heat resistance (~60°C). PETG is slightly harder to print but tougher, slightly flexible, heat-resistant to ~75°C, and tolerates outdoor exposure. Use PLA for indoor display models; use PETG for parts that get handled or go outside.',
-      },
-    ],
-    related: [],
-  },
-
   'using-claude-to-audit-firewall-rules': {
     tags: ['security', 'ai', 'firewall'],
     ascii: [
@@ -264,5 +234,401 @@ export const POSTS_META: Record<string, {
       },
     ],
     related: ['ai-generate-network-configs', 'claude-prompt-pack-network-admins', '5-free-network-troubleshooting-tools-2026'],
+  },
+
+  'failure-01-spanning-tree-loop-at-3am': {
+    tags: ['failure-library', 'spanning-tree', 'l2', 'incident'],
+    ascii: [
+      '03:14  ALERT  ping loss 47% · all VLANs',
+      '03:14  ALERT  core cpu 98% · mac-flap 2400/s',
+      '03:31  "why is bpdufilter set on Gi1/0/14?"',
+      '03:33  RESOLVED  port [BLK] · cpu 5%',
+      '[!] root cause: rogue switch + bpdufilter',
+    ],
+    accent: 'down',
+    read: '11 min',
+    faq: [
+      {
+        q: 'What is the difference between spanning-tree bpdufilter and bpduguard?',
+        a: 'bpduguard shuts down a port the moment it receives a BPDU — protective. bpdufilter stops the port from sending or receiving BPDUs entirely — destructive. bpduguard is the correct default for access ports running portfast. bpdufilter should almost never be enabled; it blinds spanning tree to anything happening on that port, which means a downstream loop becomes invisible until traffic levels make it visible.',
+      },
+      {
+        q: 'How do I detect a Layer 2 loop on a Cisco switch?',
+        a: 'The fastest signal is MAC address flapping: the same MAC address appearing on two different ports within seconds. Run show mac address-table address <MAC> twice in quick succession; if the port changes, you have a loop. Other signals: HLFM address learning CPU spikes, broadcast rates above the historical baseline, and any port in forwarding state that should not have a redundant path.',
+      },
+      {
+        q: 'Why did not spanning tree prevent the broadcast storm automatically?',
+        a: 'It would have. The reason it did not in this case is that one of the involved ports had spanning-tree bpdufilter enable configured, which made it deaf to spanning tree loop-detection protocol. Spanning tree only blocks ports where it can see redundant paths via BPDUs. Block the BPDUs and you blind the algorithm.',
+      },
+      {
+        q: 'Should I enable BPDU guard or BPDU filter on access ports?',
+        a: 'BPDU guard. Every time. spanning-tree bpduguard enable paired with spanning-tree portfast is the safe default for any port connected to an end device. If anyone plugs a switch into that port, BPDU guard will shut the port down — loud and unmistakable. The opposite command, bpdufilter, hides exactly the failure mode you want to catch.',
+      },
+    ],
+    related: ['troubleshoot-slow-network-performance', 'diagnose-packet-loss', 'find-what-saturates-your-wan'],
+  },
+
+  'potw-01-truncated-dns-query': {
+    tags: ['potw', 'dns', 'puzzle'],
+    ascii: [
+      '14:22:01  10.0.4.42 → resolver  UDP/53 query',
+      '14:22:01  resolver → 10.0.4.42  TC=1 (truncated)',
+      '14:22:01  10.0.4.42 → resolver  TCP/53 [SYN]',
+      '14:22:04  10.0.4.42 → resolver  TCP/53 [SYN] retry',
+      '[!] root cause: host blocks TCP/53',
+    ],
+    accent: 'ok',
+    read: '4 min',
+    faq: [
+      {
+        q: 'When does a DNS query actually use TCP instead of UDP?',
+        a: 'When the response is too large to fit in the client\'s UDP buffer (512 bytes without EDNS0, up to ~4096 with it), the resolver sets the truncated flag (TC=1) and the client retries the same query over TCP/53. Zone transfers (AXFR/IXFR) also always use TCP. Modern DNS — especially with DNSSEC, large TXT records, or long CNAME chains — relies on TCP fallback more often than people assume.',
+      },
+      {
+        q: 'What does TC=1 mean in a DNS response?',
+        a: 'TC=1 is the truncation flag. The resolver had a valid answer but it did not fit in a single UDP datagram, so it sent a short response with the TC bit set and no answer payload. The client is expected to retry over TCP/53. If TCP/53 is blocked on the path — or on the host itself — the query fails even though the resolver is healthy.',
+      },
+      {
+        q: 'How do I test whether TCP/53 is reachable from a Windows host?',
+        a: 'Run Test-NetConnection -ComputerName <resolver-ip> -Port 53 from PowerShell. The output shows TcpTestSucceeded : True if the handshake completes. From Linux or Mac, use nc -zv <resolver-ip> 53. Running this on both the working and broken machine isolates a host-level block in under a minute.',
+      },
+    ],
+    related: ['diagnose-dns-failures-fast', 'troubleshoot-slow-network-performance', '5-free-network-troubleshooting-tools-2026'],
+  },
+
+  'showdown-01-claude-vs-chatgpt-vs-gemini-bgp': {
+    tags: ['showdown', 'bgp', 'ai'],
+    ascii: [
+      '$ ai "dual-homed eBGP · no transit"',
+      '[✓] neighbors  AS64500 / AS64501',
+      '[✓] originate  192.0.2.0/24',
+      '[✗] outbound filter  MISSING',
+      '[!] route leak in one missing line',
+    ],
+    accent: 'warn',
+    read: '10 min',
+    faq: [
+      {
+        q: 'Can an AI model configure BGP correctly?',
+        a: 'Yes — given a specific prompt. Modern models produce syntactically valid, paste-ready eBGP configs for a stated platform when you specify the local AS, the neighbors, the exact prefixes to advertise, and the path policy. Accuracy drops sharply on vague prompts: the more you leave implicit — filtering, path preference, safety limits — the more the model omits. Always score the output against a fixed checklist before you apply it.',
+      },
+      {
+        q: 'What is the most common BGP mistake AI models make?',
+        a: 'Omitting the outbound prefix filter on a dual-homed router. The neighbors come up and traffic flows, so the config looks correct, but with no outbound filter the router re-advertises routes learned from one ISP to the other — a route leak that briefly turns you into an unintended transit AS. Confirm that every eBGP neighbor has an outbound prefix-list permitting only your own prefixes.',
+      },
+      {
+        q: 'How do I stop my BGP router from becoming a transit AS?',
+        a: 'Apply an outbound prefix-list to every eBGP neighbor that permits only the prefixes you own and denies everything else. On Cisco IOS that is `ip prefix-list MY-OUT permit <your-prefix>` plus `neighbor <ip> prefix-list MY-OUT out` on each neighbor. Pair it with `maximum-prefix` inbound so a peer that leaks the full table triggers a warning instead of an outage.',
+      },
+    ],
+    related: ['acr-01-reddit-bgp-configs', 'ai-generate-network-configs', 'using-claude-to-audit-firewall-rules'],
+  },
+
+  'migration-cisco-asa-to-pfsense': {
+    tags: ['migration', 'pfsense', 'asa'],
+    ascii: [
+      'CISCO ASA          →   pfSense',
+      'security-level     →   (none)',
+      'access-list        →   Firewall ▸ Rules',
+      'nat (inside,out)   →   Firewall ▸ NAT',
+      '[!] ASA trusts by level; pfSense does not',
+    ],
+    accent: 'accent',
+    read: '13 min',
+    faq: [
+      {
+        q: 'Can I migrate a Cisco ASA configuration to pfSense?',
+        a: 'Yes, but not as a literal line-by-line port. Interfaces, ACLs, NAT, object-groups, static routes, and site-to-site IPsec VPNs all have clean pfSense equivalents. The two things that do not port directly are ASA security levels (pfSense has no implicit trust — you write explicit rules) and AnyConnect SSL VPN (pfSense uses OpenVPN or WireGuard, so remote clients change). Plan those two as their own workstreams.',
+      },
+      {
+        q: 'What is the biggest difference between Cisco ASA and pfSense?',
+        a: 'The trust model. The ASA assigns every interface a security level (0–100) and implicitly permits traffic from a higher level to a lower one with no explicit rule. pfSense has no security levels and permits nothing inbound until you write a pass rule. Migrations break when admins translate the ACLs perfectly but forget to recreate the permissions the ASA was granting implicitly by security level.',
+      },
+      {
+        q: 'Does pfSense support AnyConnect VPN clients?',
+        a: 'No. pfSense cannot act as a Cisco AnyConnect headend. The standard replacements are OpenVPN (with the OpenVPN Connect client) or WireGuard. Your LDAP/RADIUS authentication and certificates can usually carry over, but every remote user must install a new client and import a new profile — communicate this well before cutover.',
+      },
+    ],
+    related: ['using-claude-to-audit-firewall-rules', 'ai-generate-network-configs', 'claude-prompt-pack-network-admins'],
+  },
+
+  'acr-01-reddit-bgp-configs': {
+    tags: ['acr', 'bgp', 'ai'],
+    ascii: [
+      'router bgp 65001',
+      '  network 10.0.0.0     [!] no mask',
+      '  neighbor … iBGP      [!] no next-hop-self',
+      '  neighbor … eBGP      [!] no filters',
+      'verdict: comes up, black-holes traffic',
+    ],
+    accent: 'info',
+    read: '9 min',
+    faq: [
+      {
+        q: 'Why does my BGP session come up but traffic does not flow?',
+        a: 'The most common cause on iBGP is an unreachable next-hop. When a router passes an eBGP-learned route to an iBGP peer, it keeps the original external next-hop by default. If the receiving router has no route to that external address, BGP marks the prefix inaccessible and never installs it — so the session is Established but traffic black-holes. The fix is `neighbor <peer> next-hop-self` on the router that holds the eBGP session. Also confirm your `network` statements actually match a route in the table.',
+      },
+      {
+        q: 'What does next-hop-self do in BGP?',
+        a: '`neighbor <peer> next-hop-self` tells a router to advertise itself as the next-hop for the routes it sends to that iBGP peer, instead of preserving the original eBGP next-hop. It is the standard fix for iBGP peers that cannot reach the external next-hop of eBGP-learned routes. You apply it on the border router — the one with the eBGP session — on its iBGP neighbor statements.',
+      },
+      {
+        q: 'Is it safe to use AI-generated BGP configs?',
+        a: 'Only after a semantic audit. AI models reliably produce configs that establish a session, but they frequently miss next-hop reachability, real prefix origination, and inbound/outbound filtering — bugs that stay invisible until real traffic or a real routing table arrives. Treat any AI-generated BGP config as a draft: verify it advertises what you intend, installs routes on every router, and filters in both directions before it touches production.',
+      },
+    ],
+    related: ['showdown-01-claude-vs-chatgpt-vs-gemini-bgp', 'ai-generate-network-configs', 'using-claude-to-audit-firewall-rules'],
+  },
+
+  'potw-02-one-byte-then-silence': {
+    tags: ['potw', 'tcp', 'mtu'],
+    ascii: [
+      '$ ssh app01   # hangs after connect',
+      '[ok] SYN / SYN-ACK / ACK',
+      '[ok] 1-byte push ACKed',
+      '[!!] 1460B [DF] retrans ×5, no ACK',
+      'tell: MTU black hole → clamp MSS',
+    ],
+    accent: 'ok',
+    read: '5 min',
+    faq: [
+      {
+        q: 'What is a PMTUD (Path MTU Discovery) black hole?',
+        a: 'A PMTUD black hole happens when a packet is too large for a hop on the path and has the Don\'t Fragment bit set, but the ICMP "fragmentation needed" message that should tell the sender to use smaller packets is filtered or dropped. The sender never learns its packets are too big, so it retransmits the same oversized segment until the connection stalls. It is common across VPN, GRE, and PPPoE links where encapsulation lowers the usable MTU.',
+      },
+      {
+        q: 'Why does a TCP connection complete the handshake and then hang?',
+        a: 'Because the handshake and the first tiny bits of data use small packets that fit the path, while the first full-size segment exceeds an MTU somewhere along the route. If that hop drops Don\'t-Fragment packets and the ICMP fragmentation-needed reply is blocked, the large segment is retransmitted into silence and the session hangs. The giveaway in a capture is a full-size segment with the [DF] flag retransmitting with no ACK and no returning ICMP.',
+      },
+      {
+        q: 'How do I fix an MTU black hole with MSS clamping?',
+        a: 'Clamp the TCP MSS on the tunnel or choke-point interface so both sides negotiate a segment size that fits the path. On Cisco IOS that is `ip tcp adjust-mss 1360` on the tunnel interface (path MTU 1400 minus 40 bytes of IP/TCP header). This rewrites the MSS in the TCP SYN so no segment is ever too big to cross. Also stop filtering ICMP type 3 code 4 so Path MTU Discovery can work on its own.',
+      },
+    ],
+    related: ['potw-01-truncated-dns-query', 'troubleshoot-slow-network-performance', 'diagnose-packet-loss'],
+  },
+
+  'potw-03-duplicate-ip-arp-war': {
+    tags: ['potw', 'arp', 'l2'],
+    ascii: [
+      '$ ping 10.0.4.50  # up...down...up',
+      'arp -a → 10.0.4.50:',
+      '  00-1a-2b-3c-4d-5e   then…',
+      '  00-50-56-9a-11-22   same IP!',
+      'tell: duplicate IP — last ARP wins',
+    ],
+    accent: 'ok',
+    read: '5 min',
+    faq: [
+      {
+        q: 'What causes a host to be intermittently reachable on a clean cycle?',
+        a: 'A repeating up/down cycle that survives reboots and cable swaps is the signature of a duplicate IP address. Two devices share one IP, and each periodically sends a gratuitous ARP that overwrites the mapping in every neighbor\'s ARP cache and the switch MAC table. Traffic follows whichever host announced last, so the service "blinks" as the two hosts take turns winning. Random hardware faults do not produce a clean, repeating rhythm.',
+      },
+      {
+        q: 'How do I find a duplicate IP address on my network?',
+        a: 'Run `arp -a` for the affected IP a few times in a row; if it resolves to two different MAC addresses, you have a duplicate. Then map each MAC to a switch port with `show mac address-table address <mac>` on Cisco and walk the cable. The MAC\'s OUI (first half) often identifies the vendor — a VMware OUI points at a cloned VM. On Windows, a TCP/IP address-conflict event (ID 4199) names the conflicting hardware address.',
+      },
+      {
+        q: 'How do I prevent duplicate IP and ARP spoofing on a switch?',
+        a: 'Enable DHCP snooping and Dynamic ARP Inspection (DAI) on the access switches. DAI validates every ARP packet against the DHCP snooping binding table and drops spoofed or duplicate announcements before they can poison neighbor caches. Pair it with DHCP reservations for static hosts so every address has a single source of truth and static IPs cannot collide with the DHCP pool.',
+      },
+    ],
+    related: ['potw-02-one-byte-then-silence', 'diagnose-packet-loss', 'find-what-saturates-your-wan'],
+  },
+
+  'potw-04-asymmetric-routing-stateful-drop': {
+    tags: ['potw', 'routing', 'firewall'],
+    ascii: [
+      '$ ping 10.20.5.10  # 0% loss',
+      '$ curl :443        # hangs',
+      'SYN → out via fw-A',
+      'SYN-ACK ← via fw-B → no state → DROP',
+      'tell: asymmetric routing + stateful fw',
+    ],
+    accent: 'ok',
+    read: '6 min',
+    faq: [
+      {
+        q: 'Why does ping work but TCP connections fail?',
+        a: 'The most common cause is asymmetric routing through a stateful firewall. ICMP echo is not bound to TCP session state, so it succeeds in both directions, but a TCP handshake must be witnessed in full by the same stateful device. If the SYN leaves through one firewall and the SYN-ACK returns through another, the second firewall has no session for the flow and drops the out-of-state packet, so the handshake never completes even though the server replied.',
+      },
+      {
+        q: 'What is asymmetric routing and why does it break firewalls?',
+        a: 'Asymmetric routing is when traffic to a destination takes one path and the return traffic takes a different path. Stateless forwarding tolerates it, but stateful firewalls do not: they build a per-flow session table on the outbound packet and only permit return packets that match it. If the return path crosses a different firewall that never saw the connection start, that firewall drops the reply as out-of-state. It usually appears right after a second router or firewall is added for redundancy.',
+      },
+      {
+        q: 'How do I fix asymmetric routing through a stateful firewall?',
+        a: 'Best option: make routing symmetric so both directions of a flow cross the same firewall — usually a return-route or gateway change. If both paths must stay active, run the firewalls as a stateful HA pair that synchronizes its session table, or pin the flow with policy-based routing. Loosening state inspection (asymmetric/sloppy state) works on some platforms but disables a security feature to mask a routing problem, so treat it as a last resort.',
+      },
+    ],
+    related: ['potw-03-duplicate-ip-arp-war', 'troubleshoot-slow-network-performance', 'find-what-saturates-your-wan'],
+  },
+
+  'potw-05-dhcp-snooping-blackhole': {
+    tags: ['potw', 'dhcp', 'security'],
+    ascii: [
+      'ipconfig → 169.254.18.44  (APIPA)',
+      'next switch → 10.30.3.x  fine',
+      'snooping drops (untrusted): 4012↑',
+      'uplink Gi1/0/48  Trusted: NO',
+      'tell: you blocked your own DHCP',
+    ],
+    accent: 'ok',
+    read: '6 min',
+    faq: [
+      {
+        q: 'Why do clients get a 169.254 APIPA address instead of a DHCP lease?',
+        a: 'A 169.254.x.x address means the client sent a DHCP request and received no usable reply, so Windows self-assigned a link-local (APIPA) address. Causes include the DHCP server being unreachable, scope exhaustion, a missing relay/helper-address on the router for that VLAN, or DHCP snooping dropping the server\'s replies. APIPA is distinct from getting a wrong-subnet lease, which points to a rogue DHCP server instead.',
+      },
+      {
+        q: 'What is the difference between a trusted and untrusted DHCP snooping port?',
+        a: 'DHCP snooping only allows server-to-client messages — OFFER, ACK, and NAK — to arrive on trusted ports. Access ports where clients connect stay untrusted, so a rogue DHCP server plugged into one is blocked. Every port on the path toward your legitimate DHCP server or relay must be trusted. If an uplink toward the server is left untrusted, the switch drops the real server\'s offers and clients fall back to APIPA.',
+      },
+      {
+        q: 'How do I fix DHCP snooping dropping legitimate offers?',
+        a: 'Mark the uplink toward the DHCP server (or relay) as trusted. On Cisco IOS: enter the interface and run `ip dhcp snooping trust`, then confirm the untrusted-port drop counter stops climbing with `show ip dhcp snooping statistics`. The rule: access ports stay untrusted, every uplink toward the server is trusted. Reversing that on an uplink creates a DHCP black hole that mimics a rogue-server outage.',
+      },
+    ],
+    related: ['potw-04-asymmetric-routing-stateful-drop', 'diagnose-dns-failures-fast', 'find-what-saturates-your-wan'],
+  },
+
+  'failure-02-forgotten-hosts-file': {
+    tags: ['failure-library', 'dns', 'hosts', 'incident'],
+    ascii: [
+      '14:02  db migrated → 10.0.6.40',
+      '14:03  app01: connection refused',
+      'nslookup db.corp → 10.0.6.40  (right!)',
+      'app still connects to 10.0.6.12',
+      '[!] hosts file pinned it since 2018',
+    ],
+    accent: 'down',
+    read: '10 min',
+    faq: [
+      {
+        q: 'Why does my app connect to the wrong IP when DNS is correct?',
+        a: 'Because the operating system resolver checks the hosts file before it ever queries DNS. A stale entry in the hosts file (Windows: C:\\Windows\\System32\\drivers\\etc\\hosts; Linux: /etc/hosts) pins a name to an old IP and the application uses it, even though DNS holds the correct record. Confirm what the app actually connects to with `netstat`, then inspect the hosts file.',
+      },
+      {
+        q: 'Does the hosts file override DNS?',
+        a: 'Yes. On both Windows and Linux the hosts file takes precedence over DNS for name resolution. On Linux the order is controlled by `nsswitch.conf`, which is typically `hosts: files dns` — files (the hosts file) first. An entry there wins absolutely, and DNS is never consulted for that name until the entry is removed.',
+      },
+      {
+        q: 'Why does nslookup show a different IP than ping?',
+        a: 'nslookup and dig are DNS tools — they query the DNS server directly and bypass the hosts file. ping uses the OS resolver, which honors the hosts file first. So when a stale hosts entry exists, nslookup returns the correct DNS record while ping (and your applications) connect to the pinned address. Whenever ping and nslookup disagree about a name, suspect a hosts-file override.',
+      },
+    ],
+    related: ['diagnose-dns-failures-fast', 'potw-01-truncated-dns-query', 'failure-01-spanning-tree-loop-at-3am'],
+  },
+
+  'failure-03-the-outage-that-was-a-clock': {
+    tags: ['failure-library', 'kerberos', 'ntp', 'incident'],
+    ascii: [
+      '08:31  auth failing: OWA/VPN/shares',
+      'DCs up · replication healthy',
+      'every error: KRB_AP_ERR_SKEW',
+      'w32tm offset +2847s on the PDC',
+      '[!] clock drifted 47m; Kerberos >5m = no',
+    ],
+    accent: 'down',
+    read: '11 min',
+    faq: [
+      {
+        q: 'Why are all users suddenly failing Kerberos authentication?',
+        a: 'A common cause is clock skew. Kerberos timestamps tickets to prevent replay attacks and rejects any exchange where the two clocks differ by more than the allowable skew (5 minutes by default), logging KRB_AP_ERR_SKEW. If the PDC emulator — the domain\'s authoritative time source — drifts past that threshold, every authentication that crosses the gap to a system on correct time fails at once, even though the domain controllers and replication are perfectly healthy.',
+      },
+      {
+        q: 'What does KRB_AP_ERR_SKEW mean?',
+        a: 'KRB_AP_ERR_SKEW (Security-Kerberos Event ID 4) means the time difference between the client and the server exceeds the maximum allowable Kerberos clock skew. It is a time problem, not a password or account problem. The fix is to correct the clock — usually on the PDC emulator and its NTP source — not to touch any user account.',
+      },
+      {
+        q: 'How much clock skew does Kerberos allow, and how do I fix a drifted PDC emulator?',
+        a: 'The default maximum Kerberos clock skew is 5 minutes. To fix a drifted PDC emulator, first ensure outbound UDP/123 to an external time source is allowed, then run `w32tm /config /manualpeerlist:"time.nist.gov,0x8" /syncfromflags:manual /update`, restart the w32time service, and force a resync with `w32tm /resync /force`. Verify the offset returns to a few milliseconds with `w32tm /query /status`.',
+      },
+    ],
+    related: ['failure-02-forgotten-hosts-file', 'failure-01-spanning-tree-loop-at-3am', 'diagnose-dns-failures-fast'],
+  },
+
+  'showdown-02-claude-vs-chatgpt-vs-gemini-netmiko': {
+    tags: ['showdown', 'python', 'automation'],
+    ascii: [
+      '$ ai "netmiko: back up 50 switches"',
+      '[✓] connects & pulls config',
+      '[✗] password="Cisco123"  hardcoded',
+      '[✗] except: pass → silent skips',
+      '[!] "works" on 50, backs up 47',
+    ],
+    accent: 'warn',
+    read: '11 min',
+    faq: [
+      {
+        q: 'Can an AI model write a working Netmiko backup script?',
+        a: 'Yes — given a detailed prompt. Modern models produce a working Netmiko script that reads an inventory, pulls the running-config, and saves it. The gaps appear on vague prompts: they tend to hardcode credentials, wrap the whole loop in one try/except so a single failure aborts everything, or swallow errors so unreachable devices vanish from the run. Always grade the output against a fixed checklist before trusting it in cron.',
+      },
+      {
+        q: 'What is the most common mistake in AI-generated automation scripts?',
+        a: 'Silently swallowing failures — an `except: pass` or a generic handler that prints nothing. The script backs up the reachable devices and quietly drops the ones it could not reach, so a run that missed three switches looks identical to one that succeeded. The second most common mistake is hardcoding credentials directly in the source, which then gets committed to version control.',
+      },
+      {
+        q: 'How do I handle credentials safely in a Netmiko script?',
+        a: 'Never hardcode them. Read the username and password from environment variables, a secrets manager, or an interactive `getpass` prompt (which does not echo). Keep the inventory file (hosts and device types) separate from credentials, and make sure neither secrets nor backed-up configs are committed to a public repository. Pair this with per-device error handling so one bad login does not abort the whole job.',
+      },
+    ],
+    related: ['showdown-01-claude-vs-chatgpt-vs-gemini-bgp', 'ai-generate-network-configs', 'using-claude-to-audit-firewall-rules'],
+  },
+
+  'migration-fortigate-to-opnsense': {
+    tags: ['migration', 'opnsense', 'fortigate'],
+    ascii: [
+      'FORTIGATE          →   OPNsense',
+      'firewall policy    →   Rule + NAT + UTM',
+      'UTM profiles       →   Suricata / proxy',
+      'SD-WAN rules       →   gateway groups',
+      '[!] 1 policy = 4 OPNsense objects',
+    ],
+    accent: 'accent',
+    read: '13 min',
+    faq: [
+      {
+        q: 'Can I migrate a FortiGate configuration to OPNsense?',
+        a: 'Yes, but it is a decomposition, not a one-to-one port. A single FortiGate firewall policy bundles filtering, NAT, threat inspection (AV/IPS/web/app control), and logging. OPNsense splits those across separate firewall rules, NAT settings, and plugins (Suricata, web proxy, Zenarmor). Address and service objects map cleanly to Aliases; VDOMs and the integrated UTM stack do not map directly and need redesign.',
+      },
+      {
+        q: 'What is the hardest part of a FortiGate to OPNsense migration?',
+        a: 'Unbundling the all-in-one firewall policy without losing the security inspection it performed. Because OPNsense filtering, NAT, and UTM live in different places, it is easy to translate the filter rule, see traffic flow, and never notice the antivirus, IPS, and web filtering are gone. Rebuilding SD-WAN path selection from gateway groups and policy routing, and reproducing SSL deep inspection, are the next hardest pieces.',
+      },
+      {
+        q: 'Does OPNsense replace FortiGate UTM and FortiClient VPN?',
+        a: 'OPNsense covers most FortiGate UTM functions, but as separate plugins rather than one integrated stack: Suricata for IDS/IPS, a web proxy for category filtering, and Zenarmor/Sensei for application-aware L7 control — each installed and tuned independently. FortiClient SSL VPN is not supported; OPNsense uses OpenVPN or WireGuard instead, so every remote user installs a new client and profile.',
+      },
+    ],
+    related: ['migration-cisco-asa-to-pfsense', 'using-claude-to-audit-firewall-rules', 'ai-generate-network-configs'],
+  },
+
+  'acr-02-pfsense-nat-from-the-wild': {
+    tags: ['acr', 'pfsense', 'security'],
+    ascii: [
+      'NAT ▸ Port Forward (from an AI)',
+      '  Source: any        [!] the internet',
+      '  Dest WAN:3389 → 192.168.10.10',
+      '  +assoc rule: WAN any → :3389 PASS',
+      'verdict: RDP on the internet',
+    ],
+    accent: 'info',
+    read: '8 min',
+    faq: [
+      {
+        q: 'Is it safe to port forward RDP (port 3389) on pfSense?',
+        a: 'No. Publishing RDP/3389 directly to the WAN exposes it to internet-wide scanning and automated brute-force, and it has a history of wormable pre-auth vulnerabilities. A port forward with Source set to "any" is the highest-risk version. The safe pattern is to put remote access behind a VPN (WireGuard or OpenVPN) and reach RDP only over the tunnel, so the jump box is never reachable from the public internet.',
+      },
+      {
+        q: 'How should I allow remote RDP access securely?',
+        a: 'Run a VPN on the firewall (WireGuard or OpenVPN), expose only the VPN port on the WAN, and RDP to the internal host across the tunnel. Delete any direct 3389 port forward. If a port forward is genuinely unavoidable, restrict the Source to an alias of known admin IP addresses, enable logging on the rule, and document it — but a VPN is less work than the incident an exposed RDP invites.',
+      },
+      {
+        q: 'Why is exposing port 3389 to the internet dangerous?',
+        a: 'Port 3389 (Microsoft RDP) is one of the most heavily scanned and exploited ports on the internet. An exposed endpoint faces continuous credential brute-force and stuffing, and RDP has had wormable pre-authentication vulnerabilities such as BlueKeep. A single weak or reused password on an exposed jump box can hand an attacker interactive access to an internal host — which is why RDP exposure is a leading ransomware entry vector.',
+      },
+    ],
+    related: ['acr-01-reddit-bgp-configs', 'using-claude-to-audit-firewall-rules', 'migration-cisco-asa-to-pfsense'],
   },
 };

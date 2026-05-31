@@ -1,0 +1,61 @@
+---
+// Reusable newsletter signup bar.
+// Beehiiv form ID is the same one used inside BlogPost.astro (already proven).
+// Include above <FooterBar /> on pages that don't already have their own subscribe CTA.
+---
+
+<section class="ppc-newsletter" aria-label="Newsletter signup">
+  <div class="ppc-newsletter-inner">
+    <div class="ppc-newsletter-head">
+      <span class="ppc-section-bracket">[</span>
+      <span class="ppc-newsletter-label mono">subscribe · packet drop</span>
+      <span class="ppc-section-bracket">]</span>
+    </div>
+    <p class="ppc-newsletter-text mono">
+      Weekly drop: 3 CLI commands you didn't know · 1 prompt · 1 incident write-up.
+      No spam — unsubscribe anytime.
+    </p>
+    <div class="ppc-newsletter-form">
+      <script is:inline async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="29f9e65f-4f54-4279-84c7-13b055c79420"></script>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ppc-newsletter {
+    margin: 64px auto 32px;
+    max-width: 1400px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .ppc-newsletter-inner {
+    border: 1px solid var(--ppc-accent);
+    background: var(--ppc-accent-soft);
+    border-radius: var(--ppc-radius);
+    padding: 22px 24px 18px;
+  }
+  .ppc-newsletter-head {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    color: var(--ppc-accent);
+  }
+  .ppc-newsletter-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ppc-accent);
+  }
+  .ppc-newsletter-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ppc-text-2);
+    margin: 0 0 12px;
+  }
+  .ppc-newsletter-form {
+    /* Beehiiv injects its form near the script tag */
+    min-height: 60px;
+  }
+</style>
