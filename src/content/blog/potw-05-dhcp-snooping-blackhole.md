@@ -106,4 +106,4 @@ POTW #06 — a switch uplink that passes traffic happily at a gigabit in one dir
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the puzzle when it ships Friday.
 
-— **Want the prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=potw-05-dhcp-snooping-blackhole) — 60 production prompts for network admins, $29, lifetime updates.

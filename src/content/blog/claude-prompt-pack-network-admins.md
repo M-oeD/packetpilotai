@@ -94,7 +94,7 @@ For best results:
 
 The pack is available now on Gumroad for **$29**.
 
-**[→ Get the Claude Prompt Pack for Network Admins](https://packetpilotai.gumroad.com/l/vepip)**
+**[→ Get the Claude Prompt Pack for Network Admins](https://packetpilotai.gumroad.com/l/vepip?utm_source=packetpilotai&utm_medium=blog&utm_campaign=claude-prompt-pack-network-admins)**
 
 60 prompts. One PDF. No subscription, no upsell — just the prompts.
 

@@ -157,4 +157,4 @@ Migration #03 — **Cisco IOS router → VyOS**, and the mindset shift from `cop
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next playbook when it ships.
 
-— **Want the translation and audit prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the translation and audit prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=migration-fortigate-to-opnsense) — 60 production prompts for network admins, $29, lifetime updates.

@@ -194,5 +194,24 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
     <FooterBar client:load />
     <CopilotDock client:load />
     <TweaksPanel client:load />
+
+    <!-- UTM pass-through: forward inbound utm_* params onto the Gumroad checkout link
+         so per-post attribution (set on blog CTAs) reaches Gumroad sales analytics. -->
+    <script is:inline>
+      (function () {
+        try {
+          var incoming = new URLSearchParams(window.location.search);
+          var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+          var pass = keys
+            .filter(function (k) { return incoming.has(k); })
+            .map(function (k) { return k + '=' + encodeURIComponent(incoming.get(k)); });
+          if (!pass.length) return;
+          var qs = pass.join('&');
+          document.querySelectorAll('a[href*="gumroad.com/l/vepip"]').forEach(function (a) {
+            a.href += (a.href.indexOf('?') === -1 ? '?' : '&') + qs;
+          });
+        } catch (e) { /* attribution is best-effort; never break the page */ }
+      })();
+    </script>
   </body>
 </html>

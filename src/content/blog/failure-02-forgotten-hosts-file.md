@@ -146,4 +146,4 @@ Failure #03 — a building-wide authentication meltdown that looked like a dead 
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next post-mortem the moment it ships.
 
-— **Want the diagnostic prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the diagnostic prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=failure-02-forgotten-hosts-file) — 60 production prompts for network admins, $29, lifetime updates.

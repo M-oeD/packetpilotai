@@ -151,4 +151,4 @@ POTW #02 — a TCP session that completes the handshake, transfers exactly one b
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the puzzle when it ships Friday.
 
-— **Want the prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=potw-01-truncated-dns-query) — 60 production prompts for network admins, $29, lifetime updates.

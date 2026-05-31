@@ -43,7 +43,7 @@ Requirement 4 is the trap. It is invisible in a lab where neither ISP sends you 
 
 ## The Exact Prompt
 
-This is the prompt we paste into each model verbatim. It is also the kind of structured prompt that lives in the [Prompt Pack](/prompt-pack):
+This is the prompt we paste into each model verbatim. It is also the kind of structured prompt that lives in the [Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=showdown-01-claude-vs-chatgpt-vs-gemini-bgp):
 
 ```
 You are configuring a Cisco IOS edge router for eBGP.
@@ -195,4 +195,4 @@ Showdown #02 — same three models, a different muscle: *"write a Netmiko script
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next head-to-head when it ships.
 
-— **Want the structured prompts that score six-for-six?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the structured prompts that score six-for-six?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=showdown-01-claude-vs-chatgpt-vs-gemini-bgp) — 60 production prompts for network admins, $29, lifetime updates.

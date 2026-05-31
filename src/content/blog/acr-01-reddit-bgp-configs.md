@@ -143,4 +143,4 @@ ACR #02 — a pfSense NAT and port-forward config straight from the wild. The po
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next teardown when it ships.
 
-— **Want the audit prompts that catch these before cutover?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the audit prompts that catch these before cutover?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=acr-01-reddit-bgp-configs) — 60 production prompts for network admins, $29, lifetime updates.

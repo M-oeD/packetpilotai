@@ -120,4 +120,4 @@ ACR #03 — an AI-written Python script meant to *add* a firewall rule that, on 
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next teardown when it ships.
 
-— **Want the audit prompts that catch these before they ship?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the audit prompts that catch these before they ship?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=acr-02-pfsense-nat-from-the-wild) — 60 production prompts for network admins, $29, lifetime updates.

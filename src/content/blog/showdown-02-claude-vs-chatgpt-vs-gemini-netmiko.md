@@ -230,4 +230,4 @@ Showdown #03 — same three models, a 200-line ACL with shadowed rules buried in
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next head-to-head when it ships.
 
-— **Want the structured prompts that score top marks?** [Get the Prompt Pack](/prompt-pack) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the structured prompts that score top marks?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=showdown-02-claude-vs-chatgpt-vs-gemini-netmiko) — 60 production prompts for network admins, $29, lifetime updates.
