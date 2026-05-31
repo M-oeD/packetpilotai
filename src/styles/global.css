@@ -622,6 +622,25 @@ button { font-family: inherit; }
 .ppc-post-tag { color: var(--ppc-muted); }
 .ppc-post-link { color: var(--ppc-accent); font-size: 12px; font-family: var(--ppc-mono); }
 
+/* The Five Streams — homepage stream cards (reuse .ppc-post: flex-column, hover border, ::before bar, foot margin-top:auto) */
+.ppc-stream-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+/* grow to fill each row: 3-up at typical desktop (3+2, both rows full), 2-up tablet, 1-up mobile */
+.ppc-stream-card { flex: 1 1 340px; }
+.ppc-stream-card .ppc-post-title { color: var(--ppc-text); }
+.ppc-stream-card:hover .ppc-post-title { color: var(--ppc-accent); }
+.ppc-stream-glyph { color: var(--ppc-accent); font-weight: 700; letter-spacing: 0.04em; }
+.ppc-stream-latest { font-size: 12px; color: var(--ppc-text-2); line-height: 1.5; }
+/* Per-stream colored top bar — overrides the default .ppc-post::before strip */
+.ppc-stream-card.accent-ok::before     { background: var(--ppc-ok); }
+.ppc-stream-card.accent-warn::before   { background: var(--ppc-warn); }
+.ppc-stream-card.accent-down::before   { background: var(--ppc-down); }
+.ppc-stream-card.accent-accent::before { background: var(--ppc-accent); }
+.ppc-stream-card.accent-info::before   { background: var(--ppc-info); }
+
 /* ─────────────── Pack ─────────────── */
 
 .ppc-pack {

@@ -127,7 +127,7 @@ Each pillar closes with: pack CTA + newsletter signup + "next in this series" pl
 
 ## Phase 3 — Surface lift (week 7+)
 
-- [ ] Homepage redesign — replace "Latest Posts" with "The Five Streams" cards linking to series landings
+- [x] Homepage redesign — "The Five Streams" cards replacing "Latest Posts" ✅ DEPLOYED LIVE 2026-05-31 (Cloudflare version eba04326; confirmed on packetpilotai.com). index.astro + .ppc-stream-* flex layout in global.css; per-stream accent bars; each card shows latest-in-stream + count; hero count fixed 8→22. Visual-checked via preview (3+2 desktop / 1-up mobile; caught + fixed a 4+1 orphan by switching auto-fit grid → flexbox-grow).
 - [ ] Newsletter automation — 5-email welcome sequence (one per stream's best post)
 - [ ] YouTube channel activates (per 90-day plan in `ideas.md`)
 - [ ] `/audit` landing page — Audit-as-a-Service (#10 from brainstorm)

@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
-import { POSTS_META } from '../data/posts-meta';
+import { STREAM_LIST } from '../data/streams';
 import StatusBar from '../components/react/StatusBar';
 import HeroBoot from '../components/react/HeroBoot';
 import Topology from '../components/react/Topology';
@@ -13,17 +13,32 @@ import TweaksPanel from '../components/react/TweaksPanel';
 import NewsletterBar from '../components/NewsletterBar.astro';
 
 const allPosts = await getCollection('blog');
-const latestPosts = allPosts
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3)
-  .map((p) => ({
-    slug: p.id,
-    title: p.data.title,
-    desc: p.data.description,
-    date: p.data.pubDate.toISOString().slice(0, 10),
-    ...POSTS_META[p.id],
-  }));
+const published = allPosts.filter((p) => !p.data.draft);
+const publishedCount = published.length;
+
+// Newest post in a stream first: higher streamNum wins, then newer pubDate.
+const latestFirst = (a, b) => {
+  const an = a.data.streamNum ?? 0;
+  const bn = b.data.streamNum ?? 0;
+  if (an !== bn) return bn - an;
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+};
+
+const streams = STREAM_LIST.map((s) => {
+  const inStream = [...published].filter((p) => p.data.stream === s.key).sort(latestFirst);
+  const latest = inStream[0];
+  return {
+    key: s.key,
+    name: s.name,
+    short: s.short,
+    description: s.description,
+    accent: s.accent,
+    glyph: s.glyph,
+    cadence: s.cadence,
+    count: inStream.length,
+    latestTitle: latest ? latest.data.title : null,
+  };
+});
 ---
 
 <!doctype html>
@@ -112,11 +127,11 @@ const latestPosts = allPosts
                 </a>
               </div>
               <div class="ppc-hero-meta muted">
-                <span>8 published</span>
+                <span>{publishedCount} published</span>
                 <span class="sep">·</span>
                 <span>60 prompts</span>
                 <span class="sep">·</span>
-                <span>updated 2026-04-26</span>
+                <span>updated 2026-05-31</span>
               </div>
             </div>
 
@@ -168,37 +183,38 @@ const latestPosts = allPosts
           <Traceroute client:load />
         </section>
 
-        <!-- Latest Posts -->
+        <!-- The Five Streams -->
         <section class="ppc-section">
           <div class="ppc-section-title">
             <div>
-              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>latest.posts<span class="ppc-section-bracket">]</span></div>
-              <h2 class="ppc-section-h2">Latest from the console.</h2>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>the.five.streams<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Five streams. One console.</h2>
             </div>
             <a href="/blog" class="ppc-link ppc-section-hint">▸ all posts</a>
           </div>
-          <div class="ppc-post-grid three">
-            {latestPosts.map((post) => (
-              <article class="ppc-post">
+          <div class="ppc-stream-grid">
+            {streams.map((s) => (
+              <a class={`ppc-post ppc-stream-card accent-${s.accent}`} href={`/series/${s.key}/`}>
                 <div class="ppc-post-meta">
-                  <span class="ppc-post-date">{post.date}</span>
+                  <span class="ppc-stream-glyph mono">{s.glyph}</span>
+                  <span class={`ppc-pill ${s.accent}`}>{s.short}</span>
                   <span class="ppc-post-sep">·</span>
-                  <span class="muted">{post.read}</span>
-                  <span class="ppc-post-sep">·</span>
-                  <span class={`ppc-pill ${post.accent}`}>{post.tags?.[0]}</span>
+                  <span class="muted">{s.cadence}</span>
                 </div>
-                <h3 class="ppc-post-title">
-                  <a href={`/blog/${post.slug}`}>{post.title}</a>
-                </h3>
-                <p class="ppc-post-desc">{post.desc}</p>
-                <pre class={`ppc-post-ascii mono accent-${post.accent}`}>{post.ascii?.join('\n')}</pre>
+                <h3 class="ppc-post-title">{s.name}</h3>
+                <p class="ppc-post-desc">{s.description}</p>
+                <div class="ppc-stream-latest mono">
+                  {s.latestTitle ? (
+                    <><span class="muted">latest:</span> {s.latestTitle}</>
+                  ) : (
+                    <span class="muted">pillar in flight</span>
+                  )}
+                </div>
                 <div class="ppc-post-foot">
-                  <span class="ppc-post-tags">
-                    {post.tags?.map((t: string) => <span class="ppc-post-tag">#{t}</span>)}
-                  </span>
-                  <a class="ppc-post-link" href={`/blog/${post.slug}`}>read ▸</a>
+                  <span class="ppc-post-tags">{s.count} {s.count === 1 ? 'post' : 'posts'}</span>
+                  <span class="ppc-post-link">open ▸</span>
                 </div>
-              </article>
+              </a>
             ))}
           </div>
         </section>
