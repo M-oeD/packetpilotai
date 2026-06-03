@@ -9,6 +9,34 @@ export const POSTS_META: Record<string, {
   faq: { q: string; a: string }[];
   related: string[];
 }> = {
+  'setting-up-claude-for-real-work': {
+    tags: ['ai', 'claude', 'setup'],
+    ascii: [
+      '$ claude            # most use 10% of it',
+      '[ ] context file     ← stop starting cold',
+      '[ ] real files wired ← grounded > guessing',
+      '[ ] plan-first + skeptic review',
+      '✓ tutorial level → operator',
+    ],
+    accent: 'accent',
+    read: '6 min',
+    faq: [
+      {
+        q: 'How do I set up Claude for serious work?',
+        a: 'Give it a context file once (a Claude Project, or a CLAUDE.md in your repo) describing your role, stack, conventions, and hard never-do rules; connect it to your real files and tools instead of pasting snippets; make it plan before acting; and run a skeptic-review pass on its output. Those four moves account for most of the gap between mediocre and senior-level results.',
+      },
+      {
+        q: 'What is a CLAUDE.md or Claude Project context file?',
+        a: 'It is a single file (a Project on claude.ai, or a CLAUDE.md in your project folder for Claude Code) that holds the context Claude needs every time: who you are, what you are working on, your stack, your conventions, and what it should never do. Writing it once stops Claude from guessing, which is the cause of most bad output.',
+      },
+      {
+        q: 'Why is my Claude output mediocre?',
+        a: 'Almost always setup and prompting, not the model. Most people start cold with no context, accept the first draft, and never set guardrails. Give it context, make it plan first, and ask it to critique its own work as a skeptical senior reviewer. The second pass is consistently sharper than the first.',
+      },
+    ],
+    related: ['claude-prompt-pack-network-admins', 'ai-generate-network-configs', 'using-claude-to-audit-firewall-rules'],
+  },
+
   'diagnose-packet-loss': {
     tags: ['troubleshooting', 'L1', 'wireshark'],
     ascii: [

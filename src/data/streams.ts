@@ -4,7 +4,7 @@
 // New streams require: (1) entry in STREAMS, (2) accent variant in global.css if novel,
 // (3) the dynamic /series/[stream]/index.astro route picks them up automatically.
 
-export type StreamKey = 'failure-library' | 'showdown' | 'migration' | 'potw' | 'acr';
+export type StreamKey = 'failure-library' | 'showdown' | 'migration' | 'potw' | 'acr' | 'loadout';
 
 export type StreamAccent = 'ok' | 'warn' | 'down' | 'accent' | 'info';
 
@@ -75,6 +75,17 @@ export const STREAMS: Record<StreamKey, Stream> = {
     cadence: 'monthly',
     slugPrefix: 'acr',
   },
+  loadout: {
+    key: 'loadout',
+    name: 'The Loadout',
+    short: 'loadout',
+    description:
+      'How real operators actually wield AI — setup, prompts, and the moves the posers skipped. Less hype, more loadout.',
+    accent: 'accent',
+    glyph: '[>]',
+    cadence: 'ongoing',
+    slugPrefix: 'loadout',
+  },
 };
 
 // Ordered list for iteration (filter chips, series index, etc.).
@@ -85,6 +96,7 @@ export const STREAM_LIST: Stream[] = [
   STREAMS.showdown,
   STREAMS.migration,
   STREAMS.acr,
+  STREAMS.loadout,
 ];
 
 export function getStream(key: string | null | undefined): Stream | undefined {
