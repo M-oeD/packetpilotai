@@ -56,8 +56,8 @@
   --ppc-edge-strong:  #6a4a1c;
   --ppc-text:         #ffd9a3;
   --ppc-text-2:       #f4c989;
-  --ppc-muted:        #a07c4c;
-  --ppc-muted-2:      #6e542d;
+  --ppc-muted:        #b0865a;
+  --ppc-muted-2:      #9a7740;
   /* red accent locked as default on amber theme */
   --ppc-accent:       #ff0000;
   --ppc-accent-soft:  rgba(255, 0, 0, 0.14);
@@ -252,7 +252,7 @@ button { font-family: inherit; }
 }
 .ppc-nav-prompt { color: var(--ppc-muted); }
 .ppc-nav-prompt-sigil { color: var(--ppc-accent); }
-.ppc-nav-cli-hint { color: var(--ppc-muted-2); }
+.ppc-nav-cli-hint { display: none; }
 
 /* ─────────────── Main layout ─────────────── */
 
@@ -1031,7 +1031,21 @@ button { font-family: inherit; }
 }
 @media (max-width: 640px) {
   .ppc-post-grid.three, .ppc-post-grid.two { grid-template-columns: 1fr; }
-  .ppc-nav-items { display: none; }
+  /* Mobile nav: show the routes as a swipeable command-row instead of hiding them.
+     ⌘K is a no-op on touch, so it's dropped here to make room. */
+  .ppc-nav-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+  .ppc-nav-cli { display: none; }
+  .ppc-nav-items {
+    order: 2;
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 0 -20px;
+    padding: 0 20px 2px;
+  }
+  .ppc-nav-items::-webkit-scrollbar { display: none; }
+  .ppc-nav-item { white-space: nowrap; flex: 0 0 auto; }
   .ppc-copilot { width: calc(100% - 36px); }
   .ppc-copilot.is-closed { width: 200px; }
   .ppc-tweaks { display: none; }

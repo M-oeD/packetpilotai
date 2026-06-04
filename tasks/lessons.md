@@ -40,3 +40,48 @@ Don't trust the spawned shell's inherited PATH for builds/deploys here. Reconstr
 A partial build that crashes on a child process reads like a code failure when it's really a missing-PATH problem (a hand-patched PATH can still leave System32 gaps). The registry PATH is the canonical login PATH and yields a clean `EXIT=0`. Applies to `npm run deploy` too.
 
 ---
+
+## 2026-06-03 — Astro 6 + Cloudflare dev SSR floods "Invalid hook call / useState null"
+
+**What happened:**
+`npm run dev` logged `Invalid hook call` + `Cannot read properties of null (reading 'useState')` for **every** React island, on every request. Prod build and client hydration were fine — dev SSR only.
+
+**Rule:**
+Known upstream bug (withastro/astro#16529): Vite optimizes `react` and `react-dom/server` in separate passes, so react-dom/server holds a React whose hook dispatcher is null. `resolve.dedupe` does NOT fix it (not a real on-disk duplicate). Fix = force all React island deps into one eager pre-bundle pass in `astro.config.mjs`:
+```js
+vite: {
+  optimizeDeps: { include: ['react','react-dom','react-dom/client','react-dom/server','react/jsx-runtime','react/jsx-dev-runtime'] },
+  ssr: { optimizeDeps: { include: ['react','react-dom','react-dom/server','react/jsx-runtime','react/jsx-dev-runtime'] } },
+}
+```
+
+**Why it matters:**
+Dev-only noise (prod unaffected — `optimizeDeps` doesn't touch the Rollup prod build), but it masks real errors. Always `npm run build`-verify after touching `astro.config.mjs`. Revisit/remove if a future Astro / `@astrojs/react` bump fixes it upstream (currently @astrojs/react 5.x on Astro 6).
+
+---
+
+## 2026-06-03 — preview_screenshot times out on infinite animations
+
+**What happened:**
+`preview_screenshot` timed out (30s) repeatedly on the homepage though the page was healthy (`preview_eval`/`preview_inspect` returned instantly). The capture waits for an "idle" that never arrives: perpetual CSS animations (scanline, blinking caret) + canvas islands' `requestAnimationFrame` loops (Topology/Traceroute at 60fps).
+
+**Rule:**
+Before screenshotting this site, freeze motion via `preview_eval`: (1) `window.requestAnimationFrame = () => 0`; (2) clear pending timers (`let hi=setTimeout(()=>{},0); for(i=0..hi) clearTimeout(i)/clearInterval(i)`); (3) inject `*{animation:none!important;transition:none!important}` + hide `.ppc-scanline`. CSS-only freeze is NOT enough — the rAF/canvas loops must be killed too. For pure verification (colors, computed styles, layout), prefer `preview_inspect` — it never hangs.
+
+**Why it matters:**
+Burned ~5 calls before diagnosing. Don't keep retrying a hanging screenshot — freeze first, or verify via inspect.
+
+---
+
+## 2026-06-03 — work in the artifact, keep chat thin (user workflow correction)
+
+**What happened:**
+Delivered a large audit as walls of chat text, then a triage table as more walls, then answered "let's build a viewer to escape the chat" with *more* chat plus a multiple-choice scoping quiz. User pushback: "reading all this in chat is terrible" → "we need a better workflow" → (rejected the quiz).
+
+**Rule:**
+For large artifacts / design iteration: move the work into a persistent surface (a doc, or the live `preview` server) and treat chat as a thin control channel. Don't make the user read-to-decide — show two states and let them point. Build → show → react in small loops; don't scope big up front via questionnaires. Don't reflexively build meta-tooling (dashboards) when the leverage is in the decision or the fix itself.
+
+**Why it matters:**
+This user is an operator who wants velocity and visual ground-truth, not prose to wade through. Verbose chat + premature decision-cards actively burn trust. (Validated live this session — the live-preview/HMR loop landed; the chat-walls did not.)
+
+---
