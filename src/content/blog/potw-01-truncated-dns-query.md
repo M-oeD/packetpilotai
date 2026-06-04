@@ -132,19 +132,6 @@ If you remember nothing else from this puzzle, remember the TC bit. It's the dif
 
 ---
 
-## Frequently Asked Questions
-
-**When does a DNS query actually use TCP instead of UDP?**
-When the response is too large to fit in the client's advertised UDP buffer (default 512 bytes without EDNS0, up to ~4096 with it), the resolver sets the **truncated** flag (`TC=1`) and the client retries the same query over TCP/53. Zone transfers (`AXFR`/`IXFR`) also always use TCP. Modern DNS — especially with DNSSEC, large TXT records, or long CNAME chains — relies on TCP fallback far more often than people assume.
-
-**What does `TC=1` mean in a DNS response?**
-It's the **truncation flag**. The resolver had a valid answer but it didn't fit in a single UDP datagram, so it sent back a short response with the TC bit set and no answer data. The client is expected to retry the query over TCP/53. If TCP/53 is blocked anywhere on the path — or on the host itself — the query fails even though the resolver is healthy.
-
-**How do I test whether TCP/53 is reachable from a Windows host?**
-Run `Test-NetConnection -ComputerName <resolver-ip> -Port 53` from PowerShell. The output shows `TcpTestSucceeded : True` if the handshake completes. From Linux or Mac, use `nc -zv <resolver-ip> 53`. Doing this from both the working machine and the broken machine isolates a host-level block in under a minute.
-
----
-
 ## Next Week
 
 POTW #02 — a TCP session that completes the handshake, transfers exactly one byte of payload, then dies. What killed it?

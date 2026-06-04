@@ -225,22 +225,6 @@ Claude lands on "Layer 2 loop, BPDU filtering interferes with STP detection" in 
 
 ---
 
-## Frequently Asked Questions
-
-**What is the difference between `spanning-tree bpdufilter` and `spanning-tree bpduguard`?**
-`bpduguard` shuts down a port the moment it receives a BPDU — protective. `bpdufilter` stops the port from sending or receiving BPDUs entirely — destructive. `bpduguard` is the correct default for access ports running `portfast`. `bpdufilter` should almost never be enabled; it blinds spanning tree to anything happening on that port, which means a downstream loop becomes invisible until traffic levels make it visible the hard way.
-
-**How do I detect a Layer 2 loop on a Cisco switch?**
-The fastest signal is MAC address flapping: the same MAC address appearing on two different ports within seconds. Run `show mac address-table address <MAC>` twice in quick succession; if the port changes, you have a loop. Other signals: `HLFM address learning` CPU spikes, broadcast rates above the historical baseline, and any port in `forwarding` state that should not have a redundant path.
-
-**Why didn't spanning tree prevent this loop automatically?**
-It would have — that's what spanning tree exists for. The reason it didn't in this case is that one of the involved ports had `spanning-tree bpdufilter enable` configured, which made it deaf to spanning tree's loop-detection protocol. Spanning tree only blocks ports where it can see redundant paths via BPDUs. Block the BPDUs and you blind the algorithm.
-
-**Should I enable BPDU guard or BPDU filter on access ports?**
-BPDU guard. Every time. `spanning-tree bpduguard enable` paired with `spanning-tree portfast` is the safe default for any port connected to an end device. If anyone plugs a switch into that port, BPDU guard will shut the port down — loud and unmistakable. The opposite command, `bpdufilter`, hides exactly the failure mode you want to catch.
-
----
-
 ## Next in the Failure Library
 
 Failure #02 — a DNS outage that traced back to a forgotten `hosts` file from a 2018 migration. Coming in two weeks.
