@@ -4,6 +4,27 @@ Active plan-of-record. Check items off as they ship. Review section at the botto
 
 ---
 
+## Audit + UX/hygiene ship — 2026-06-04 ✅ LIVE
+
+Full site audit (UI / UX / direction / "stay blog or change"). **Verdict:** keep the on-site blog — it's a high-quality, high-sunk asset; the problems are the funnel and distribution, not the format. Fixed the actionable defects and shipped.
+
+**DEPLOYED LIVE 2026-06-04** — Cloudflare version `7603ddbe-f364-4523-88c1-49916ceba703`; verified on packetpilotai.com (200, new nav serving). Branch `overhaul/noc-console-redesign` pushed to origin. Commits `62bbd49`, `7a2e226`, `26835f7`.
+
+- [x] **Mobile nav** — was `display:none` with no hamburger <640px; now a swipeable terminal command-row (`global.css`)
+- [x] **Contrast** — `--ppc-muted-2` 2.8→4.85:1 (was failing WCAG AA), `--ppc-muted`→6.1:1
+- [x] **Dead ⌘K** — "press ⌘K" hint (wired to nothing) removed site-wide
+- [x] **Dev-SSR fix** — `astro.config.mjs` `optimizeDeps.include` kills the Astro 6 + Cloudflare "Invalid hook call" dev storm (withastro/astro#16529); prod build unaffected (see lessons.md)
+- [x] **Shared `<Nav>`** — nav was hand-duplicated across 8 files; extracted to `src/components/Nav.astro` (path-aware active). Added `/roadmap` + `/tools` to global nav (closes the old "wire /roadmap into nav" follow-up)
+- [x] **FAQ dedupe** — removed in-body FAQ from `failure-01` + `potw-01` (canonical lives in `POSTS_META.faq`)
+- [x] **Hygiene** — deleted orphaned `Header.astro`/`HeaderLink.astro` + dead `public/console/`; removed ~10 stray root dumps; corrected stale `STACK.md`
+
+**Audit findings NOT yet actioned (need decisions / bigger build):**
+- [ ] Tag sprawl (~45 tags, mostly count-1) → collapse to ~10-tag keep-list (needs user nod)
+- [ ] Funnel leak — broad post `setting-up-claude-for-real-work` CTAs to the $29 niche pack; broad lead-magnet email capture still not wired
+- [ ] Strategic: niche-vs-audience-engine direction call (gated on traffic/signup numbers) + pick a distribution channel
+
+---
+
 ## Phase 0 — Foundation ✅ (live in production 2026-05-20)
 
 **Deploy:** `wrangler deploy` succeeded — version `a2b4971f-2fe2-4533-9dcc-11e096dbf181`. 25 assets uploaded. Live on `packetpilotai.com` and `packetpilotai.mc69080vill.workers.dev`.

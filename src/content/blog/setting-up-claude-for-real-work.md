@@ -91,6 +91,8 @@ That is it. You just left the tutorial level.
 
 None of this is about talent — the operator and the amateur have the same Claude open. One configured it; one didn't.
 
-If you run a network or infrastructure for a living, the next step is built for you: the **PacketPilot AI prompt pack** — 50+ field-tested prompts for audits, migrations, troubleshooting, and the 3am comms. [Grab it — $29, one file](https://packetpilotai.gumroad.com/l/vepip).
+Want the kit that makes these six moves automatic? **[The Operator's Claude Starter Kit](/starter-kit/)** is free — the context-file template plus all six moves as copy-paste prompts. Set Claude up once and stop starting cold.
+
+And if you run a network or infrastructure for a living, the **PacketPilot AI prompt pack** goes deeper — 50+ field-tested prompts for audits, migrations, and the 3am comms. [$29, one file](https://packetpilotai.gumroad.com/l/vepip).
 
 *Operator-built. We use this stuff harder than we talk about it.*

@@ -10,7 +10,7 @@ export const POSTS_META: Record<string, {
   related: string[];
 }> = {
   'setting-up-claude-for-real-work': {
-    tags: ['ai', 'claude', 'setup'],
+    tags: ['ai'],
     ascii: [
       '$ claude            # most use 10% of it',
       '[ ] context file     ← stop starting cold',
@@ -38,7 +38,7 @@ export const POSTS_META: Record<string, {
   },
 
   'diagnose-packet-loss': {
-    tags: ['troubleshooting', 'L1', 'wireshark'],
+    tags: ['troubleshooting'],
     ascii: [
       '$ ping 192.168.1.1 -n 100',
       'Sent=100  Received=83  Lost=17 (17%)',
@@ -66,7 +66,7 @@ export const POSTS_META: Record<string, {
   },
 
   'ai-generate-network-configs': {
-    tags: ['ai', 'config', 'cisco'],
+    tags: ['ai', 'cisco'],
     ascii: [
       '$ claude "VLAN 10 guest, Gi0/1 access"',
       '[+] vlan 10',
@@ -95,7 +95,7 @@ export const POSTS_META: Record<string, {
   },
 
   'claude-prompt-pack-network-admins': {
-    tags: ['pack', 'claude', 'release'],
+    tags: ['ai'],
     ascii: [
       '┌─ PROMPT PACK v1 ──────────────┐',
       '│ ⚙  Config Generation     ×7  │',
@@ -125,7 +125,7 @@ export const POSTS_META: Record<string, {
   },
 
   '5-free-network-troubleshooting-tools-2026': {
-    tags: ['tools', 'free', 'loadout'],
+    tags: ['ai'],
     ascii: [
       '[1] Wireshark  → every packet on the wire',
       '[2] Nmap       → who is on my network',
@@ -181,7 +181,7 @@ export const POSTS_META: Record<string, {
   },
 
   'find-what-saturates-your-wan': {
-    tags: ['wan', 'netflow', 'analysis'],
+    tags: ['wan', 'automation', 'troubleshooting'],
     ascii: [
       'TOP TALKERS  · last 5m',
       '  10.0.4.42   480 Mb/s   ████████████',
@@ -209,7 +209,7 @@ export const POSTS_META: Record<string, {
   },
 
   'troubleshoot-slow-network-performance': {
-    tags: ['performance', 'methodology'],
+    tags: ['troubleshooting'],
     ascii: [
       'LAYER 1  cable/port      ✓ pass',
       'LAYER 2  switching       ✓ pass',
@@ -237,7 +237,7 @@ export const POSTS_META: Record<string, {
   },
 
   'using-claude-to-audit-firewall-rules': {
-    tags: ['security', 'ai', 'firewall'],
+    tags: ['security', 'ai'],
     ascii: [
       '$ claude --review fw.conf',
       '[!] rule 14 shadowed by rule 9',
@@ -265,7 +265,7 @@ export const POSTS_META: Record<string, {
   },
 
   'failure-01-spanning-tree-loop-at-3am': {
-    tags: ['failure-library', 'spanning-tree', 'l2', 'incident'],
+    tags: ['switching', 'troubleshooting'],
     ascii: [
       '03:14  ALERT  ping loss 47% · all VLANs',
       '03:14  ALERT  core cpu 98% · mac-flap 2400/s',
@@ -297,7 +297,7 @@ export const POSTS_META: Record<string, {
   },
 
   'potw-01-truncated-dns-query': {
-    tags: ['potw', 'dns', 'puzzle'],
+    tags: ['dns', 'troubleshooting'],
     ascii: [
       '14:22:01  10.0.4.42 → resolver  UDP/53 query',
       '14:22:01  resolver → 10.0.4.42  TC=1 (truncated)',
@@ -325,7 +325,7 @@ export const POSTS_META: Record<string, {
   },
 
   'showdown-01-claude-vs-chatgpt-vs-gemini-bgp': {
-    tags: ['showdown', 'bgp', 'ai'],
+    tags: ['routing', 'ai'],
     ascii: [
       '$ ai "dual-homed eBGP · no transit"',
       '[✓] neighbors  AS64500 / AS64501',
@@ -353,7 +353,7 @@ export const POSTS_META: Record<string, {
   },
 
   'migration-cisco-asa-to-pfsense': {
-    tags: ['migration', 'pfsense', 'asa'],
+    tags: ['firewalls', 'cisco'],
     ascii: [
       'CISCO ASA          →   pfSense',
       'security-level     →   (none)',
@@ -381,7 +381,7 @@ export const POSTS_META: Record<string, {
   },
 
   'acr-01-reddit-bgp-configs': {
-    tags: ['acr', 'bgp', 'ai'],
+    tags: ['routing', 'ai'],
     ascii: [
       'router bgp 65001',
       '  network 10.0.0.0     [!] no mask',
@@ -409,7 +409,7 @@ export const POSTS_META: Record<string, {
   },
 
   'potw-02-one-byte-then-silence': {
-    tags: ['potw', 'tcp', 'mtu'],
+    tags: ['wan'],
     ascii: [
       '$ ssh app01   # hangs after connect',
       '[ok] SYN / SYN-ACK / ACK',
@@ -437,7 +437,7 @@ export const POSTS_META: Record<string, {
   },
 
   'potw-03-duplicate-ip-arp-war': {
-    tags: ['potw', 'arp', 'l2'],
+    tags: ['switching'],
     ascii: [
       '$ ping 10.0.4.50  # up...down...up',
       'arp -a → 10.0.4.50:',
@@ -465,7 +465,7 @@ export const POSTS_META: Record<string, {
   },
 
   'potw-04-asymmetric-routing-stateful-drop': {
-    tags: ['potw', 'routing', 'firewall'],
+    tags: ['routing', 'security'],
     ascii: [
       '$ ping 10.20.5.10  # 0% loss',
       '$ curl :443        # hangs',
@@ -493,7 +493,7 @@ export const POSTS_META: Record<string, {
   },
 
   'potw-05-dhcp-snooping-blackhole': {
-    tags: ['potw', 'dhcp', 'security'],
+    tags: ['switching', 'security'],
     ascii: [
       'ipconfig → 169.254.18.44  (APIPA)',
       'next switch → 10.30.3.x  fine',
@@ -520,8 +520,36 @@ export const POSTS_META: Record<string, {
     related: ['potw-04-asymmetric-routing-stateful-drop', 'diagnose-dns-failures-fast', 'find-what-saturates-your-wan'],
   },
 
+  'potw-06-duplex-mismatch': {
+    tags: ['switching', 'troubleshooting'],
+    ascii: [
+      'iperf  A→B   93.6 Mb/s   ✓',
+      'iperf  B→A    2.44 Mb/s  ✗',
+      'core-sw  Gi1/0/48  Full-duplex',
+      'acc-sw07 Gi1/0/1   Half + late-collisions',
+      'tell: duplex mismatch — half side can\'t talk',
+    ],
+    accent: 'ok',
+    read: '6 min',
+    faq: [
+      {
+        q: 'What are the symptoms of an Ethernet duplex mismatch?',
+        a: 'A duplex mismatch produces slowness that only shows up under load, and usually only in one direction. The classic fingerprint is a link that auto-negotiated down to 100 Mb/s (because one side was hard-coded), wildly asymmetric throughput, late collisions counting up on the half-duplex end, and CRC/FCS errors plus runts on the full-duplex end. Ping and low-rate traffic look perfectly fine, which is exactly why it gets misdiagnosed as a failing cable.',
+      },
+      {
+        q: 'Why does a duplex mismatch slow down only one direction?',
+        a: 'Because only the half-duplex end runs CSMA/CD. When that end transmits, the full-duplex partner sends at the same time without deferring, so the half-duplex side detects a late collision, backs off, and retransmits — collapsing the direction it sources to a trickle. The opposite direction, where the half-duplex end mostly receives, runs close to line rate. The rule of thumb: traffic flows fine until the half-duplex device has to do the talking.',
+      },
+      {
+        q: 'How do I fix a duplex mismatch on a Cisco switch?',
+        a: 'Make both ends agree. The preferred fix is to set both interfaces to `speed auto` and `duplex auto` so negotiation completes and a gigabit link can train at 1000/full. If a port must be pinned, hard-code both ends to the identical speed and duplex — never just one, because a single hard-coded end disables negotiation and forces its auto partner to fall back to half-duplex. Verify with `show interfaces`: both ends should report the same duplex and speed, and the late-collision counter should stop incrementing.',
+      },
+    ],
+    related: ['potw-05-dhcp-snooping-blackhole', 'troubleshoot-slow-network-performance', 'diagnose-packet-loss'],
+  },
+
   'failure-02-forgotten-hosts-file': {
-    tags: ['failure-library', 'dns', 'hosts', 'incident'],
+    tags: ['dns', 'troubleshooting'],
     ascii: [
       '14:02  db migrated → 10.0.6.40',
       '14:03  app01: connection refused',
@@ -549,7 +577,7 @@ export const POSTS_META: Record<string, {
   },
 
   'failure-03-the-outage-that-was-a-clock': {
-    tags: ['failure-library', 'kerberos', 'ntp', 'incident'],
+    tags: ['security', 'troubleshooting'],
     ascii: [
       '08:31  auth failing: OWA/VPN/shares',
       'DCs up · replication healthy',
@@ -577,7 +605,7 @@ export const POSTS_META: Record<string, {
   },
 
   'showdown-02-claude-vs-chatgpt-vs-gemini-netmiko': {
-    tags: ['showdown', 'python', 'automation'],
+    tags: ['automation'],
     ascii: [
       '$ ai "netmiko: back up 50 switches"',
       '[✓] connects & pulls config',
@@ -605,7 +633,7 @@ export const POSTS_META: Record<string, {
   },
 
   'migration-fortigate-to-opnsense': {
-    tags: ['migration', 'opnsense', 'fortigate'],
+    tags: ['firewalls'],
     ascii: [
       'FORTIGATE          →   OPNsense',
       'firewall policy    →   Rule + NAT + UTM',
@@ -633,7 +661,7 @@ export const POSTS_META: Record<string, {
   },
 
   'acr-02-pfsense-nat-from-the-wild': {
-    tags: ['acr', 'pfsense', 'security'],
+    tags: ['firewalls', 'security'],
     ascii: [
       'NAT ▸ Port Forward (from an AI)',
       '  Source: any        [!] the internet',

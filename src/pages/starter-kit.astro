@@ -1,0 +1,152 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
+import StatusBar from '../components/react/StatusBar';
+import FooterBar from '../components/react/FooterBar';
+import CopilotDock from '../components/react/CopilotDock';
+import TweaksPanel from '../components/react/TweaksPanel';
+
+const contextTemplate = `# Context for Claude
+
+## Who I am
+[Your role. e.g. "Network admin running 3 sites" / "Solo founder building a SaaS" / "Analyst on the finance team."]
+
+## What I'm working on
+[Current project or recurring work, in a line or two. What does "done" look like?]
+
+## My stack / tools
+[The specific tools you live in. e.g. "PowerShell, Cisco IOS, Azure" / "Python, Postgres, dbt" / "Excel, SQL, our BI tool."]
+
+## My conventions — what "good" looks like
+[How you like things done. e.g. "Concise. Show your reasoning on anything risky. Comment the code. No hype."]
+
+## Hard rules — never do this
+[Your guardrails. e.g. "Never run destructive commands. Propose changes, don't apply them. Never send anything on my behalf."]
+
+## How to work with me
+- Plan first on anything non-trivial; wait for my go before you build.
+- When you're done, review your own output as a skeptic before handing it over.
+- If you're guessing, say so. Ask instead of assuming.`;
+
+const moves = [
+  { name: 'Plan before building', prompt: 'Before you write anything, lay out your plan as a short numbered list and state what you’re assuming about my setup. Then stop and wait for my go.' },
+  { name: 'The skeptic pass (use on everything)', prompt: 'Now review what you just produced as a skeptical senior [engineer / editor / analyst] who has to put their name on it. What’s weak? What did you assume? What’s the single riskiest part, and how would you fix it?' },
+  { name: 'Set the guardrails', prompt: 'Ground rules for this session: read-only unless I explicitly say otherwise. Propose changes — don’t apply them. Never delete, send, or touch anything live without asking me first. If an action is irreversible, stop and confirm.' },
+  { name: 'Stop taking the first idea', prompt: 'Give me three approaches, ranked, with the trade-off that decides between them. Tell me which you’d pick and why — in one sentence.' },
+  { name: 'Make it work on the real thing', prompt: 'Before you answer, tell me what you can actually see here versus what you’re inferring. Don’t fill gaps with guesses — list the gaps and ask.' },
+  { name: 'Turn a good result into a reusable asset', prompt: 'That worked. Turn it into a reusable template/checklist I can run again next time, with the parts I’ll need to change marked clearly.' },
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead
+      title="The Operator's Claude Starter Kit — free"
+      description="The context-file template plus the six operator moves as copy-paste prompts. Free. The companion to Setting Up Claude for Real Work."
+    />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
+
+    <StatusBar client:load />
+    <Nav />
+
+    <div class="ppc-shell">
+      <main class="ppc-main">
+
+        <!-- Hero -->
+        <section class="ppc-hero" style="margin-bottom:28px">
+          <div class="ppc-article-kicker" style="margin-bottom:14px">
+            <span class="ppc-section-bracket">[</span>starter-kit<span class="ppc-section-bracket">]</span>
+          </div>
+          <h1 class="ppc-hero-h1" style="max-width:18ch">
+            The Operator's<br /><em class="ppc-hero-em">Claude Starter Kit.</em>
+          </h1>
+          <p class="ppc-hero-lede">
+            The context file you fill in once, plus the six operator moves as copy-paste prompts —
+            the setup that turns Claude from a vending machine into a teammate. It's free. Take it.
+          </p>
+        </section>
+
+        <!-- Email capture -->
+        <section class="ppc-section" style="margin-top:0">
+          <div class="ppc-newsletter-inner" style="border:1px solid var(--ppc-accent);background:var(--ppc-accent-soft);border-radius:var(--ppc-radius);padding:22px 24px 18px">
+            <div class="ppc-newsletter-head" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;color:var(--ppc-accent)">
+              <span class="ppc-section-bracket">[</span>
+              <span class="mono" style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase">get new prompts as they drop</span>
+              <span class="ppc-section-bracket">]</span>
+            </div>
+            <p class="mono" style="font-size:14px;line-height:1.55;color:var(--ppc-text-2);margin:0 0 12px">
+              The kit's below — yours, no signup. Drop your email and I'll send new operator prompts,
+              context-file patterns, and field notes as they land. No spam, unsubscribe anytime.
+            </p>
+            <div style="min-height:60px">
+              <script is:inline async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="29f9e65f-4f54-4279-84c7-13b055c79420"></script>
+            </div>
+          </div>
+        </section>
+
+        <!-- Part 1: context file -->
+        <section class="ppc-section">
+          <div class="ppc-section-title">
+            <div>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>part 1 · context file<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Fill this in once. Reuse it forever.</h2>
+            </div>
+          </div>
+          <p class="ppc-section-lede" style="margin-bottom:16px">
+            Drop this into a Claude <strong>Project</strong> (claude.ai) or save it as <span class="mono">CLAUDE.md</span> in your
+            project folder. Fill the brackets, delete what doesn't apply. This single file is the highest-leverage
+            move in the kit — it's the difference between Claude <em>guessing</em> and Claude <em>knowing</em>.
+          </p>
+          <pre class="ppc-pack-ascii mono" style="font-size:13px;line-height:1.55;border:1px solid var(--ppc-border);padding:22px;background:var(--ppc-surface);overflow-x:auto;white-space:pre-wrap">{contextTemplate}</pre>
+        </section>
+
+        <!-- Part 2: the six moves -->
+        <section class="ppc-section">
+          <div class="ppc-section-title">
+            <div>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>part 2 · the six moves<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Copy. Paste. Go.</h2>
+            </div>
+          </div>
+          <div class="ppc-post-grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+            {moves.map((m, i) => (
+              <article class="ppc-post">
+                <div class="ppc-post-meta">
+                  <span class="mono" style="color:var(--ppc-accent)">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="ppc-post-sep">·</span>
+                  <span class="ppc-post-title" style="font-size:15px;margin:0">{m.name}</span>
+                </div>
+                <p class="mono" style="font-size:13px;line-height:1.6;color:var(--ppc-text-2);margin:10px 0 0">{m.prompt}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- Soft $29 path -->
+        <section class="ppc-section">
+          <div class="ppc-pack" style="grid-template-columns:1fr">
+            <div class="ppc-pack-right">
+              <p class="ppc-pack-blurb">
+                Run a network or infrastructure for a living? The <strong>PacketPilot AI prompt pack</strong> goes
+                deeper — 50+ field-tested prompts for audits, migrations, troubleshooting, and the 3am comms.
+              </p>
+              <a class="ppc-btn ghost mono" href="https://packetpilotai.gumroad.com/l/vepip" target="_blank" rel="noopener">
+                ▸ the full field pack <span class="muted">$29</span>
+              </a>
+            </div>
+          </div>
+          <p class="muted mono" style="font-size:12px;margin-top:20px">Independent. Operator-built. We use this stuff harder than we talk about it.</p>
+        </section>
+
+      </main>
+    </div>
+
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
+</html>
