@@ -29,4 +29,4 @@ export const GOOGLE_SITE_VERIFICATION = 'CwHFqyMgKDxGipUsvqXzJ_kc-Bnb5zOaJkRVJx6
 // Cloudflare Web Analytics beacon token. PUBLIC by design (ships in client HTML) — safe to commit.
 // Get it: Cloudflare dashboard -> Analytics & Logs -> Web Analytics -> "Add a site" -> copy the token.
 // Leave as '' to disable the beacon (no script is emitted, build stays clean).
-export const CF_ANALYTICS_TOKEN = '8bbbffa2f7d54790ba1d51964ad51de0';
+export const CF_ANALYTICS_TOKEN = '2be4f685518548f68f768cde379c3ccf';
