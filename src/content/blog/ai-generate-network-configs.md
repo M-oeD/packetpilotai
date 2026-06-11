@@ -2,7 +2,7 @@
 title: 'How to Use AI to Generate Network Configurations'
 description: 'Stop hand-writing configs. Learn how to use AI tools like ChatGPT and GitHub Copilot to generate accurate Cisco IOS, Junos, and MikroTik configurations in seconds.'
 pubDate: '2026-04-18'
-image: '/og/ai-generate-network-configs.png'
+stream: 'showdown'
 heroAscii: |
   $ claude "Create VLAN 10 for guest WiFi on Cisco IOS"
 
@@ -14,24 +14,13 @@ heroAscii: |
   [+]   switchport access vlan 10
   [+]   spanning-tree portfast
   [+] Done. Config ready to paste. ✓
-faqs:
-  - q: "How do I write a good prompt for generating network configs?"
-    a: "Be specific. Vague input gives vague output; include the device vendor, model, which ports, and the exact behavior you want. The more context you provide, the more accurate the generated config."
-  - q: "Can I paste AI-generated configs directly into production?"
-    a: "No. Never paste AI output directly into production. Read it line by line, check it against your vendor and IOS version, test it in a lab like GNS3, EVE-NG, or Packet Tracer, then verify with show commands after applying."
-  - q: "Which AI tools work well for network configs?"
-    a: "ChatGPT (GPT-4o) has broad vendor support, GitHub Copilot is great for Python/Netmiko scripts, Claude is strong at structured configs and edge cases, and Gemini is solid for multi-step walkthroughs. The difference is how you prompt, not the tool."
-  - q: "Can AI catch its own config mistakes?"
-    a: "It can surface nuance with good prompting. In the OSPF example the AI flagged that making an interface fully passive would prevent neighbor formation, so it applied passive only to the LAN side. You can also ask it to validate a specific line."
 ---
 
-Every network admin has been there — staring at a blank config file, trying to remember the exact syntax for a VLAN trunk, an OSPF neighbor statement, or an ACL that does exactly what you need. You know *what* you want. Getting it written correctly is the friction.
-
-AI changes that. In this guide you'll learn how to prompt AI tools to generate production-ready network configs, how to validate them before touching a device, and where the guardrails are.
+To generate accurate network configurations with AI, include the device vendor, model, specific port assignments, IP addresses, and the exact behavior you want in a single structured prompt. Specific input produces CLI-ready output; vague prompts produce generic templates you still have to rewrite. Always review AI output line by line for syntax that matches your exact platform version, and test in a lab — GNS3, EVE-NG, or Packet Tracer — before touching production. This guide shows the difference between prompts that work and prompts that waste time.
 
 ---
 
-## The Core Skill: Writing Good Prompts
+## What Makes a Good AI Prompt for Network Config Generation?
 
 AI generates configs based on what you tell it. Vague input → vague output. Specific input → config you can actually use.
 
@@ -133,7 +122,7 @@ Clean. No fuss.
 
 ---
 
-## Validating AI-Generated Configs
+## How Do You Validate AI-Generated Network Configurations Before Deploying?
 
 **Never paste AI output directly into production.** That's the one rule. Here's the validation workflow:
 
@@ -157,7 +146,7 @@ show ip access-lists
 
 ---
 
-## AI Tools That Work Well for Network Configs
+## Which AI Tools Work Best for Network Configuration Generation?
 
 | Tool | Strengths |
 |---|---|
@@ -170,7 +159,7 @@ All of them work. The difference is in how you prompt, not which tool you use.
 
 ---
 
-## Prompt Templates to Save
+## What Are the Best AI Prompt Templates for Network Configuration?
 
 Copy these and fill in your details:
 
@@ -190,4 +179,21 @@ Copy these and fill in your details:
 
 AI won't replace your knowledge — it will multiply it. The admin who knows *what* they want but can get it configured in 10 seconds instead of 30 minutes is the one who ships faster and goes home on time.
 
-Next up: [Automate Network Tasks with Python — Beginner Guide](#).
+---
+
+## Frequently Asked Questions
+
+**Which AI model works best for generating network configurations?**
+Claude Sonnet and GPT-4o both produce high-quality configs. The model matters less than the prompt — a specific, well-structured prompt on any capable model will outperform a vague prompt on the best model. Specify the vendor, device model, exact IOS or firmware version, interface names, and requirements.
+
+**How do I write a good prompt for network config generation?**
+Include: vendor and device model, exact interface identifiers (Gi0/1, not "port 1"), IP addresses and subnet masks, VLAN IDs and names, the specific feature to configure (OSPF, ACL, trunk), and any constraints (which traffic to allow or deny, which interfaces face the WAN). The examples in this guide show the difference in output quality.
+
+**Can I paste AI-generated configs directly into production?**
+No. Read the output line by line, verify syntax against your platform's command reference, confirm that interface names match your actual device, and test in a lab first. AI occasionally generates commands that don't exist on a specific IOS version or confuses IOS and IOS-XE syntax.
+
+**Does AI know the difference between Cisco IOS and IOS-XE?**
+Generally yes, but specify which one in your prompt. State "Cisco IOS 15.2" or "Cisco IOS-XE 17.x" explicitly. Syntax differences between the two — especially for QoS, ACLs, and EIGRP — are common enough that the distinction matters for getting usable output.
+
+**Can AI generate Junos, pfSense, or MikroTik configs — not just Cisco?**
+Yes. Claude and GPT-4o have solid coverage of Junos, pfSense, FortiGate, and MikroTik RouterOS. Apply the same rule: specify the platform and version in your prompt. "pfSense 2.7 — generate a firewall rule" will get you accurate results; "pfSense firewall rule" is too vague.

@@ -1,0 +1,282 @@
+---
+import Nav from '../../components/Nav.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import StatusBar from '../../components/react/StatusBar';
+import FooterBar from '../../components/react/FooterBar';
+import CopilotDock from '../../components/react/CopilotDock';
+import TweaksPanel from '../../components/react/TweaksPanel';
+import SubnetCalc from '../../components/react/SubnetCalc';
+
+const title = 'Free Network Admin Tools — PacketPilot AI';
+const description = 'Free browser-based tools for network admins: subnet calculator, CIDR lookup, wildcard mask converter, and more. No install, no login.';
+---
+
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead title={title} description={description} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Free Network Admin Tools",
+      "description": description,
+      "url": "https://packetpilotai.com/tools",
+      "provider": {
+        "@type": "Organization",
+        "name": "PacketPilot AI",
+        "url": "https://packetpilotai.com"
+      }
+    })} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a subnet calculator?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A subnet calculator takes an IP address and CIDR prefix length (e.g., 192.168.1.0/24) and computes the network address, broadcast address, subnet mask, wildcard mask, and the range of usable host addresses. It is used by network engineers to plan IP address allocation and verify subnetting."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I calculate a subnet mask from a CIDR prefix?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A /24 prefix is 255.255.255.0. A /25 is 255.255.255.128. The pattern: fill 32 bits left-to-right with 1s for the prefix length, then fill remaining bits with 0s, and convert each group of 8 bits to decimal. For example, /28 = 11111111.11111111.11111111.11110000 = 255.255.255.240."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a wildcard mask used for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Wildcard masks are used in Cisco IOS access control lists (ACLs) and OSPF area definitions. A wildcard mask is the bitwise inverse of a subnet mask: a /24 subnet mask of 255.255.255.0 has a wildcard mask of 0.0.0.255. A 0-bit in the wildcard mask means 'must match'; a 1-bit means 'ignore'."
+          }
+        }
+      ]
+    })} />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
+
+    <StatusBar client:load />
+
+    <Nav />
+
+    <div class="ppc-shell">
+      <div class="tools-page">
+
+        <header class="tools-header">
+          <div class="ppc-article-kicker">
+            <span class="ppc-section-bracket">[</span>
+            tools · free · no login
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <h1 class="ppc-article-h1">Network Admin Tools</h1>
+          <p class="ppc-article-lede">
+            Browser-based utilities for network engineers. No install, no account, no rate limits.
+          </p>
+        </header>
+
+        <!-- Featured: AI Network Engineering Roadmap -->
+        <section class="tool-section" id="roadmap">
+          <div class="tool-label">
+            <span class="ppc-section-bracket">[</span>
+            <span class="tool-label-text">★ featured · interactive</span>
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <h2 class="tool-title">The AI Network Engineering Roadmap</h2>
+          <p class="tool-desc muted">
+            The whole stack — subnetting to BGP to firewall audits to automation — with a copy-paste
+            Claude prompt on every node. Track your progress right in the browser.
+          </p>
+          <a class="ppc-btn primary" href="/roadmap">Open the roadmap →</a>
+        </section>
+
+        <!-- Subnet Calculator -->
+        <section class="tool-section" id="subnet">
+          <div class="tool-label">
+            <span class="ppc-section-bracket">[</span>
+            <span class="tool-label-text">01 · subnet calculator</span>
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <h2 class="tool-title">Subnet & CIDR Calculator</h2>
+          <p class="tool-desc muted">
+            Enter any IP address with a CIDR prefix to get network address, broadcast, host range,
+            subnet mask, and wildcard mask. Click any row in the prefix table to recalculate.
+          </p>
+          <SubnetCalc client:load />
+        </section>
+
+        <!-- More tools placeholder — easy to extend -->
+        <section class="tool-section tool-coming" id="coming-soon">
+          <div class="tool-label">
+            <span class="ppc-section-bracket">[</span>
+            <span class="tool-label-text">more tools</span>
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <div class="tool-coming-grid">
+            {[
+              { name: 'Bandwidth Calculator', desc: 'Convert Mbps ↔ MB/s ↔ GB/hr · plan backup windows' },
+              { name: 'MTU Path Tester', desc: 'Check max MTU between two IPs without fragmentation' },
+              { name: 'Ping Heatmap', desc: 'Visualize latency variance over time from your browser' },
+              { name: 'ACL Wildcard Converter', desc: 'Paste a subnet mask, get the ACL wildcard instantly' },
+            ].map((t) => (
+              <div class="tool-coming-card">
+                <span class="tool-coming-name">{t.name}</span>
+                <span class="tool-coming-desc muted">{t.desc}</span>
+                <span class="tool-coming-badge">coming soon</span>
+              </div>
+            ))}
+          </div>
+          <p class="tool-coming-cta muted">
+            Want to be notified when new tools drop?
+            <a class="ppc-link" href="#subscribe">Join the list ↓</a>
+          </p>
+        </section>
+
+        <!-- Email capture anchor -->
+        <section class="tool-section" id="subscribe">
+          <div class="tool-label">
+            <span class="ppc-section-bracket">[</span>
+            <span class="tool-label-text">stay in the loop</span>
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <div class="subscribe-box">
+            <p class="subscribe-desc">
+              Get new tools, guides, and the free CLI cheatsheet PDF — straight to your inbox.
+              No spam, unsubscribe anytime.
+            </p>
+            <script is:inline async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="29f9e65f-4f54-4279-84c7-13b055c79420"></script>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
+</html>
+
+<style>
+.tools-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.tools-header {
+  margin-bottom: 3rem;
+}
+
+.tool-section {
+  margin-bottom: 3.5rem;
+}
+
+.tool-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 0.65rem;
+}
+
+.tool-label-text {
+  color: var(--c-muted, rgba(232,230,217,0.55));
+}
+
+.tool-title {
+  font-family: var(--font-display, 'Orbitron', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--c-fg);
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.04em;
+}
+
+.tool-desc {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+}
+
+/* Coming soon grid */
+.tool-coming-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.tool-coming-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--c-border, rgba(255,255,255,0.07));
+  border-radius: 3px;
+  position: relative;
+}
+
+.tool-coming-name {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--c-fg);
+  font-weight: 600;
+}
+
+.tool-coming-desc {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.tool-coming-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-warn, #e8a000);
+  border: 1px solid var(--c-warn, #e8a000);
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.tool-coming-cta {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+/* Email subscribe box */
+.subscribe-box {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--c-border, rgba(255,255,255,0.08));
+  border-radius: 4px;
+  padding: 1.5rem 1.25rem;
+}
+
+.subscribe-desc {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--c-fg);
+  margin: 0 0 1.1rem;
+}
+
+.muted {
+  color: var(--c-muted, rgba(232,230,217,0.5));
+}
+</style>

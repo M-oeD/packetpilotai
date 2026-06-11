@@ -2,7 +2,7 @@
 title: "How to Find What's Saturating Your WAN"
 description: 'A saturated WAN feels like the entire network is broken — but the cause is usually one app, one host, or one runaway backup. This step-by-step guide takes you from "everything is slow" to the exact source using interface stats, NetFlow, DPI, and Wireshark.'
 pubDate: '2026-04-24'
-image: '/og/find-what-saturates-your-wan.png'
+stream: 'failure-library'
 heroAscii: |
   $ show interfaces GigabitEthernet0/0 | include rate
 
@@ -18,26 +18,13 @@ heroAscii: |
 
   [!] One host pushing 13 GB inbound on a 1 Gbps link.
   [→] Find the host. Find the app. Then decide what to do.
-faqs:
-  - q: "How do I tell if my WAN link is saturated?"
-    a: "Pull live interface utilization and convert to a percentage of link capacity. A link consistently above 80% utilization is functionally saturated, and output drops greater than zero confirm packets are being dropped."
-  - q: "Why does egress matter more than ingress on a WAN link?"
-    a: "Egress is what matters most: a 1 Gbps link with 950 Mbps outbound and 50 Mbps inbound is a problem. Asymmetric links, like 1 Gbps down and 100 Mbps up, saturate the small side first, often invisibly."
-  - q: "How do I find which host is using all the bandwidth?"
-    a: "Use NetFlow (Cisco) or sFlow (Juniper, Arista, HP) for per-flow visibility, then sort by bytes descending; the top 5 flows are your suspects. With no flow collector, a port-mirrored capture into ntopng gives the same picture."
-  - q: "How do I identify which application a top-talker host is running?"
-    a: "Reverse DNS or whois the destination IP, or check the TLS SNI in a packet capture with tshark. DPI firewalls like Palo Alto, Fortinet, or Meraki show the app name directly in their Application Visibility view."
-  - q: "When should I upgrade the WAN link versus applying QoS?"
-    a: "Upgrade only when saturation is sustained not bursty, you have eliminated rogue sources, and QoS is not enough to protect critical apps. QoS does not add bandwidth; it decides who suffers when there is not enough."
 ---
 
-A saturated WAN doesn't announce itself politely. It shows up as "the internet is slow," "Teams is choppy," "VPN keeps dropping," and a flood of tickets that all sound different but have the same root cause: one fat link, fully booked.
-
-The fix isn't always obvious — and it almost never is "buy more bandwidth" until you know what's eating the bandwidth you have. This guide walks the steps that take you from "users are complaining" to "this host, this app, here's what we're doing about it."
+WAN saturation is almost always caused by one host or one application — a runaway backup, a Windows Update wave, or cloud sync consuming the link. To find it: run `show interfaces` on your WAN-facing router and check the 5-minute output rate against the link's rated capacity. If it's near line rate, run `show ip cache flow` to identify the top talkers by IP. One source almost always dominates. This guide walks each step from symptom to source.
 
 ---
 
-## What "Saturated" Actually Means
+## What Does WAN Saturation Actually Mean?
 
 A WAN link is saturated when the offered traffic exceeds what the link can carry. When that happens, the device's egress queue fills, and once the queue overflows, packets get dropped. TCP retransmits, latency spikes, real-time apps stutter.
 
@@ -49,7 +36,7 @@ A few useful numbers to keep in mind:
 
 ---
 
-## Step 1: Confirm the Link Is Actually Saturated
+## Step 1: How Do You Confirm Your WAN Link Is Saturated?
 
 Before chasing top talkers, prove the link is full. Pull live interface utilization:
 
@@ -81,7 +68,7 @@ If utilization is low but drops are high, you don't have a saturation problem �
 
 ---
 
-## Step 2: Find the Top Talkers with NetFlow or sFlow
+## Step 2: How Do You Find Which Device Is Consuming the Most Bandwidth?
 
 Once you know the link is saturated, the next question is "by what?" NetFlow (Cisco) and sFlow (Juniper, Arista, HP) give you per-flow visibility — source, destination, port, byte count.
 
@@ -118,7 +105,7 @@ If your routers don't speak NetFlow/sFlow, a free port-mirrored capture into nto
 
 ---
 
-## Step 3: Identify the Application
+## Step 3: How Do You Identify Which Application Is Saturating the WAN?
 
 A top-talker IP gives you "host 10.10.42.31 is the problem" — but you still need to know what `10.10.42.31` is *doing*. Most modern WAN traffic is HTTPS, so just looking at port 443 doesn't tell you which app.
 
@@ -171,7 +158,7 @@ Within a couple of minutes you'll have a list of the destinations and SNI hostna
 
 ---
 
-## Step 5: Look for Time-of-Day Patterns
+## Step 5: Why Does WAN Saturation Only Happen at Certain Times?
 
 Some saturation is constant. Some is scheduled and invisible until you look for it. Pull the interface utilization graph over a 24-hour and 7-day window:
 
@@ -187,7 +174,7 @@ If your monitoring doesn't graph history yet, that's the gap to fix first — yo
 
 ---
 
-## Step 6: Fix It
+## Step 6: How Do You Fix WAN Saturation?
 
 Once you know **who, what, and when**, the fix usually falls into one of four buckets:
 
@@ -237,7 +224,7 @@ If you can't show a graph that justifies the upgrade, your boss won't approve it
 
 ---
 
-## Root Cause Quick Reference
+## What Are the Most Common Causes of WAN Saturation?
 
 | Pattern | Most likely cause | Fix path |
 |---|---|---|
@@ -276,3 +263,22 @@ User reports "WAN is slow / VPN choppy / Teams cutting out"
 ```
 
 Saturation isn't mysterious. It's one of: a host, an app, a schedule, or a capacity gap — and a flow report plus a 24-hour graph almost always tells you which.
+
+---
+
+## Frequently Asked Questions
+
+**How do I know if my WAN is actually saturated?**
+Run `show interfaces <WAN-interface>` on your router and check the "5 minute input rate" and "5 minute output rate." If either consistently exceeds 80% of the link's rated capacity, the link is saturated — bursts that exceed 100% cause drops even when the average looks fine.
+
+**What's the fastest way to find which device is consuming the most bandwidth?**
+On Cisco IOS, run `show ip cache flow` and look at the top entries by bytes. The leading source IP is almost always the culprit. If you have a NetFlow collector, filter by WAN interface and sort by bytes per second over the last 15 minutes for the same answer with more history.
+
+**Can I identify the top bandwidth user without NetFlow?**
+Yes. `show ip cache flow` on Cisco IOS gives a live snapshot of active flows without a dedicated collector. For a graphical view, mirror the WAN port to a span port and open it in Wireshark — sort the "Conversations" view by bytes to see the same picture.
+
+**How much WAN utilization is too much?**
+A link consistently above 80% is effectively saturated. Above 70% on a real-time traffic path (voice, video) is where call quality problems begin, even if the average looks acceptable. Bursts regularly exceed 100% on links running at 80% average.
+
+**Once I find the source, what should I do?**
+In order of effort: (1) reschedule high-volume jobs (backups, updates) to off-hours; (2) rate-limit the offending traffic source; (3) apply QoS to protect real-time traffic; (4) deploy a local cache for repeated downloads (WSUS, BranchCache); (5) upgrade the link once all other options are exhausted and you have a graph that justifies it.

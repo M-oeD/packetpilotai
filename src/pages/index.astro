@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
-import { POSTS_META } from '../data/posts-meta';
+import { STREAM_LIST } from '../data/streams';
 import StatusBar from '../components/react/StatusBar';
 import HeroBoot from '../components/react/HeroBoot';
 import Topology from '../components/react/Topology';
@@ -10,58 +10,67 @@ import Traceroute from '../components/react/Traceroute';
 import FooterBar from '../components/react/FooterBar';
 import CopilotDock from '../components/react/CopilotDock';
 import TweaksPanel from '../components/react/TweaksPanel';
+import NewsletterBar from '../components/NewsletterBar.astro';
+import Nav from '../components/Nav.astro';
 
 const allPosts = await getCollection('blog');
-const latestPosts = allPosts
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3)
-  .map((p) => ({
-    slug: p.id,
-    title: p.data.title,
-    desc: p.data.description,
-    date: p.data.pubDate.toISOString().slice(0, 10),
-    ...POSTS_META[p.id],
-  }));
+const published = allPosts.filter((p) => !p.data.draft);
+const publishedCount = published.length;
+
+// Newest post in a stream first: higher streamNum wins, then newer pubDate.
+const latestFirst = (a, b) => {
+  const an = a.data.streamNum ?? 0;
+  const bn = b.data.streamNum ?? 0;
+  if (an !== bn) return bn - an;
+  return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+};
+
+const streams = STREAM_LIST.map((s) => {
+  const inStream = [...published].filter((p) => p.data.stream === s.key).sort(latestFirst);
+  const latest = inStream[0];
+  return {
+    key: s.key,
+    name: s.name,
+    short: s.short,
+    description: s.description,
+    accent: s.accent,
+    glyph: s.glyph,
+    cadence: s.cadence,
+    count: inStream.length,
+    latestTitle: latest ? latest.data.title : null,
+  };
+});
 ---
 
 <!doctype html>
 <html lang="en" data-theme="amber" data-density="compact">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "PacketPilot AI",
+          "url": "https://packetpilotai.com",
+          "description": "Terminal-first guides for network admins on troubleshooting, Cisco and pfSense configs, and AI-assisted networking workflows."
+        },
+        {
+          "@type": "Organization",
+          "name": "PacketPilot AI",
+          "url": "https://packetpilotai.com",
+          "description": "PacketPilot AI publishes practical guides for network administrators covering packet analysis, network troubleshooting, firewall auditing, and AI-assisted configuration generation."
+        }
+      ]
+    })} />
   </head>
   <body>
     <div class="ppc-grid-bg" aria-hidden="true"></div>
     <div class="ppc-scanline" aria-hidden="true"></div>
 
-    <StatusBar client:idle />
+    <StatusBar client:load />
 
-    <header class="ppc-nav">
-      <div class="ppc-nav-inner">
-        <a class="ppc-brand" href="/">
-          <span class="ppc-brand-glyph" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="2.5" y="2.5" width="19" height="19" rx="1" />
-              <path d="M2.5 12 H 21.5 M 12 2.5 V 21.5" />
-              <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
-            </svg>
-          </span>
-          <span>packet<span class="ppc-brand-em">pilot</span><span class="ppc-brand-tld">.ai</span></span>
-          <span class="ppc-brand-caret">_</span>
-        </a>
-        <nav class="ppc-nav-items">
-          <a href="/" class="ppc-nav-item is-active">/home</a>
-          <a href="/blog" class="ppc-nav-item">/blog</a>
-          <a href="/prompt-pack" class="ppc-nav-item">/prompt-pack</a>
-          <a href="/about" class="ppc-nav-item">/about</a>
-        </nav>
-        <div class="ppc-nav-cli">
-          <span class="ppc-nav-prompt">~</span>
-          <span class="ppc-nav-prompt-sigil">$</span>
-          <span class="ppc-nav-cli-hint">press ⌘K</span>
-        </div>
-      </div>
-    </header>
+    <Nav />
 
     <div class="ppc-shell">
       <main class="ppc-main">
@@ -94,11 +103,11 @@ const latestPosts = allPosts
                 </a>
               </div>
               <div class="ppc-hero-meta muted">
-                <span>8 published</span>
+                <span>{publishedCount} published</span>
                 <span class="sep">·</span>
                 <span>60 prompts</span>
                 <span class="sep">·</span>
-                <span>updated 2026-04-26</span>
+                <span>updated 2026-05-31</span>
               </div>
             </div>
 
@@ -110,7 +119,7 @@ const latestPosts = allPosts
                     <span></span><span></span><span></span>
                   </span>
                 </div>
-                <HeroBoot client:idle />
+                <HeroBoot client:load />
                 <div class="ppc-hero-window-foot">
                   <span>tmux 0:console*</span>
                   <span>—</span>
@@ -135,7 +144,7 @@ const latestPosts = allPosts
             </div>
             <div class="ppc-section-hint muted">rendered client-side · 60fps · zero photos</div>
           </div>
-          <Topology client:visible />
+          <Topology client:load />
         </section>
 
         <!-- Traceroute -->
@@ -147,40 +156,41 @@ const latestPosts = allPosts
             </div>
             <div class="ppc-section-hint muted">mtr, but on the homepage</div>
           </div>
-          <Traceroute client:visible />
+          <Traceroute client:load />
         </section>
 
-        <!-- Latest Posts -->
+        <!-- The Six Streams -->
         <section class="ppc-section">
           <div class="ppc-section-title">
             <div>
-              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>latest.posts<span class="ppc-section-bracket">]</span></div>
-              <h2 class="ppc-section-h2">Latest from the console.</h2>
+              <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>the.six.streams<span class="ppc-section-bracket">]</span></div>
+              <h2 class="ppc-section-h2">Six streams. One console.</h2>
             </div>
             <a href="/blog" class="ppc-link ppc-section-hint">▸ all posts</a>
           </div>
-          <div class="ppc-post-grid three">
-            {latestPosts.map((post) => (
-              <article class="ppc-post">
+          <div class="ppc-stream-grid">
+            {streams.map((s) => (
+              <a class={`ppc-post ppc-stream-card accent-${s.accent}`} href={`/series/${s.key}/`}>
                 <div class="ppc-post-meta">
-                  <span class="ppc-post-date">{post.date}</span>
+                  <span class="ppc-stream-glyph mono">{s.glyph}</span>
+                  <span class={`ppc-pill ${s.accent}`}>{s.short}</span>
                   <span class="ppc-post-sep">·</span>
-                  <span class="muted">{post.read}</span>
-                  <span class="ppc-post-sep">·</span>
-                  <span class={`ppc-pill ${post.accent}`}>{post.tags?.[0]}</span>
+                  <span class="muted">{s.cadence}</span>
                 </div>
-                <h3 class="ppc-post-title">
-                  <a href={`/blog/${post.slug}`}>{post.title}</a>
-                </h3>
-                <p class="ppc-post-desc">{post.desc}</p>
-                <pre class={`ppc-post-ascii mono accent-${post.accent}`}>{post.ascii?.join('\n')}</pre>
+                <h3 class="ppc-post-title">{s.name}</h3>
+                <p class="ppc-post-desc">{s.description}</p>
+                <div class="ppc-stream-latest mono">
+                  {s.latestTitle ? (
+                    <><span class="muted">latest:</span> {s.latestTitle}</>
+                  ) : (
+                    <span class="muted">pillar in flight</span>
+                  )}
+                </div>
                 <div class="ppc-post-foot">
-                  <span class="ppc-post-tags">
-                    {post.tags?.map((t: string) => <span class="ppc-post-tag">#{t}</span>)}
-                  </span>
-                  <a class="ppc-post-link" href={`/blog/${post.slug}`}>read ▸</a>
+                  <span class="ppc-post-tags">{s.count} {s.count === 1 ? 'post' : 'posts'}</span>
+                  <span class="ppc-post-link">open ▸</span>
                 </div>
-              </article>
+              </a>
             ))}
           </div>
         </section>
@@ -230,8 +240,9 @@ const latestPosts = allPosts
       </main>
     </div>
 
-    <FooterBar client:visible />
-    <CopilotDock client:idle />
-    <TweaksPanel client:idle />
+    <NewsletterBar />
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
   </body>
 </html>

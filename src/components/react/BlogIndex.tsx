@@ -9,9 +9,20 @@ export type PostData = {
   tags: string[];
   ascii: string[];
   accent: string;
+  stream?: string;
+  streamNum?: number;
 };
 
-function PostCard({ post }: { post: PostData }) {
+export type StreamMeta = {
+  key: string;
+  name: string;
+  short: string;
+  accent: string;
+  glyph: string;
+};
+
+function PostCard({ post, streamMap }: { post: PostData; streamMap: Map<string, StreamMeta> }) {
+  const stream = post.stream ? streamMap.get(post.stream) : undefined;
   return (
     <article className="ppc-post">
       <div className="ppc-post-meta">
@@ -19,7 +30,19 @@ function PostCard({ post }: { post: PostData }) {
         <span className="ppc-post-sep">·</span>
         <span className="muted">{post.read}</span>
         <span className="ppc-post-sep">·</span>
-        <span className={`ppc-pill ${post.accent}`}>{post.tags[0]}</span>
+        {stream ? (
+          <a
+            href={`/series/${stream.key}/`}
+            className={`ppc-pill ${stream.accent}`}
+            style={{ textDecoration: 'none' }}
+            title={stream.name}
+          >
+            <span style={{ marginRight: 4 }}>{stream.glyph}</span>
+            {stream.short}
+          </a>
+        ) : (
+          <span className={`ppc-pill ${post.accent}`}>{post.tags[0]}</span>
+        )}
       </div>
       <h3 className="ppc-post-title">
         <a href={`/blog/${post.slug}`}>{post.title}</a>
@@ -40,9 +63,22 @@ function PostCard({ post }: { post: PostData }) {
   );
 }
 
-export default function BlogIndex({ posts }: { posts: PostData[] }) {
+export default function BlogIndex({
+  posts,
+  streams = [],
+}: {
+  posts: PostData[];
+  streams?: StreamMeta[];
+}) {
+  const [stream, setStream] = useState('all');
   const [tag, setTag] = useState('all');
   const [query, setQuery] = useState('');
+
+  const streamMap = useMemo(() => {
+    const m = new Map<string, StreamMeta>();
+    streams.forEach((s) => m.set(s.key, s));
+    return m;
+  }, [streams]);
 
   const allTags = useMemo(() => {
     const s = new Set<string>();
@@ -51,7 +87,13 @@ export default function BlogIndex({ posts }: { posts: PostData[] }) {
   }, [posts]);
 
   const filtered = useMemo(() => {
-    let result = tag === 'all' ? posts : posts.filter((p) => p.tags.includes(tag));
+    let result = posts;
+    if (stream !== 'all') {
+      result = result.filter((p) => p.stream === stream);
+    }
+    if (tag !== 'all') {
+      result = result.filter((p) => p.tags.includes(tag));
+    }
     if (query.trim()) {
       const q = query.toLowerCase();
       result = result.filter(
@@ -62,7 +104,7 @@ export default function BlogIndex({ posts }: { posts: PostData[] }) {
       );
     }
     return result;
-  }, [posts, tag, query]);
+  }, [posts, stream, tag, query]);
 
   return (
     <>
@@ -89,6 +131,51 @@ export default function BlogIndex({ posts }: { posts: PostData[] }) {
         </div>
       </div>
 
+      {streams.length > 0 && (
+        <>
+          <div
+            className="ppc-section-kicker mono"
+            style={{ margin: '4px 0 8px', opacity: 0.7 }}
+          >
+            <span className="ppc-section-bracket">[</span>
+            streams
+            <span className="ppc-section-bracket">]</span>
+          </div>
+          <div className="ppc-blog-tags" style={{ marginBottom: 14 }}>
+            <button
+              className={`ppc-blog-tag${stream === 'all' ? ' is-active' : ''}`}
+              onClick={() => setStream('all')}
+            >
+              <span>all</span>
+              <span className="ppc-blog-tag-count mono">{posts.length}</span>
+            </button>
+            {streams.map((s) => {
+              const count = posts.filter((p) => p.stream === s.key).length;
+              return (
+                <button
+                  key={s.key}
+                  className={`ppc-blog-tag${stream === s.key ? ' is-active' : ''}`}
+                  onClick={() => setStream(s.key)}
+                  title={s.name}
+                >
+                  <span className="mono" style={{ marginRight: 6 }}>{s.glyph}</span>
+                  <span>{s.short}</span>
+                  <span className="ppc-blog-tag-count mono">{count}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div
+            className="ppc-section-kicker mono"
+            style={{ margin: '4px 0 8px', opacity: 0.7 }}
+          >
+            <span className="ppc-section-bracket">[</span>
+            tags
+            <span className="ppc-section-bracket">]</span>
+          </div>
+        </>
+      )}
+
       <div className="ppc-blog-tags">
         {allTags.map((t) => (
           <button
@@ -106,7 +193,7 @@ export default function BlogIndex({ posts }: { posts: PostData[] }) {
 
       <div className="ppc-post-grid two">
         {filtered.map((p) => (
-          <PostCard key={p.slug} post={p} />
+          <PostCard key={p.slug} post={p} streamMap={streamMap} />
         ))}
       </div>
 

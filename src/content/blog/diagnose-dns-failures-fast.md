@@ -2,7 +2,7 @@
 title: 'How to Diagnose DNS Failures Fast'
 description: 'When DNS breaks, everything looks broken — but the real cause is rarely obvious. This step-by-step guide takes you from "the internet is down" to root cause using nslookup, dig, and a handful of resolver checks.'
 pubDate: '2026-04-24'
-image: '/og/diagnose-dns-failures-fast.png'
+stream: 'failure-library'
 heroAscii: |
   $ nslookup app.example.com
 
@@ -19,26 +19,13 @@ heroAscii: |
 
   [!] Internal resolver fails. Public resolver works.
   [→] The record is fine. Your DNS server isn't.
-faqs:
-  - q: "How do I confirm a problem is actually DNS?"
-    a: "Ping the destination by name and by IP. If the name fails but the IP works, it is DNS. If both work or both fail, look elsewhere; both failing usually means a connectivity issue, not DNS."
-  - q: "How do I tell if my DNS server is broken or the record itself is wrong?"
-    a: "Test against a public resolver with nslookup name 8.8.8.8 or 1.1.1.1. If public resolvers answer but your internal one does not, your internal DNS server is broken or filtering. If both return the same wrong IP, the record itself is wrong."
-  - q: "What ports does DNS use and how can a firewall break resolution?"
-    a: "DNS uses UDP/53 for normal queries, TCP/53 for large responses and zone transfers, and TCP/853 for DNS-over-TLS. Blocking TCP/53 makes large DNSSEC responses fail, and blocking 853 breaks DoT clients like Android."
-  - q: "Why does a DNS record still resolve to the old value after I changed it?"
-    a: "A long TTL keeps stale answers in caches; a TTL of 86400 survives a full day after a fix. Lower the TTL (300 seconds is common) at least 24 hours before a planned change, or query the authoritative nameserver directly to bypass caches."
-  - q: "What is dig +trace used for?"
-    a: "dig +trace walks the resolution chain manually through root, TLD, and authoritative servers so you see which step fails. A timeout or REFUSED at any level pinpoints the broken layer."
 ---
 
-DNS failures are sneaky. The user doesn't say "DNS is broken" — they say "the website is down," "Outlook can't connect," "VPN won't authenticate." Every one of those can be DNS, and DNS is almost always the last thing anyone checks.
-
-The good news: DNS failures leave fingerprints. There's a repeatable workflow that takes you from a vague complaint to the exact resolver, record, or firewall rule that's wrong. This guide walks you through it.
+DNS failures show up as app errors, Outlook outages, and VPN authentication failures — almost never as "DNS is broken." The fastest diagnosis: run `nslookup <hostname>` against your internal resolver, then against `8.8.8.8`. If internal fails but public resolves, your DNS server is the problem — not the record. If both fail, the record is wrong or the authoritative nameserver is down. This guide walks the full step-by-step workflow from complaint to root cause.
 
 ---
 
-## What DNS Resolution Actually Does
+## What Does DNS Resolution Actually Do?
 
 Every time something on your network connects to a name — `office.com`, `update.windows.com`, an internal app — it makes a sequence of DNS lookups:
 
@@ -51,7 +38,7 @@ Any one of those four steps can fail. The trick is knowing which.
 
 ---
 
-## Step 1: Confirm It's Actually DNS
+## Step 1: How Do You Confirm the Problem Is DNS?
 
 Before chasing resolvers, prove the symptom is name resolution. Ping the destination by name and by IP:
 
@@ -76,7 +63,7 @@ If `ping <name>` returns "could not find host" or "request timed out" but the IP
 
 ---
 
-## Step 2: Check the Client's Resolver Config
+## Step 2: How Do You Check Which DNS Server the Client Is Using?
 
 The client may be asking the wrong server. Check what resolvers it's using:
 
@@ -117,7 +104,7 @@ sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
 
 ---
 
-## Step 3: Test Against an Alternate Resolver
+## Step 3: How Do You Test If the Problem Is Your DNS Server or the Record?
 
 This is the fastest way to isolate "is it the record or is it my DNS server?"
 
@@ -168,7 +155,7 @@ If you see `connection timed out; no servers could be reached` partway through, 
 
 ---
 
-## Step 5: Check the Firewall — Port 53 and Port 853
+## Step 5: Can a Firewall Break DNS? (Port 53 and Port 853)
 
 DNS traffic uses **UDP/53** for normal queries, **TCP/53** for large responses (and zone transfers), and **TCP/853** for DNS-over-TLS (DoT). A firewall blocking any of these breaks resolution in ways that aren't always obvious.
 
@@ -198,7 +185,7 @@ If your firewall logs show drops to UDP/53 from the affected client, the answer 
 
 ---
 
-## Step 6: Authoritative Side — TTL, Stale Records, and Propagation
+## Step 6: What If the DNS Record Itself Is Wrong?
 
 If the record itself is wrong, no amount of resolver troubleshooting fixes it. Query the authoritative nameservers directly:
 
@@ -228,7 +215,7 @@ The TTL in the answer line shows how much time is left on the cached record.
 
 ---
 
-## Root Cause Quick Reference
+## What Are the Most Common DNS Failure Root Causes?
 
 | Symptom | Most likely cause | Where to look |
 |---|---|---|
@@ -268,3 +255,22 @@ User reports "site/app/service is down"
 ```
 
 DNS has fingerprints. Follow them, and you'll have your answer before the user finishes typing the ticket.
+
+---
+
+## Frequently Asked Questions
+
+**How do I tell if DNS is causing my problem?**
+Run `nslookup <failing-hostname>`. If it returns an error but resolves when you add `8.8.8.8` as the server (`nslookup <hostname> 8.8.8.8`), your internal DNS resolver is broken. If both fail, the record or authoritative nameserver is the problem — not your resolver.
+
+**What's the difference between NXDOMAIN and SERVFAIL?**
+NXDOMAIN means the record doesn't exist. SERVFAIL means the resolver couldn't complete the lookup — often because it can't reach the authoritative nameserver or has a misconfigured zone. NXDOMAIN is a record problem; SERVFAIL is a server or network problem.
+
+**Why does nslookup work but my browser still fails?**
+Browsers cache DNS independently. Flush the OS DNS cache (`ipconfig /flushdns` on Windows, `sudo resolvectl flush-caches` on Linux) and clear the browser's own DNS cache — in Chrome: `chrome://net-internals/#dns`. If the browser is using a different resolver than the system (some do), that's also a cause.
+
+**How do I flush the DNS cache on Windows?**
+Run `ipconfig /flushdns` from an elevated command prompt. This clears the Windows resolver cache. If the problem returns immediately after flushing, the resolver itself is returning the wrong answer — the issue is upstream of the client.
+
+**Why does DNS work for some users but not others?**
+Different machines may be configured to use different resolvers. Run `ipconfig /all` (Windows) or `cat /etc/resolv.conf` (Linux) on both an affected and an unaffected machine and compare the "DNS Servers" entries. If they differ, the broken resolver is the cause.

@@ -2,7 +2,7 @@
 title: 'Troubleshoot Slow Network Performance Step-by-Step'
 description: 'A systematic methodology for diagnosing slow networks — from end-user complaint to root cause. Covers ping, traceroute, packet capture, interface stats, and common fixes.'
 pubDate: '2026-04-18'
-image: '/og/troubleshoot-slow-network-performance.png'
+stream: 'failure-library'
 heroAscii: |
   $ tracert 8.8.8.8
 
@@ -13,24 +13,13 @@ heroAscii: |
 
   [!] Latency jumped 178ms at hop 3 — ISP segment
   [→] Open a ticket with your ISP. Data in hand.
-faqs:
-  - q: "Where do I start when a user says the network is slow?"
-    a: "First define slow: ask what is slow, where the user is, when it started, and how many people are affected. Then isolate scope by pinging progressively further destinations: localhost, gateway, an internet IP, and a domain name."
-  - q: "What ping latency is acceptable on a LAN?"
-    a: "Run 50 pings and watch for packet loss, average RTT, and jitter. Any loss to the gateway is a red flag, and an average RTT over 5ms on a LAN is worth investigating."
-  - q: "What interface errors indicate a physical problem?"
-    a: "On a switch port, any non-zero counter is a problem. CRC errors suggest a bad cable, damaged SFP, or duplex mismatch; runts suggest a duplex mismatch; collisions mean a half-duplex device on a full-duplex port."
-  - q: "What should I look for in a packet capture when troubleshooting slowness?"
-    a: "Look for TCP retransmissions (upstream dropping packets), TCP Zero Window (an overwhelmed receiver), high TCP RTT via tcp.analysis.ack_rtt, and DNS timeouts. Wireshark Expert Information flags most of these automatically."
 ---
 
-"The network is slow." It's the vaguest complaint in IT, and it lands on your desk at least once a week. Without a methodology, you're guessing. With one, you find the cause in minutes.
-
-This is the workflow I use every time. It's sequential on purpose — each step narrows the problem before you move to the next.
+To troubleshoot slow network performance, ping four destinations in sequence: `127.0.0.1` (loopback), your default gateway, `8.8.8.8` (internet IP), and then a domain name like `google.com`. The first destination that fails or shows high latency tells you exactly where to look. From there, check for packet loss with 50-packet pings, examine switch interface error counters, and measure WAN utilization. This guide walks each step in the order that narrows fastest.
 
 ---
 
-## Step 1: Define "Slow"
+## Step 1: What Should You Find Out Before Troubleshooting Slow Network Performance?
 
 Before touching a single device, get specifics from whoever reported the issue:
 
@@ -43,7 +32,7 @@ One user with slow Teams calls is a different problem than an entire floor with 
 
 ---
 
-## Step 2: Isolate the Scope
+## Step 2: How Do You Isolate Where on the Network the Slowness Is?
 
 Run a quick ping test from the affected machine to progressively further destinations:
 
@@ -66,7 +55,7 @@ ping google.com         # DNS + internet — tests name resolution
 
 ---
 
-## Step 3: Measure Latency and Packet Loss
+## Step 3: How Do You Measure Latency and Packet Loss?
 
 Pings that reply aren't always healthy. Add `-n 50` (Windows) or `-c 50` (Linux) to run 50 pings and look for:
 
@@ -109,7 +98,7 @@ If latency spikes at **hop 1** (your gateway), start there. If it spikes at **ho
 
 ---
 
-## Step 5: Check Interface Statistics on the Switch/Router
+## Step 5: What Switch Interface Statistics Indicate a Network Problem?
 
 High error counts on a port are the most common cause of LAN slowness and packet loss. SSH into the switch and check:
 
@@ -168,7 +157,7 @@ On a router, check WAN utilization the same way. If the WAN link is maxed, prior
 
 ---
 
-## Step 7: Packet Capture (When You Still Can't Find It)
+## Step 7: When Should You Use a Packet Capture to Diagnose Slow Network Performance?
 
 If the previous steps don't reveal the cause, capture traffic and look at what's actually happening. Wireshark is your best tool here.
 
@@ -190,7 +179,7 @@ The **Expert Information** panel in Wireshark (Analyze → Expert Information) w
 
 ---
 
-## Step 8: Common Fixes by Root Cause
+## Step 8: What Are the Most Common Fixes for Slow Network Performance?
 
 | Root cause | Fix |
 |---|---|
@@ -227,3 +216,22 @@ User reports slow network
 ```
 
 Slow networks have causes. Follow the steps, and you'll find it — every time.
+
+---
+
+## Frequently Asked Questions
+
+**What's the first thing to check when the network is slow?**
+Ping your default gateway with 50 packets and check for loss. Any loss to the gateway is a local problem — start with the physical layer: cable, switch port, duplex setting. If the gateway is clean, run a traceroute to find where latency spikes along the path to an internet destination.
+
+**How do I tell if the slowness is DNS and not the network itself?**
+Ping an IP address (`8.8.8.8`) and compare the response time to pinging a domain name (`google.com`). If the IP responds quickly but the domain is slow, DNS is the bottleneck. Switch the machine's DNS temporarily to `8.8.8.8` or `1.1.1.1` to confirm — if speed improves, your internal DNS server is the problem.
+
+**What ping round-trip time is too slow on a LAN?**
+A wired LAN connection should show sub-1ms RTT to the default gateway. Above 5ms is worth investigating. Above 20ms to the gateway almost always indicates a physical layer problem — duplex mismatch, a failing port, or a bad cable.
+
+**How do I check if my WAN link is saturated?**
+SSH to your router and run `show interfaces <WAN-interface> | include rate`. Check the "5 minute output rate." If it's consistently above 80% of the link's rated capacity, the link is saturated. See the WAN saturation guide for the next steps.
+
+**When should I capture packets instead of checking interface stats?**
+Check interface stats first — they're fast and reveal physical layer errors and bandwidth saturation without needing a capture point or span port. Move to Wireshark only when the physical layer is clean and you need to see TCP-level behavior: retransmissions, zero-window events, DNS timeouts, or application-layer failures.

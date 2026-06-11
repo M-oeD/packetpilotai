@@ -2,7 +2,6 @@
 title: '5 Free Network Troubleshooting Tools Every Admin Should Have in 2026'
 description: 'Paid tools are great. Free tools solve 80% of real problems and run on every machine you already own. Here are five free network troubleshooting tools every admin should be able to drive cold — what each one does, when to reach for it, and the one limitation that bites you.'
 pubDate: '2026-04-24'
-image: '/og/5-free-network-troubleshooting-tools-2026.png'
 heroAscii: |
   ┌─ THE FREE TOOL BELT ──────────────────────────────────┐
   │                                                       │
@@ -15,22 +14,11 @@ heroAscii: |
   │  [!] All five are free. All five are production-ready │
   │  [→] Learn one a week and you have a toolkit in 5     │
   └───────────────────────────────────────────────────────┘
-faqs:
-  - q: "What are the five free network troubleshooting tools every admin should know?"
-    a: "Wireshark for packet-level forensics, Nmap for discovery and audit, iperf3 for throughput testing, LibreNMS for long-term history and alerting, and MTR for per-hop path analysis. All five are free and production-ready."
-  - q: "How do I find the real throughput of a link?"
-    a: "Use iperf3: run iperf3 -s on the receiver and iperf3 -c receiver-ip on the sender. Test inside the LAN, then to the WAN edge, then to the internet; the point where the number falls off a cliff is the bottleneck."
-  - q: "Why do I see packet loss at intermediate hops in MTR that may not be real?"
-    a: "Some routers de-prioritize ICMP, so intermediate hops can show loss that is not actually affecting user traffic. Always check the destination hop loss number to know whether real traffic is impacted."
-  - q: "When are paid network tools worth it over free ones?"
-    a: "Paid tools earn their place in three areas: dashboards a CIO wants, automated alerting at scale, and DPI-class application visibility. Outside of those, free tools handle the overwhelming majority of real troubleshooting."
 ---
 
-The networking software market wants you to believe that real visibility costs five figures a year. It doesn't. The five tools below are free, mature, used by every serious operator on the planet, and together they handle the overwhelming majority of real troubleshooting situations.
+The five best free network troubleshooting tools for admins are: **Wireshark** (packet capture and protocol analysis), **Nmap** (host and port discovery), **iperf3** (real throughput measurement between two endpoints), **LibreNMS** (SNMP-based monitoring with historical graphs), and **MTR** (per-hop latency and packet loss combined). All five are free, production-ready, and actively maintained — together they cover the overwhelming majority of real troubleshooting scenarios without a license fee.
 
-Paid tools earn their seat in three places: dashboards your CIO wants, automated alerting at scale, and DPI-class application visibility. Outside of those, free tools win — and learning them deeply pays back forever, because they don't disappear when the contract lapses.
-
-Here's the toolkit, in the order you'll likely reach for them.
+Paid tools earn their seat in three places: CIO-facing dashboards, automated alerting at scale, and DPI-class application visibility. Outside those, free wins. Here's the toolkit in the order you'll most often reach for it.
 
 ---
 
@@ -198,7 +186,7 @@ The hop at line 3 is where loss starts. Now you have a specific datum to send yo
 
 ---
 
-## Side-by-Side Comparison
+## Which Free Network Tool Should You Use for Each Problem?
 
 | Tool | Use case | Skill curve | OS coverage | Where it shines |
 |---|---|---|---|---|
@@ -210,7 +198,7 @@ The hop at line 3 is where loss starts. Now you have a specific datum to send yo
 
 ---
 
-## Build Your Free Toolkit
+## How Do You Install All Five Free Network Troubleshooting Tools?
 
 Here are the install one-liners. Put these on your jump box and forget about them:
 
@@ -236,3 +224,22 @@ LibreNMS deserves its own VM — don't try to bolt it onto a workstation. The of
 ---
 
 Free tools have one trait the paid ones don't: they're still here next year, regardless of vendor pricing changes, regardless of contract status. Learning them deeply is one of the highest-leverage things a network admin can do — and the five above are where to start.
+
+---
+
+## Frequently Asked Questions
+
+**What is the best free tool for capturing network packets?**
+Wireshark is the standard. It decodes thousands of protocols, ships with a display filter builder, and includes `tshark` for command-line and scripted captures. It's free, open source, and available on Windows, Mac, and Linux. For headless servers, use `tshark` directly.
+
+**Which tool should I reach for first when the network is slow?**
+Start with MTR (`mtr -r -c 100 <destination>`) to find where in the path latency or loss appears. If the path looks clean, use iperf3 to measure actual throughput between two points and confirm whether the link itself is the bottleneck. If throughput is fine but an application is slow, move to Wireshark to examine TCP-level behavior.
+
+**Is LibreNMS free for commercial use?**
+Yes. LibreNMS is released under the GNU GPL and is free in commercial environments — no license fee, no sensor limit, no feature gating. It contrasts with PRTG Free, which caps you at 100 sensors. LibreNMS requires a dedicated Linux VM or Docker container; it's not a workstation install.
+
+**What's the difference between Wireshark and MTR?**
+Wireshark captures and decodes the actual content of packets at a single capture point — it answers "what is this device sending?" MTR measures path-level behavior across multiple hops — it answers "where does the path break?" They're complementary: use MTR to find the problem hop, Wireshark to understand what's happening at that level.
+
+**Can I run Nmap in a production environment?**
+With care, yes. Use `-sn` for ping sweeps (no port scanning), avoid aggressive timing flags like `-T4` or `-T5`, and coordinate with your team before scanning. The default timing (`-T3`) is safe on most networks. Aggressive scans can impact fragile devices like older IP cameras and printers.

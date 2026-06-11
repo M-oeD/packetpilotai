@@ -1,0 +1,310 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+
+const title = 'Network Admin CLI Cheatsheet — PacketPilot AI';
+const description = 'Essential CLI commands for network admins: Cisco IOS, Linux networking, packet capture, DNS debugging, and WAN analysis. Free — save or print.';
+
+const sections = [
+  {
+    id: 'triage',
+    label: 'Quick Triage',
+    accent: 'warn',
+    items: [
+      { cmd: 'ping -n 100 <host>',              note: 'Windows — quantify packet loss baseline' },
+      { cmd: 'ping -c 100 -i 0.2 <host>',       note: 'Linux — fast 100-packet test' },
+      { cmd: 'mtr --report --report-cycles 60 <host>', note: 'Live per-hop loss + latency' },
+      { cmd: 'tracert <host>',                   note: 'Windows traceroute' },
+      { cmd: 'traceroute -n <host>',             note: 'Linux traceroute, no DNS lookup' },
+      { cmd: 'pathping <host>',                  note: 'Windows — traceroute + loss stats combined' },
+    ],
+  },
+  {
+    id: 'cisco',
+    label: 'Cisco IOS',
+    accent: 'ok',
+    items: [
+      { cmd: 'show interfaces <if>',             note: 'CRC, input/output drops, errors' },
+      { cmd: 'show interfaces <if> counters',    note: 'Byte + packet counters per direction' },
+      { cmd: 'show ip interface brief',          note: 'All interfaces, IP, status at a glance' },
+      { cmd: 'show cdp neighbors detail',        note: 'Neighbor IPs, platform, interface mapping' },
+      { cmd: 'show spanning-tree vlan <id>',     note: 'STP root, port roles, blocking ports' },
+      { cmd: 'show mac address-table vlan <id>', note: 'MAC to port mapping per VLAN' },
+      { cmd: 'show arp',                         note: 'ARP cache — find IP-to-MAC mappings' },
+      { cmd: 'show ip route <ip>',               note: 'Routing decision for a specific prefix' },
+      { cmd: 'show log | inc %.*-3-',            note: 'Filter syslog for errors (severity 3)' },
+      { cmd: 'debug ip packet detail',           note: 'Last resort — verbose packet debug (careful)' },
+      { cmd: 'clear counters <if>',              note: 'Reset interface counters before monitoring' },
+    ],
+  },
+  {
+    id: 'linux',
+    label: 'Linux Networking',
+    accent: 'accent',
+    items: [
+      { cmd: 'ip link show',                     note: 'All interfaces, link state, MTU' },
+      { cmd: 'ip addr show <if>',                note: 'Interface IPs, subnet, flags' },
+      { cmd: 'ip route get <host>',              note: 'Routing decision + src IP for a destination' },
+      { cmd: 'ss -tunp',                         note: 'Open TCP/UDP sockets with PIDs' },
+      { cmd: 'ss -s',                            note: 'Socket summary — established, closed, etc.' },
+      { cmd: 'netstat -rn',                      note: 'Routing table (older systems)' },
+      { cmd: 'ethtool <if>',                     note: 'Link speed, duplex, autoneg state' },
+      { cmd: 'ethtool -S <if>',                  note: 'NIC driver stats — rx_errors, tx_dropped' },
+      { cmd: 'tc -s qdisc show dev <if>',        note: 'QoS queue stats — drops, overlimits' },
+      { cmd: 'iperf3 -s',                        note: 'Start iperf server on default port 5201' },
+      { cmd: 'iperf3 -c <server> -t 30 -P 4',   note: 'Test throughput: 30s, 4 parallel streams' },
+    ],
+  },
+  {
+    id: 'dns',
+    label: 'DNS Debugging',
+    accent: 'warn',
+    items: [
+      { cmd: 'dig @<resolver> <name> +short',    note: 'Query specific resolver — quick answer' },
+      { cmd: 'dig @<resolver> <name> +stats',    note: 'Include query time in output' },
+      { cmd: 'dig +trace <name>',                note: 'Walk the full delegation chain' },
+      { cmd: 'dig -x <ip>',                      note: 'Reverse DNS lookup' },
+      { cmd: 'nslookup <name> <resolver>',       note: 'Windows — test specific DNS server' },
+      { cmd: 'resolvectl query <name>',          note: 'systemd-resolved — see which nameserver answered' },
+      { cmd: 'tcpdump -n port 53',               note: 'Capture all DNS traffic on the wire' },
+    ],
+  },
+  {
+    id: 'capture',
+    label: 'Packet Capture',
+    accent: 'down',
+    items: [
+      { cmd: 'tcpdump -i <if> -w cap.pcap',      note: 'Capture all traffic on an interface to file' },
+      { cmd: 'tcpdump -i <if> host <ip>',        note: 'Capture traffic to/from one host' },
+      { cmd: 'tcpdump -i <if> port 443',         note: 'Capture HTTPS traffic' },
+      { cmd: 'tcpdump -i <if> "tcp[tcpflags] & tcp-rst != 0"', note: 'Capture TCP resets' },
+      { cmd: 'tshark -r cap.pcap -qz io,stat,1', note: 'Throughput per second from a capture file' },
+      { cmd: 'tshark -r cap.pcap -Y "tcp.analysis.retransmission"', note: 'Show retransmissions only' },
+    ],
+  },
+  {
+    id: 'wan',
+    label: 'WAN & Bandwidth',
+    accent: 'accent',
+    items: [
+      { cmd: 'show interfaces <WAN-if> | inc rate', note: 'Cisco — input/output rate in real time' },
+      { cmd: 'show ip cache flow',                note: 'Cisco IOS — NetFlow top talkers (if enabled)' },
+      { cmd: 'nload <if>',                        note: 'Linux — live bandwidth graph per interface' },
+      { cmd: 'iftop -i <if>',                     note: 'Linux — per-host bandwidth breakdown' },
+      { cmd: 'vnstat -l -i <if>',                 note: 'Linux — live rx/tx counters' },
+      { cmd: 'ping -M do -s 1400 <gateway>',      note: 'Linux — MTU test: find fragmentation point' },
+      { cmd: 'ping -l 1400 -f <gateway>',         note: 'Windows — same MTU test' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      @media print {
+        .no-print { display: none !important; }
+        body { background: #fff !important; color: #111 !important; }
+        .cs-root { max-width: 100%; padding: 0; }
+        .cs-section { break-inside: avoid; }
+        .ppc-grid-bg, .ppc-scanline { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
+
+    <div class="cs-root">
+      <header class="cs-header no-print">
+        <a class="ppc-brand cs-back" href="/">
+          ← packetpilot.ai
+        </a>
+        <button class="cs-print-btn" onclick="window.print()">
+          ⎙ save / print PDF
+        </button>
+      </header>
+
+      <div class="cs-title-block">
+        <div class="cs-kicker">
+          <span class="cs-bracket">[</span>
+          free · packetpilot.ai
+          <span class="cs-bracket">]</span>
+        </div>
+        <h1 class="cs-h1">Network Admin CLI Cheatsheet</h1>
+        <p class="cs-sub">
+          Essential commands for triage, capture, and analysis — Cisco IOS, Linux, DNS.
+          Bookmark this page or print to PDF.
+        </p>
+      </div>
+
+      <div class="cs-grid">
+        {sections.map((section) => (
+          <section class="cs-section" id={section.id}>
+            <div class={`cs-section-label cs-accent-${section.accent}`}>
+              <span class="cs-bracket">[</span>
+              {section.label}
+              <span class="cs-bracket">]</span>
+            </div>
+            <div class="cs-table">
+              {section.items.map((item) => (
+                <div class="cs-row">
+                  <code class="cs-cmd">{item.cmd}</code>
+                  <span class="cs-note">{item.note}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <footer class="cs-footer no-print">
+        <p class="cs-footer-text">
+          More guides and tools at <a class="ppc-link" href="https://packetpilotai.com">packetpilotai.com</a>.
+          Get 60+ AI prompts for network admins →
+          <a class="ppc-link" href="/prompt-pack">prompt-pack</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+.cs-root {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+}
+
+.cs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.cs-back {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--c-muted, rgba(232,230,217,0.55));
+  text-decoration: none;
+}
+
+.cs-back:hover { color: var(--c-fg); }
+
+.cs-print-btn {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  background: transparent;
+  border: 1px solid var(--c-accent);
+  color: var(--c-accent);
+  padding: 0.35rem 0.75rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cs-print-btn:hover {
+  background: rgba(57, 208, 216, 0.1);
+}
+
+.cs-title-block {
+  margin-bottom: 2.5rem;
+}
+
+.cs-kicker {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 0.5rem;
+}
+
+.cs-bracket { color: var(--c-accent); }
+
+.cs-h1 {
+  font-family: var(--font-display, 'Orbitron', sans-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--c-fg);
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.04em;
+}
+
+.cs-sub {
+  font-size: 0.82rem;
+  color: var(--c-muted, rgba(232,230,217,0.6));
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+}
+
+@media (max-width: 640px) {
+  .cs-grid { grid-template-columns: 1fr; }
+}
+
+.cs-section {}
+
+.cs-section-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.cs-accent-warn  { color: var(--c-warn, #e8a000); }
+.cs-accent-ok    { color: var(--c-ok, #00c853); }
+.cs-accent-accent{ color: var(--c-accent, #39d0d8); }
+.cs-accent-down  { color: var(--c-down, #ff4d4f); }
+
+.cs-table {
+  border: 1px solid var(--c-border, rgba(255,255,255,0.08));
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cs-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 0.15rem;
+}
+
+.cs-row:last-child { border-bottom: none; }
+.cs-row:nth-child(even) { background: rgba(255,255,255,0.015); }
+
+.cs-cmd {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--c-fg, #e8e6d9);
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.cs-note {
+  font-size: 0.68rem;
+  color: var(--c-muted, rgba(232,230,217,0.5));
+  line-height: 1.4;
+}
+
+.cs-footer {
+  margin-top: 3rem;
+  border-top: 1px solid var(--c-border, rgba(255,255,255,0.08));
+  padding-top: 1.25rem;
+}
+
+.cs-footer-text {
+  font-size: 0.78rem;
+  color: var(--c-muted, rgba(232,230,217,0.55));
+  line-height: 1.6;
+}
+</style>
