@@ -1,0 +1,6 @@
+# Copy to `.dev.vars` (gitignored) and fill in real values.
+
+# Cloudflare API token for `npm run stats` (visitor analytics).
+# Mint at: dashboard → My Profile → API Tokens → Create Custom Token
+# Permission: Account · Account Analytics · Read   (Account Resources: your account)
+CF_ANALYTICS_TOKEN=
