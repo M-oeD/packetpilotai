@@ -6,6 +6,7 @@ import FooterBar from '../../components/react/FooterBar';
 import CopilotDock from '../../components/react/CopilotDock';
 import TweaksPanel from '../../components/react/TweaksPanel';
 import SubnetCalc from '../../components/react/SubnetCalc';
+import WildcardConverter from '../../components/react/WildcardConverter';
 
 const title = 'Free Network Admin Tools — PacketPilot AI';
 const description = 'Free browser-based tools for network admins: subnet calculator, CIDR lookup, wildcard mask converter, and more. No install, no login.';
@@ -53,6 +54,14 @@ const description = 'Free browser-based tools for network admins: subnet calcula
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Wildcard masks are used in Cisco IOS access control lists (ACLs) and OSPF area definitions. A wildcard mask is the bitwise inverse of a subnet mask: a /24 subnet mask of 255.255.255.0 has a wildcard mask of 0.0.0.255. A 0-bit in the wildcard mask means 'must match'; a 1-bit means 'ignore'."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I convert a subnet mask to a wildcard mask?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Subtract each octet of the subnet mask from 255. For 255.255.255.0 the wildcard is (255-255).(255-255).(255-255).(255-0) = 0.0.0.255. Equivalently, it is the bitwise inverse of the mask. A /26 mask of 255.255.255.192 becomes the wildcard 0.0.0.63."
           }
         }
       ]
@@ -111,6 +120,22 @@ const description = 'Free browser-based tools for network admins: subnet calcula
           <SubnetCalc client:load />
         </section>
 
+        <!-- Wildcard / ACL Mask Converter -->
+        <section class="tool-section" id="wildcard">
+          <div class="tool-label">
+            <span class="ppc-section-bracket">[</span>
+            <span class="tool-label-text">02 · wildcard converter</span>
+            <span class="ppc-section-bracket">]</span>
+          </div>
+          <h2 class="tool-title">Wildcard / ACL Mask Converter</h2>
+          <p class="tool-desc muted">
+            Paste a subnet mask, a wildcard mask, or a CIDR prefix — get all three
+            plus a ready-to-paste Cisco ACL line. The wildcard is the bitwise
+            inverse the IOS ACL and OSPF <code>network</code> statements expect.
+          </p>
+          <WildcardConverter client:load />
+        </section>
+
         <!-- More tools placeholder — easy to extend -->
         <section class="tool-section tool-coming" id="coming-soon">
           <div class="tool-label">
@@ -123,7 +148,7 @@ const description = 'Free browser-based tools for network admins: subnet calcula
               { name: 'Bandwidth Calculator', desc: 'Convert Mbps ↔ MB/s ↔ GB/hr · plan backup windows' },
               { name: 'MTU Path Tester', desc: 'Check max MTU between two IPs without fragmentation' },
               { name: 'Ping Heatmap', desc: 'Visualize latency variance over time from your browser' },
-              { name: 'ACL Wildcard Converter', desc: 'Paste a subnet mask, get the ACL wildcard instantly' },
+              { name: 'TCP Flag Decoder', desc: 'Decode SYN/ACK/FIN/RST flag combos from a hex value' },
             ].map((t) => (
               <div class="tool-coming-card">
                 <span class="tool-coming-name">{t.name}</span>
