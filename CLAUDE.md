@@ -18,7 +18,10 @@ npm run generate-types   # wrangler types
 - React 19 islands (`@astrojs/react`) for interactive components (StatusBar, Topology, CopilotDock, …), hydrated client-side.
 - Blog: markdown in `src/content/blog/`; content-layer `loader: glob` in `content.config.ts` (glob excludes placeholder posts). MDX, RSS, sitemap integrations.
 - Newsletter: Beehiiv via `NewsletterBar.astro` (home/blog/about/series) + inline post CTAs.
-- Analytics: Cloudflare Web Analytics beacon — token `CF_ANALYTICS_TOKEN` in `src/consts.ts`. Traffic only; conversions live in Gumroad (UTM) and Beehiiv.
+- Analytics — two trustworthy sources (RUM beacon removed 2026-06-25):
+  - **`npm run traffic`** (`scripts/traffic.mjs`, edge HTTP analytics) — the real traffic source. Needs a token with **Zone Analytics:Read** + `CF_ZONE_TAG` in `.dev.vars`. 3 layers: raw edge (≈72% is 404/403 vuln-scanner noise — not human) → **Layer 3 = GET+200+eyeball, assets stripped = real-ish human pageviews** (free-plan adaptive retains ~1wk, no content-type filter). Also reads the distribution test (a posted URL spikes in Layer 3, distinct from scanner 404s).
+  - Conversions: Gumroad (sales, exact) + Beehiiv (signups, exact) — the numbers to actually trust.
+  - **Removed 2026-06-25:** the Cloudflare Web Analytics RUM beacon — `scripts/web-stats.mjs`, the `BaseHead.astro` beacon `<script>`, and `CF_ANALYTICS_TOKEN` in `consts.ts`. It rounded to 10 and had recorded zero since 06-10 (deployed token ≠ data-bearing tag). Edge analytics supersedes it. (`.dev.vars` `CF_ANALYTICS_TOKEN` is now the *API* token for `npm run traffic`, unrelated to the old public beacon token.)
 - Fonts: Google Fonts CDN (Orbitron, Share Tech Mono, Rajdhani).
 - Sister repo: M-oed/claude-token-counter (plain HTML/CSS/JS, GitHub Pages, auto-deploys from main).
 

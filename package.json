@@ -12,7 +12,7 @@
     "astro": "astro",
     "generate-types": "wrangler types",
     "deploy": "npm run build && wrangler deploy",
-    "stats": "node scripts/web-stats.mjs"
+    "traffic": "node scripts/traffic.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.10",

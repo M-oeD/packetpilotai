@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { CF_ANALYTICS_TOKEN, GOOGLE_SITE_VERIFICATION, OG_IMAGE, SITE_TITLE, TWITTER_HANDLE } from '../consts';
+import { GOOGLE_SITE_VERIFICATION, OG_IMAGE, SITE_TITLE, TWITTER_HANDLE } from '../consts';
 import { absoluteUrl, websiteSchema } from '../utils/schema';
 
 interface Props {
@@ -41,9 +41,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = absoluteUrl(image, Astro.site);
 const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 
-// CF Web Analytics beacon token + optional Google Search Console verification.
-// Env vars override the committed defaults; tags are omitted when both are unset.
-const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN ?? CF_ANALYTICS_TOKEN;
+// Site-verification tags. Env vars override the committed defaults; omitted when unset.
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? GOOGLE_SITE_VERIFICATION;
 const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
 // Optional Google Analytics 4. Off unless PUBLIC_GA4_ID is set. NOTE: GA4 sets
@@ -106,15 +104,6 @@ const structuredData = [websiteSchema(Astro.site), ...jsonLd];
 {structuredData.map((block) => (
 	<script type="application/ld+json" set:html={JSON.stringify(block)} />
 ))}
-
-{cfBeaconToken && (
-	<script
-		is:inline
-		defer
-		src="https://static.cloudflareinsights.com/beacon.min.js"
-		data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
-	/>
-)}
 
 {ga4Id && (
 	<>

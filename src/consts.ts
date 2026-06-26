@@ -25,8 +25,3 @@ export const TWITTER_HANDLE = '';
 // (it is exposed in the page's HTML for anyone to read), so committing it is
 // safe. The PUBLIC_GOOGLE_SITE_VERIFICATION env var, if set, overrides this.
 export const GOOGLE_SITE_VERIFICATION = 'CwHFqyMgKDxGipUsvqXzJ_kc-Bnb5zOaJkRVJx6gNzA';
-
-// Cloudflare Web Analytics beacon token. PUBLIC by design (ships in client HTML) — safe to commit.
-// Get it: Cloudflare dashboard -> Analytics & Logs -> Web Analytics -> "Add a site" -> copy the token.
-// Leave as '' to disable the beacon (no script is emitted, build stays clean).
-export const CF_ANALYTICS_TOKEN = '2be4f685518548f68f768cde379c3ccf';
