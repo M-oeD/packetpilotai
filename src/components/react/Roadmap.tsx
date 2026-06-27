@@ -163,7 +163,7 @@ export default function Roadmap() {
               </div>
 
               <div className="rm-con-foot">
-                <a href="/prompt-pack">60+ field-tested prompts like this {'→'} the pack · $29</a>
+                <a href="/prompt-pack">60 field-tested prompts like this {'→'} the pack · $29</a>
               </div>
             </div>
           ) : (

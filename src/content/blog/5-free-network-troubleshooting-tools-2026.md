@@ -94,7 +94,7 @@ The output of `nmap -sV` is the fastest answer to "what is that mystery host on 
 - "The internet is slow" — confirm or rule out the link itself
 - Validating a new circuit before signing off
 - Comparing path A vs path B (failover testing)
-- Proving the LAN side is fine and the WAN is the bottleneck
+- Proving the LAN side is fine and [the WAN is the bottleneck](/blog/find-what-saturates-your-wan)
 - Sanity-checking a vendor's bandwidth claim
 
 **The five-second workflow:**
@@ -132,7 +132,7 @@ Run it client-to-server inside the LAN first, then client-to-WAN-edge, then clie
 - Baseline comparison: is *this* CPU spike normal for *this* device?
 - Inventory you can actually trust
 
-**The one-time setup pays back forever.** Once it's polling your gear, you stop guessing about historical state. Walked into a "the network was slow last night" ticket? Open the graph, see the spike, find the offender. Without monitoring, that ticket is unanswerable.
+**The one-time setup pays back forever.** Once it's polling your gear, you stop guessing about historical state. Walked into a ["the network was slow last night"](/blog/troubleshoot-slow-network-performance) ticket? Open the graph, see the spike, find the offender. Without monitoring, that ticket is unanswerable.
 
 ```yaml
 # Minimum viable monitoring scope:
@@ -159,7 +159,7 @@ Run it client-to-server inside the LAN first, then client-to-WAN-edge, then clie
 - "Latency to this site is bad sometimes" — find the hop that flutters
 - ISP troubleshooting when you need data, not feelings
 - Verifying a path change after BGP failover or a route flap
-- Detecting asymmetric packet loss that regular ping misses
+- Detecting [asymmetric packet loss](/blog/diagnose-packet-loss) that regular ping misses
 
 **The first command you'll run:**
 
@@ -224,6 +224,14 @@ LibreNMS deserves its own VM — don't try to bolt it onto a workstation. The of
 ---
 
 Free tools have one trait the paid ones don't: they're still here next year, regardless of vendor pricing changes, regardless of contract status. Learning them deeply is one of the highest-leverage things a network admin can do — and the five above are where to start.
+
+---
+
+## Turn Tool Output Into Answers
+
+The pack includes prompts that turn raw MTR, Wireshark, and Nmap output into root-cause analysis — the tools find the problem, Claude explains it and recommends the fix.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=5-free-network-troubleshooting-tools-2026)**
 
 ---
 

@@ -12,7 +12,10 @@ heroAscii: |
   │  🐍  Python Automation      →  6 prompts      │
   │  📄  Documentation          →  5 prompts      │
   │  🔒  Security & Auditing    →  5 prompts      │
-  │  🤖  AI Workflows           → 10 prompts      │
+  │  🧩  Claude Projects        →  5 prompts      │
+  │  📡  Wireless               →  3 prompts      │
+  │  🤖  AI Workflows           →  7 prompts      │
+  │  🎁  Bonus                  →  5 prompts      │
   │  ⚡  Quick-Fire             → 10 prompts      │
   │                                               │
   │  packetpilotai.gumroad.com  ·  $29            │
@@ -107,7 +110,7 @@ The pack is available now on Gumroad for **$29**.
 ## Frequently Asked Questions
 
 **What's included in the Claude Prompt Pack for Network Admins?**
-60 structured prompt templates organized into seven categories: config generation (VLAN, ACL, OSPF, BGP, static routing), troubleshooting workflows, Python and Netmiko automation scripts, documentation generation, security and auditing, Claude Project system prompts, and 10 quick-fire prompts for common one-off tasks.
+60 structured prompt templates organized into nine categories — config generation (VLAN, ACL, OSPF, BGP, static routing), troubleshooting workflows, Python and Netmiko automation scripts, documentation generation, security and auditing, Claude Project system prompts, wireless networks, and AI-assisted workflows, plus a bonus set — followed by 10 quick-fire prompts for common one-off tasks.
 
 **Which vendors do the prompts cover?**
 Cisco IOS and IOS-XE are the primary platforms, with coverage for pfSense, Juniper JunOS, and Linux-based infrastructure. The prompts include vendor-specific syntax guidance and output formatting for each platform.

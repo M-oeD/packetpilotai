@@ -330,8 +330,8 @@ After a few incidents, this becomes automatic. You won't need the checklist — 
 
 ## Need the Claude Prompts Pre-Built?
 
-The prompts embedded in this checklist are simplified versions of what's in the [Claude Prompt Pack for Network Admins](/prompt-pack). The pack includes structured troubleshooting prompts that walk Claude through your specific environment — vendor, platform, VLAN layout — so you get relevant output instead of generic answers.
+The prompts embedded in this checklist are simplified versions of what's in the [Claude Prompt Pack for Network Admins](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=network-incident-checklist). The pack includes structured troubleshooting prompts that walk Claude through your specific environment — vendor, platform, VLAN layout — so you get relevant output instead of generic answers.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack)**
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=network-incident-checklist)**
 
 60 prompts. One PDF. No subscription.

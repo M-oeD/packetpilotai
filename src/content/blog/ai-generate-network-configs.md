@@ -118,7 +118,7 @@ interface Vlan20
  ip access-group GUEST_RESTRICT in
 ```
 
-Clean. No fuss.
+Clean. No fuss. Generated an ACL like this? [Audit it with Claude](/blog/using-claude-to-audit-firewall-rules) for shadowed and overly permissive rules before it goes live.
 
 ---
 
@@ -178,6 +178,14 @@ Copy these and fill in your details:
 ---
 
 AI won't replace your knowledge — it will multiply it. The admin who knows *what* they want but can get it configured in 10 seconds instead of 30 minutes is the one who ships faster and goes home on time.
+
+---
+
+## The Production Version of These Prompts
+
+The pack includes the production-tested versions of every technique here — seven config-generation prompts with `[brackets]` for your vendor, interfaces, and VLANs.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=ai-generate-network-configs)**
 
 ---
 

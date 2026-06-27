@@ -25,6 +25,34 @@ Full site audit (UI / UX / direction / "stay blog or change"). **Verdict:** keep
 
 ---
 
+## Funnel easy-wins batch — 2026-06-25 ✅ DEPLOYED LIVE 2026-06-26
+
+Acting on `tasks/funnel-audit-2026-06-25.md`. Closed the mechanical attribution + trust defects. **DEPLOYED** — Cloudflare version `96c208ba-7c34-40fc-a38c-bf714f3a3067`; verified live on packetpilotai.com (prompt-pack renders 10 categories summing to 60; homepage hero + pack Gumroad buttons carry `utm_medium=home`).
+
+**Attribution holes closed (so Gumroad analytics can see what converts):**
+- [x] Homepage hero + pack-section Gumroad buttons UTM-tagged (`utm_medium=home`, campaigns `homepage-hero` / `homepage-pack`) — `index.astro`. Verified live in built HTML.
+- [x] 4 bare blog CTAs UTM-tagged (`utm_medium=blog`, `utm_campaign=<slug>`) — `why-claude-gives-wrong-network-configs` ×2, `network-incident-checklist` ×2.
+- [x] `setting-up-claude-for-real-work` + `starter-kit.astro` Gumroad CTAs UTM-tagged.
+- [x] `/prompt-pack` pass-through script now applies a **default** attribution (`utm_medium=product-page`) on direct visits instead of returning early — direct-to-pack conversions are no longer invisible. Inbound UTMs still override (no dup params).
+
+**"60 prompts" trust defect fixed (breakdown showed 7 rows summing to 50 under a 60 headline):**
+- [x] Verified ground truth: pack = 50 numbered (9 categories) + 10 Quick-Fire = **60**. Headline was right; breakdown was wrong.
+- [x] Corrected the category breakdown to the real **10-row, sums-to-60** set (Config 7 · Troubleshoot 7 · Python 6 · Docs 5 · Security 5 · Claude Projects 5 · Wireless 3 · AI Workflows 7 · Bonus 5 · Quick-Fire 10) in all surfaces: `index.astro` ASCII box, `prompt-pack.astro` ASCII box + section grid, `claude-prompt-pack-network-admins.md` heroAscii + FAQ, `posts-meta.ts` FAQ (JSON-LD).
+- [x] Normalized stale counts: "50+ prompts" / "60+ prompts" pack refs → exact "60" (`setting-up...`, `starter-kit`, `cheatsheet`, `roadmap.astro`, `Roadmap.tsx`). (Left `BlogPost.astro` "60+ commands" — that's the CLI cheatsheet lead-magnet, not the pack.)
+- ASCII boxes aligned by exact column math (verified all rows length-match siblings); screenshots skipped — they hang on this site (lessons.md).
+
+**Needle-mover batch — 2026-06-26 ✅ DEPLOYED LIVE (version `39c0414f-bdaf-41fa-8aac-c211510e2756`):**
+- [x] **Closed the 7-evergreen-post CTA leak** — added a contextual pack CTA before the FAQ in each of `diagnose-packet-loss`, `diagnose-dns-failures-fast`, `find-what-saturates-your-wan`, `troubleshoot-slow-network-performance`, `using-claude-to-audit-firewall-rules`, `5-free-network-troubleshooting-tools-2026`, `ai-generate-network-configs`. Each = topic-tailored H2 + relevance bridge + bold buy link with `utm_medium=blog&utm_campaign=<slug>` (so every one is attributed). House-style match (content → CTA → FAQ). Build-verified all 7 in `dist/`, live-verified on packetpilotai.com.
+
+**Internal-linking batch — 2026-06-26 ✅ DEPLOYED LIVE (version `94703137-48f3-4794-9940-687c59ac9f51`):**
+- [x] **Wove 12 contextual in-body cross-links** through the 7 evergreen troubleshooting how-tos (packet-loss ↔ slow-perf ↔ WAN-saturation ↔ DNS ↔ free-tools ↔ firewall-audit ↔ config-gen). All anchored on existing prose, no keyword stuffing. `troubleshoot-slow` is the hub (3 outbound). Live-verified 200 + present.
+- [x] **Fixed a sitewide broken-link bug** found during verification: every post's "related posts" cards rendered `href="/blog/undefined"` (~78 dead links across 26 posts). Root cause: Astro 6 content-layer dropped `CollectionEntry.slug`; `BlogPost.astro` still used `post.slug`. Switched to `post.id` (matches `[...slug].astro` `params: { slug: post.id }`). Built HTML: **0** `/blog/undefined` across all 27 pages (was ~78). Lesson logged.
+
+**Still open (future batches):**
+- [ ] Lead-magnet email capture on broad evergreen posts (Beehiiv form renders site-wide via layout, but no targeted lead-magnet offer on the high-traffic how-tos).
+
+---
+
 ## Phase 0 — Foundation ✅ (live in production 2026-05-20)
 
 **Deploy:** `wrangler deploy` succeeded — version `a2b4971f-2fe2-4533-9dcc-11e096dbf181`. 25 assets uploaded. Live on `packetpilotai.com` and `packetpilotai.mc69080vill.workers.dev`.
@@ -185,7 +213,7 @@ Rolling roadmap.sh's "interactive structured artifact" format into packetpilotai
 - [x] Interactive island — `src/components/react/Roadmap.tsx` (theme-aware `--ppc` tokens so it renders red-on-amber; click→console; localStorage progress; copy-prompt)
 - [x] Page — `src/pages/roadmap.astro` (ItemList + FAQ JSON-LD; pack CTA; NewsletterBar); linked from `/tools` (nav + featured card)
 - [ ] Open-source the repo for GitHub-driven discovery
-- [ ] Follow-up: wire `/roadmap` into the global nav on home/blog/about/prompt-pack (currently only on /roadmap + /tools)
+- [x] Follow-up: wire `/roadmap` into the global nav on home/blog/about/prompt-pack — **already done by the 2026-06-04 ship** (extracted shared `Nav.astro` carries `/roadmap` + `/tools`; every main page renders `<Nav />`). This note was stale. **2026-06-16: closed the last orphan** — `404.astro` had a hand-rolled nav block (bypassed the shared component, missing roadmap/tools) AND still carried the dead `⌘K` hints the 2026-06-04 ship claimed it removed "site-wide." Swapped to `<Nav />` + killed both ⌘K hints. Build-verified (green, 404.html nav now 6 items incl. roadmap/tools, zero ⌘K). **NOT deployed — build passes, not live.**
 
 ### P3 — Walk the tree for content
 - [ ] Re-order remaining Phase 1/2 backlog so each post fills a roadmap node

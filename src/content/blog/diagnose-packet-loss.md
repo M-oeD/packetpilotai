@@ -163,7 +163,7 @@ show interfaces GigabitEthernet0/1 | include rate
 Look at the `5 minute input rate` and `5 minute output rate`. If either is near the link's maximum capacity, you've found your problem — the link is dropping packets because it can't keep up.
 
 **Fixes:**
-- Identify what's consuming the bandwidth (`show ip cache flow` or a traffic analysis tool)
+- Identify what's consuming the bandwidth (`show ip cache flow` or a traffic analysis tool) — see [how to find what's saturating your WAN](/blog/find-what-saturates-your-wan)
 - Apply QoS to prioritize critical traffic (voice, video)
 - Upgrade the link if it's consistently saturated
 
@@ -254,6 +254,14 @@ User reports packet loss / degraded connection
 ```
 
 Packet loss has a cause. Work the steps, and you'll find it.
+
+---
+
+## Skip the Setup — Use the Pre-Built Prompt
+
+The pack includes a structured packet-loss diagnosis prompt that walks Claude through your exact path — gateway, uplinks, interface counters — so you get targeted next steps instead of generic advice.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=diagnose-packet-loss)**
 
 ---
 

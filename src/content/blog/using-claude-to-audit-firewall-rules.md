@@ -217,7 +217,15 @@ Annually:
    for rebuilding the rulebase cleanly
 ```
 
-The goal isn't to let AI run your firewall — it's to take the *parts of the audit a computer should do* off your plate, so the human time goes to the calls that actually need judgment. That's the entire premise of every useful AI workflow, and firewall audits are an unusually good fit.
+The goal isn't to let AI run your firewall — it's to take the *parts of the audit a computer should do* off your plate, so the human time goes to the calls that actually need judgment. That's the entire premise of every useful AI workflow — the same structured-prompt approach behind [generating configs from a prompt](/blog/ai-generate-network-configs) — and firewall audits are an unusually good fit.
+
+---
+
+## Skip Writing the Audit Prompt
+
+The pack includes ready-made firewall-audit prompts — shadow detection, implicit-deny gaps, overly broad permits — so you stop hand-writing the audit prompt every time.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=using-claude-to-audit-firewall-rules)**
 
 ---
 

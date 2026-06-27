@@ -93,6 +93,6 @@ None of this is about talent — the operator and the amateur have the same Clau
 
 Want the kit that makes these six moves automatic? **[The Operator's Claude Starter Kit](/starter-kit/)** is free — the context-file template plus all six moves as copy-paste prompts. Set Claude up once and stop starting cold.
 
-And if you run a network or infrastructure for a living, the **PacketPilot AI prompt pack** goes deeper — 50+ field-tested prompts for audits, migrations, and the 3am comms. [$29, one file](https://packetpilotai.gumroad.com/l/vepip).
+And if you run a network or infrastructure for a living, the **PacketPilot AI prompt pack** goes deeper — 60 field-tested prompts for audits, migrations, and the 3am comms. [$29, one file](https://packetpilotai.gumroad.com/l/vepip?utm_source=packetpilotai&utm_medium=blog&utm_campaign=setting-up-claude-for-real-work).
 
 *Operator-built. We use this stuff harder than we talk about it.*

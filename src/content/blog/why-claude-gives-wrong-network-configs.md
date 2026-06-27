@@ -243,10 +243,10 @@ None of this requires a new tool. It requires a template you fill in once.
 
 ## The Pre-Built Version
 
-Building and refining these context scaffolds for every task type — BGP, VLANs, ACLs, OSPF, Python automation, firewall rules, documentation — is exactly what the [Claude Prompt Pack for Network Admins](/prompt-pack) contains.
+Building and refining these context scaffolds for every task type — BGP, VLANs, ACLs, OSPF, Python automation, firewall rules, documentation — is exactly what the [Claude Prompt Pack for Network Admins](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=why-claude-gives-wrong-network-configs) contains.
 
 Every prompt in the pack includes a pre-built context section with `[brackets]` for your specifics. Fill them in, paste into Claude, get CLI-ready output on the first try.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack)**
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=why-claude-gives-wrong-network-configs)**
 
 60 prompts. One PDF. No Python required.

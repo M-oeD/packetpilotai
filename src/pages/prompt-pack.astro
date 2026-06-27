@@ -23,8 +23,17 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
 │  🔒  Security & Audit       5 prompts                              │
 │     Firewall review, ACL audit, CVE triage, hardening checklist    │
 │                                                                    │
-│  🤖  AI Workflows          10 prompts                              │
-│     Claude Projects setup, context templates, chaining prompts     │
+│  🧩  Claude Projects        5 prompts                              │
+│     System prompts, multi-vendor translation, config diff          │
+│                                                                    │
+│  📡  Wireless               3 prompts                              │
+│     Wi-Fi surveys, 802.1X / RADIUS, wireless troubleshooting       │
+│                                                                    │
+│  🤖  AI Workflows           7 prompts                              │
+│     Root-cause from logs, NOC summaries, escalation drafts         │
+│                                                                    │
+│  🎁  Bonus                  5 prompts                              │
+│     Manager explainers, budget justification, post-mortems         │
 │                                                                    │
 │  ⚡  Quick-Fire            10 prompts                              │
 │     One-liners for common admin tasks — fast, no setup             │
@@ -86,7 +95,10 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
               { name: 'Python & Automation', count: 6, examples: ['Netmiko backup script (all devices)', 'SNMP poller with alerting', 'Nornir parallel config push'] },
               { name: 'Documentation', count: 5, examples: ['Change request template', 'Post-mortem with root cause', 'Network diagram from topology data'] },
               { name: 'Security & Audit', count: 5, examples: ['Firewall rule review + shadow detection', 'CIS benchmark checklist', 'CVE triage for network gear'] },
-              { name: 'AI Workflows', count: 10, examples: ['Claude Projects system prompt', 'Multi-step troubleshooting chain', 'Context window management'] },
+              { name: 'Claude Projects', count: 5, examples: ['Network-engineer system prompt', 'Multi-vendor config translation', 'Config diff + change summary'] },
+              { name: 'Wireless', count: 3, examples: ['Wi-Fi site survey planning', '802.1X / RADIUS configuration', 'Wireless troubleshooting workflow'] },
+              { name: 'AI Workflows', count: 7, examples: ['Root-cause analysis from logs', 'Weekly NOC summary generator', 'Vendor escalation drafting'] },
+              { name: 'Bonus', count: 5, examples: ['Explain a change to a manager', 'Budget justification write-up', 'Post-mortem facilitation'] },
               { name: 'Quick-Fire', count: 10, examples: ['Convert subnet to CIDR notation', 'Generate SNMP trap receiver config', 'Summarize show run output'] },
             ].map(({ name, count, examples }) => (
               <article class="ppc-post">
@@ -181,8 +193,11 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
           var pass = keys
             .filter(function (k) { return incoming.has(k); })
             .map(function (k) { return k + '=' + encodeURIComponent(incoming.get(k)); });
-          if (!pass.length) return;
-          var qs = pass.join('&');
+          // Direct visits (no inbound utm_*) still get attributed to the product page,
+          // so /prompt-pack conversions aren't invisible in Gumroad analytics.
+          var qs = pass.length
+            ? pass.join('&')
+            : 'utm_source=packetpilotai&utm_medium=product-page&utm_campaign=prompt-pack';
           document.querySelectorAll('a[href*="gumroad.com/l/vepip"]').forEach(function (a) {
             a.href += (a.href.indexOf('?') === -1 ? '?' : '&') + qs;
           });

@@ -153,9 +153,9 @@ const faqItems = meta.faq ?? [];
             </div>
             <div class="ppc-related-grid">
               {relatedPosts.map((post) => {
-                const pm = POSTS_META[post.id] ?? POSTS_META[post.slug] ?? { tags: [], accent: 'ok', read: '5 min' };
+                const pm = POSTS_META[post.id] ?? { tags: [], accent: 'ok', read: '5 min' };
                 return (
-                  <a class="ppc-related-card" href={`/blog/${post.slug}`}>
+                  <a class="ppc-related-card" href={`/blog/${post.id}`}>
                     <span class={`ppc-dot ${pm.accent}`}></span>
                     <span class="ppc-related-title">{post.data.title}</span>
                     <span class="ppc-related-read muted">{pm.read}</span>

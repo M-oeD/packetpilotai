@@ -71,7 +71,7 @@ ping 192.168.1.1 -n 50
 ping 192.168.1.1 -c 50
 ```
 
-If you see packet loss to the **gateway**, the problem is almost certainly between the host and the first switch — bad cable, duplex mismatch, or a flapping port.
+If you see [packet loss](/blog/diagnose-packet-loss) to the **gateway**, the problem is almost certainly between the host and the first switch — bad cable, duplex mismatch, or a flapping port.
 
 If latency is high only to **internet destinations**, the issue is at or beyond the router.
 
@@ -185,7 +185,7 @@ The **Expert Information** panel in Wireshark (Analyze → Expert Information) w
 |---|---|
 | Duplex mismatch | Force speed/duplex on switch port and NIC |
 | Bad cable | Replace cable or SFP |
-| DNS slowness | Change DNS to 8.8.8.8 / 1.1.1.1 temporarily to test; fix DNS server if confirmed |
+| [DNS slowness](/blog/diagnose-dns-failures-fast) | Change DNS to 8.8.8.8 / 1.1.1.1 temporarily to test; fix DNS server if confirmed |
 | Bandwidth saturation | QoS, traffic shaping, or upgrade the link |
 | Congested Wi-Fi channel | Change AP channel, check channel utilization |
 | Faulty switch port | Move device to another port, disable bad port |
@@ -219,6 +219,14 @@ Slow networks have causes. Follow the steps, and you'll find it — every time.
 
 ---
 
+## Run the Whole Flow Through Claude
+
+The pack includes a systematic slow-network triage prompt that runs Claude top to bottom — DNS, RTT, link saturation, physical layer — against your specific environment.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=troubleshoot-slow-network-performance)**
+
+---
+
 ## Frequently Asked Questions
 
 **What's the first thing to check when the network is slow?**
@@ -231,7 +239,7 @@ Ping an IP address (`8.8.8.8`) and compare the response time to pinging a domain
 A wired LAN connection should show sub-1ms RTT to the default gateway. Above 5ms is worth investigating. Above 20ms to the gateway almost always indicates a physical layer problem — duplex mismatch, a failing port, or a bad cable.
 
 **How do I check if my WAN link is saturated?**
-SSH to your router and run `show interfaces <WAN-interface> | include rate`. Check the "5 minute output rate." If it's consistently above 80% of the link's rated capacity, the link is saturated. See the WAN saturation guide for the next steps.
+SSH to your router and run `show interfaces <WAN-interface> | include rate`. Check the "5 minute output rate." If it's consistently above 80% of the link's rated capacity, the link is saturated. See [the WAN saturation guide](/blog/find-what-saturates-your-wan) for the next steps.
 
 **When should I capture packets instead of checking interface stats?**
 Check interface stats first — they're fast and reveal physical layer errors and bandwidth saturation without needing a capture point or span port. Move to Wireshark only when the physical layer is clean and you need to see TCP-level behavior: retransmissions, zero-window events, DNS timeouts, or application-layer failures.

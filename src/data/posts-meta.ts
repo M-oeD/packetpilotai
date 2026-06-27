@@ -110,11 +110,11 @@ export const POSTS_META: Record<string, {
     faq: [
       {
         q: 'What is the PacketPilot Claude Prompt Pack?',
-        a: 'The PacketPilot Claude Prompt Pack is a collection of 60+ pre-written prompts for network admins, organized by use case: config generation, troubleshooting, Python automation, security auditing, and documentation. It is a $29 PDF designed to save hours of prompt engineering.',
+        a: 'The PacketPilot Claude Prompt Pack is a collection of 60 pre-written prompts for network admins, organized by use case: config generation, troubleshooting, Python automation, security auditing, and documentation. It is a $29 PDF designed to save hours of prompt engineering.',
       },
       {
         q: 'What prompts are included for network administrators?',
-        a: 'The pack covers seven categories: Config Generation (Cisco, pfSense, VLANs, ACLs), Troubleshooting (diagnosis, root cause, postmortems), Python & Automation (Netmiko, NAPALM scripts), Security & Auditing (firewall reviews, ACL analysis), Documentation (runbooks, change tickets), and Quick-Fire one-liners for common tasks.',
+        a: 'The pack covers nine categories: Config Generation (Cisco, pfSense, VLANs, ACLs), Troubleshooting (diagnosis, root cause, postmortems), Python & Automation (Netmiko, NAPALM scripts), Documentation (runbooks, change tickets), Security & Auditing (firewall reviews, ACL analysis), Claude Project system prompts, Wireless (Wi-Fi surveys, 802.1X/RADIUS), and AI-assisted workflows (RCA from logs, NOC summaries), plus 10 Quick-Fire one-liners for common tasks.',
       },
       {
         q: 'Does the prompt pack work with ChatGPT or only Claude?',

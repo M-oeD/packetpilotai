@@ -26,7 +26,7 @@ WAN saturation is almost always caused by one host or one application — a runa
 
 ## What Does WAN Saturation Actually Mean?
 
-A WAN link is saturated when the offered traffic exceeds what the link can carry. When that happens, the device's egress queue fills, and once the queue overflows, packets get dropped. TCP retransmits, latency spikes, real-time apps stutter.
+A WAN link is saturated when the offered traffic exceeds what the link can carry. When that happens, the device's egress queue fills, and once the queue overflows, [packets get dropped](/blog/diagnose-packet-loss). TCP retransmits, latency spikes, real-time apps stutter.
 
 A few useful numbers to keep in mind:
 
@@ -170,7 +170,7 @@ Some saturation is constant. Some is scheduled and invisible until you look for 
 
 If you can correlate the user-reported "slow" times with a graph spike, you've found the window. Then a flow query *during* that window points at the source.
 
-If your monitoring doesn't graph history yet, that's the gap to fix first — you can't troubleshoot saturation without history. LibreNMS, PRTG, or Cloudflare's free analytics will all do this.
+If your monitoring doesn't graph history yet, that's the gap to fix first — you can't troubleshoot saturation without history. [LibreNMS, PRTG, or Cloudflare's free analytics](/blog/5-free-network-troubleshooting-tools-2026) will all do this.
 
 ---
 
@@ -263,6 +263,14 @@ User reports "WAN is slow / VPN choppy / Teams cutting out"
 ```
 
 Saturation isn't mysterious. It's one of: a host, an app, a schedule, or a capacity gap — and a flow report plus a 24-hour graph almost always tells you which.
+
+---
+
+## Let Claude Rank the Talkers
+
+The pack includes a WAN-saturation prompt that turns your `show ip cache flow` or NetFlow output into a ranked list of top talkers — plus the QoS or rate-limit fix to apply.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=find-what-saturates-your-wan)**
 
 ---
 

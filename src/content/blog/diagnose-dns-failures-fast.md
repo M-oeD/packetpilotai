@@ -56,7 +56,7 @@ ping 192.168.1.1
 |---|---|
 | Name fails, IP works | DNS — your problem |
 | Name works, IP works | Not DNS — look elsewhere |
-| Both fail | Not DNS — connectivity issue, go troubleshoot that first |
+| Both fail | Not DNS — connectivity issue, [go troubleshoot that first](/blog/troubleshoot-slow-network-performance) |
 | Name resolves but app still broken | DNS resolved, but maybe to the wrong record — keep reading |
 
 If `ping <name>` returns "could not find host" or "request timed out" but the IP responds, you've confirmed DNS. Move on.
@@ -255,6 +255,14 @@ User reports "site/app/service is down"
 ```
 
 DNS has fingerprints. Follow them, and you'll have your answer before the user finishes typing the ticket.
+
+---
+
+## Want Claude to Run This Triage?
+
+The pack includes a DNS failure triage prompt that has Claude compare resolvers, separate NXDOMAIN from SERVFAIL, and pinpoint whether the problem is the record or the resolver.
+
+**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=diagnose-dns-failures-fast)**
 
 ---
 

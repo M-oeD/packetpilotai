@@ -85,3 +85,17 @@ For large artifacts / design iteration: move the work into a persistent surface 
 This user is an operator who wants velocity and visual ground-truth, not prose to wade through. Verbose chat + premature decision-cards actively burn trust. (Validated live this session — the live-preview/HMR loop landed; the chat-walls did not.)
 
 ---
+
+## 2026-06-26 — Astro 6 dropped `CollectionEntry.slug`; use `post.id` for URLs
+
+**What happened:**
+While verifying internal links in built HTML, every blog post's "related posts" cards were emitting `href="/blog/undefined"` — ~78 dead links sitewide. The card title/read-time rendered fine (pulled via `POSTS_META[post.id]`), only the href was broken. `BlogPost.astro` built the URL with `/blog/${post.slug}`.
+
+**Rule:**
+On Astro's content-layer (`loader: glob`, Astro 5+/6), `CollectionEntry.slug` no longer exists — the identifier is `post.id`. The dynamic route here is `params: { slug: post.id }` (`blog/[...slug].astro`), so the canonical URL is `/blog/${post.id}`. Any code building a post URL or matching against the `related` array must use `post.id`, never `post.slug` (which is `undefined` and silently stringifies into the href).
+
+**Why it matters:**
+- Silent failure: `${undefined}` produces a syntactically valid link that 404s. Build stays green, page renders, only a link-target check in the *built HTML* catches it — not the dev console.
+- Cue: after any internal-linking work, grep the built `dist/` for `/undefined` and assert real target pages exist (`Test-Path dist/client/blog/<slug>/index.html`). That same check is what surfaced this.
+
+---
