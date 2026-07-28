@@ -1,0 +1,62 @@
+---
+// No-JS success landing — src/pages/api/subscribe.ts 303-redirects here after a
+// plain <form> POST. JS-enhanced submits never navigate here (inline success
+// state instead), but this page must stand alone for the progressive-enhancement
+// path to be real.
+//
+// INTERIM COPY (2026-07-28): the lede and meta description deliberately promise NO
+// confirmation email, because Beehiiv is not wired yet — signups land in D1 as
+// `pending_sync` and nothing is sent. Once BEEHIIV_API_KEY / BEEHIIV_PUB_ID are set
+// and double-opt-in is ON, restore both here and in SubscribeForm.astro:
+//   lede →  "Check your inbox to confirm the subscription — one click and you're set."
+//   meta →  "You're on the list — check your inbox to confirm."
+import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
+import StatusBar from '../components/react/StatusBar';
+import FooterBar from '../components/react/FooterBar';
+import CopilotDock from '../components/react/CopilotDock';
+import TweaksPanel from '../components/react/TweaksPanel';
+---
+
+<!doctype html>
+<html lang="en" data-theme="amber" data-density="compact">
+  <head>
+    <BaseHead
+      title="Subscribed — PacketPilot AI"
+      description="You're on the list."
+    />
+  </head>
+  <body>
+    <div class="ppc-grid-bg" aria-hidden="true"></div>
+    <div class="ppc-scanline" aria-hidden="true"></div>
+
+    <StatusBar client:load />
+
+    <Nav />
+
+    <div class="ppc-shell">
+      <main class="ppc-main">
+        <section class="ppc-hero" style="margin-bottom:32px">
+          <div class="ppc-article-kicker" style="margin-bottom:14px">
+            <span class="ppc-section-bracket">[</span>subscribed<span class="ppc-section-bracket">]</span>
+          </div>
+          <h1 class="ppc-hero-h1" style="max-width:20ch">
+            You're <em class="ppc-hero-em">on the list.</em>
+          </h1>
+          <p class="ppc-hero-lede">
+            We've got your email — nothing else needed. The next drop lands in your inbox.
+            No spam, unsubscribe anytime.
+          </p>
+          <div class="ppc-hero-cta">
+            <a class="ppc-btn primary mono" href="/blog">▸ read the blog</a>
+            <a class="ppc-btn ghost mono" href="/">▸ back home</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <FooterBar client:load />
+    <CopilotDock client:load />
+    <TweaksPanel client:load />
+  </body>
+</html>

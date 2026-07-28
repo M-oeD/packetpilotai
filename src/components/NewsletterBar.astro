@@ -1,7 +1,9 @@
 ---
 // Reusable newsletter signup bar.
-// Beehiiv form ID is the same one used inside BlogPost.astro (already proven).
+// First-party form (src/components/SubscribeForm.astro) — no more third-party
+// beehiiv embed script; adblockers no longer eat the signup.
 // Include above <FooterBar /> on pages that don't already have their own subscribe CTA.
+import SubscribeForm from './SubscribeForm.astro';
 ---
 
 <section class="ppc-newsletter" aria-label="Newsletter signup">
@@ -16,7 +18,7 @@
       No spam — unsubscribe anytime.
     </p>
     <div class="ppc-newsletter-form">
-      <script is:inline async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="29f9e65f-4f54-4279-84c7-13b055c79420"></script>
+      <SubscribeForm source="newsletter-bar" />
     </div>
   </div>
 </section>
@@ -55,7 +57,6 @@
     margin: 0 0 12px;
   }
   .ppc-newsletter-form {
-    /* Beehiiv injects its form near the script tag */
     min-height: 60px;
   }
 </style>

@@ -4,3 +4,12 @@
 # Mint at: dashboard → My Profile → API Tokens → Create Custom Token
 # Permission: Account · Account Analytics · Read   (Account Resources: your account)
 CF_ANALYTICS_TOKEN=
+
+# Newsletter intake (src/pages/api/subscribe.ts, scripts/subs.mjs, scripts/seed-subs.mjs).
+# Beehiiv dashboard → Settings → API keys/Publication ID. Requires Stripe identity
+# verification on the Beehiiv account to unlock the API (see
+# tasks/newsletter-intake-spec-2026-07-15.md, "Owner actions"). In prod, set both
+# with `wrangler secret put BEEHIIV_API_KEY` / `wrangler secret put BEEHIIV_PUB_ID`
+# instead of committing them anywhere.
+BEEHIIV_API_KEY=
+BEEHIIV_PUB_ID=

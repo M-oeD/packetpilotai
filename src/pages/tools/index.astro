@@ -7,6 +7,7 @@ import CopilotDock from '../../components/react/CopilotDock';
 import TweaksPanel from '../../components/react/TweaksPanel';
 import SubnetCalc from '../../components/react/SubnetCalc';
 import WildcardConverter from '../../components/react/WildcardConverter';
+import SubscribeForm from '../../components/SubscribeForm.astro';
 
 const title = 'Free Network Admin Tools — PacketPilot AI';
 const description = 'Free browser-based tools for network admins: subnet calculator, CIDR lookup, wildcard mask converter, and more. No install, no login.';
@@ -175,7 +176,7 @@ const description = 'Free browser-based tools for network admins: subnet calcula
               Get new tools, guides, and the free CLI cheatsheet PDF — straight to your inbox.
               No spam, unsubscribe anytime.
             </p>
-            <script is:inline async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="29f9e65f-4f54-4279-84c7-13b055c79420"></script>
+            <SubscribeForm source="tools" />
           </div>
         </section>
 

@@ -53,6 +53,31 @@ Acting on `tasks/funnel-audit-2026-06-25.md`. Closed the mechanical attribution 
 
 ---
 
+## Option B first-party newsletter intake — 🟢 LIVE IN PRODUCTION 2026-07-28
+
+**Deployed version `698b9017-f3ad-4236-8e9d-e3b86de83419`.** Email capture works for the first time since 2026-06-01. Verified end-to-end against prod: POST → `{"ok":true}` 200 → row in remote D1 `pending_sync` + `subscribed`/`sync_fail` audit events (the `sync_fail` proves best-effort Beehiiv degradation works live). Test row deleted; list clean at 0.
+
+**Beehiiv was never on the critical path** — D1 is written first and Beehiiv sync is best-effort, so signups are captured now and `npm run subs` forwards the backlog whenever the API key lands. Nothing is lost in the gap.
+
+Context: the 07-16 funnel audit (`Documents\RnD\packetpilotai-funnel-audit-2026-07-16.md`) found the Beehiiv v3 embed renders **zero visible pixels sitewide** (h:2000 iframe in a `height:0; overflow:hidden` wrapper) — last real signup June 1. Owner approved `tasks/newsletter-intake-spec-2026-07-15.md`; built by sonnet subagent (Codex CLI wedged: 0.137 too old for configured model, 0.144.5 Windows-sandbox write failure), reviewed + hardened by Claude.
+
+- [x] D1 binding `DB` → `packetpilot-subs` in wrangler.jsonc (placeholder id + owner-action comment) + `migrations/0001_subscribers.sql`
+- [x] `src/pages/api/subscribe.ts` — POST json+urlencoded, honeypot, validation, idempotent dupes, D1-first + best-effort Beehiiv, no IP/UA; hardened in review (post-insert bookkeeping can't 500 a persisted signup)
+- [x] `src/lib/subscribe-validation.js` pure helpers (8/8 node tests green)
+- [x] Shared `SubscribeForm.astro` swapped into ALL FOUR embed sites (NewsletterBar, BlogPost layout ×26 posts, starter-kit, tools) — `subscribe-forms.beehiiv.com` grep = 0 in src/
+- [x] `/subscribed` page · `scripts/subs.mjs` (`npm run subs` reconcile+report) · `scripts/seed-subs.mjs` (CSV import) · `.dev.vars.example` updated
+- [x] `npm run build` green (agent ×3 + review ×1); adapter note: `@astrojs/cloudflare@13` has no `platformProxy` option — endpoint uses `import { env } from 'cloudflare:workers'`; astro.config.mjs untouched
+- [x] ~~Owner: `wrangler d1 create packetpilot-subs`~~ → **DONE 07-28**: id `a61029ea-7e41-49f7-9f8a-831f83ec3bed` (WNAM) in wrangler.jsonc, migration applied `--remote`, `subscribers` + `sub_events` verified. Binding kept as **`DB`** — wrangler suggested `packetpilot_subs`, which would break `subscribe.ts:137`.
+- [x] ~~Deploy~~ → **DONE 07-28**, verification tests run against prod (see header). `/subscribed` 307→200; `subscribe-forms.beehiiv.com` absent from cache-busted live HTML.
+- [x] Copy-integrity fix — both success paths promised a confirmation email that cannot arrive until Beehiiv is wired. Fixed in `subscribed.astro` (lede + meta) and `SubscribeForm.astro:130` (JS path, ~40 pages). **Revert text stored in-place at both sites.**
+- [ ] **⚠️ COMMIT — highest priority.** The whole Option B build is uncommitted and now running in production, on one unbacked disk.
+- [ ] **Owner: purge Cloudflare cache.** First post-deploy fetch was `CF-Cache-Status: HIT` serving the *old* dead-embed HTML; cache-busted fetch is clean. Until purged/expired, some visitors still get the broken embed. Dashboard → Caching → Purge Everything.
+- [ ] **Owner: Cloudflare WAF rate rule on `/api/subscribe`** (e.g. 10 req/min/IP) — same dashboard visit as the purge.
+- [ ] **Owner: Beehiiv Stripe identity verification → API key + Pub ID** → `wrangler secret put` ×2; decide double-opt-in (recommend ON). Then `npm run subs` back-fills every `pending_sync` row, and restore the confirmation copy.
+- [ ] **Owner: export Beehiiv subscriber CSV** → `node scripts/seed-subs.mjs <csv>`
+
+---
+
 ## Phase 0 — Foundation ✅ (live in production 2026-05-20)
 
 **Deploy:** `wrangler deploy` succeeded — version `a2b4971f-2fe2-4533-9dcc-11e096dbf181`. 25 assets uploaded. Live on `packetpilotai.com` and `packetpilotai.mc69080vill.workers.dev`.

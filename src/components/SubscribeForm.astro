@@ -1,0 +1,146 @@
+---
+// Shared first-party subscribe form — replaces the third-party Beehiiv loader
+// embed everywhere it used to render (NewsletterBar, BlogPost, starter-kit,
+// tools/index). Progressive enhancement:
+//   - No JS: plain <form method="post" action="/api/subscribe">, browser does a
+//     normal navigation, server responds 303 -> /subscribed (or back with
+//     ?error=1 on a validation failure).
+//   - JS: the script below intercepts submit, POSTs JSON, and swaps in an
+//     inline "✓ subscribed" state without leaving the page.
+//
+// Props:
+//   source — required. Short slug for subscribers.source ('newsletter-bar' |
+//            'blog-post' | 'starter-kit' | 'tools', etc).
+//   page   — optional. Path the form rendered on; defaults to the current path.
+interface Props {
+	source: string;
+	page?: string;
+}
+
+const { source, page = Astro.url.pathname } = Astro.props;
+const formId = `subscribe-${source}`;
+---
+
+<form class="ppc-subscribe-form" id={formId} method="post" action="/api/subscribe" data-subscribe-form>
+	<input type="hidden" name="source" value={source} />
+	<input type="hidden" name="page" value={page} />
+	<!-- Honeypot: hidden from sighted/keyboard users, visible to bots that fill every field. -->
+	<div class="ppc-subscribe-hp" aria-hidden="true">
+		<label for={`${formId}-website`}>Website</label>
+		<input type="text" id={`${formId}-website`} name="website" tabindex="-1" autocomplete="off" />
+	</div>
+	<div class="ppc-subscribe-row">
+		<input
+			class="ppc-subscribe-input mono"
+			type="email"
+			name="email"
+			placeholder="you@domain.com"
+			required
+			maxlength="254"
+			aria-label="Email address"
+		/>
+		<button class="ppc-btn primary mono ppc-subscribe-btn" type="submit">Subscribe</button>
+	</div>
+	<p class="ppc-subscribe-status mono" data-subscribe-status role="status" aria-live="polite"></p>
+</form>
+
+<style>
+	.ppc-subscribe-form {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.ppc-subscribe-hp {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+	.ppc-subscribe-row {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+	.ppc-subscribe-input {
+		flex: 1 1 220px;
+		min-width: 0;
+		padding: 10px 12px;
+		background: var(--ppc-bg-2);
+		border: 1px solid var(--ppc-border);
+		border-radius: var(--ppc-radius);
+		color: var(--ppc-text);
+		font-size: 13px;
+	}
+	.ppc-subscribe-input:focus {
+		outline: none;
+		border-color: var(--ppc-accent);
+	}
+	.ppc-subscribe-btn {
+		flex: 0 0 auto;
+	}
+	.ppc-subscribe-status {
+		min-height: 1.2em;
+		font-size: 12px;
+		margin: 0;
+		color: var(--ppc-muted);
+	}
+	.ppc-subscribe-status.is-ok {
+		color: var(--ppc-ok);
+	}
+	.ppc-subscribe-status.is-err {
+		color: var(--ppc-down);
+	}
+	.ppc-subscribe-form.is-done .ppc-subscribe-row {
+		display: none;
+	}
+</style>
+
+<script>
+	// Progressive enhancement only — with JS disabled the form above still
+	// works via a plain POST + 303 redirect to /subscribed.
+	function initSubscribeForms(root) {
+		root.querySelectorAll('form[data-subscribe-form]').forEach((form) => {
+			if (form.dataset.enhanced) return;
+			form.dataset.enhanced = 'true';
+
+			const status = form.querySelector('[data-subscribe-status]');
+			const setStatus = (text, kind) => {
+				if (!status) return;
+				status.textContent = text;
+				status.className = 'ppc-subscribe-status mono' + (kind ? ` is-${kind}` : '');
+			};
+
+			form.addEventListener('submit', async (e) => {
+				e.preventDefault();
+				const btn = form.querySelector('button[type="submit"]');
+				const payload = Object.fromEntries(new FormData(form).entries());
+				if (btn) btn.disabled = true;
+				setStatus('Sending…');
+
+				try {
+					const res = await fetch('/api/subscribe', {
+						method: 'POST',
+						headers: { 'content-type': 'application/json', accept: 'application/json' },
+						body: JSON.stringify(payload),
+					});
+					const json = await res.json().catch(() => ({}));
+					if (res.ok && json.ok) {
+						form.classList.add('is-done');
+						// INTERIM (2026-07-28): no confirmation email exists until Beehiiv is wired —
+					// restore 'check your inbox to confirm.' once the secrets are set + double-opt-in ON.
+					setStatus('✓ subscribed — the next drop lands in your inbox.', 'ok');
+					} else {
+						if (btn) btn.disabled = false;
+						setStatus('That email didn’t work — check it and try again.', 'err');
+					}
+				} catch {
+					if (btn) btn.disabled = false;
+					setStatus('Network hiccup — try again.', 'err');
+				}
+			});
+		});
+	}
+
+	initSubscribeForms(document);
+</script>

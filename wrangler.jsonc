@@ -9,5 +9,15 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"d1_databases": [
+		{
+			// Created 2026-07-28 via `wrangler d1 create packetpilot-subs` (region WNAM).
+			// Binding MUST stay "DB" — src/pages/api/subscribe.ts reads env.DB. Do not
+			// rename it to wrangler's suggested "packetpilot_subs".
+			"binding": "DB",
+			"database_name": "packetpilot-subs",
+			"database_id": "a61029ea-7e41-49f7-9f8a-831f83ec3bed"
+		}
+	]
 }
