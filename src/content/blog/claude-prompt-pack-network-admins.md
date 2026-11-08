@@ -18,7 +18,7 @@ heroAscii: |
   │  🎁  Bonus                  →  5 prompts      │
   │  ⚡  Quick-Fire             → 10 prompts      │
   │                                               │
-  │  packetpilotai.gumroad.com  ·  $29            │
+  │  packetpilotai.gumroad.com                    │
   └───────────────────────────────────────────────┘
 ---
 
@@ -95,7 +95,7 @@ For best results:
 
 ## Get It
 
-The pack is available now on Gumroad for **$29**.
+The pack is available now on Gumroad.
 
 **[→ Get the Claude Prompt Pack for Network Admins](https://packetpilotai.gumroad.com/l/vepip?utm_source=packetpilotai&utm_medium=blog&utm_campaign=claude-prompt-pack-network-admins)**
 

@@ -8,6 +8,7 @@ import TweaksPanel from '../components/react/TweaksPanel';
 import NewsletterBar from '../components/NewsletterBar.astro';
 import Roadmap from '../components/react/Roadmap';
 import { ROADMAP, ROADMAP_NODE_COUNT, ROADMAP_POST_COUNT } from '../data/roadmap';
+import { PACK_PRICE, PACK_PROMPTS } from '../consts';
 
 const title = 'AI Network Engineering Roadmap — Claude for Network Engineers | PacketPilot AI';
 const description =
@@ -95,10 +96,10 @@ const faq = {
             </div>
             <p class="rm-cta-text">
               Every prompt here is a sample of the system. The
-              <strong>Claude Prompt Pack for Network Admins</strong> is 60 field-tested prompts —
+              <strong>Claude Prompt Pack for Network Admins</strong> is {PACK_PROMPTS} field-tested prompts —
               config generation, troubleshooting, Python automation, security auditing — organized and ready to run.
             </p>
-            <a class="ppc-btn primary" href="/prompt-pack">Get the pack · $29</a>
+            <a class="ppc-btn primary" href="/prompt-pack">Get the pack · {PACK_PRICE}</a>
           </div>
         </section>
 

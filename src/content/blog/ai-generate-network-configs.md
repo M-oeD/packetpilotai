@@ -185,7 +185,7 @@ AI won't replace your knowledge — it will multiply it. The admin who knows *wh
 
 The pack includes the production-tested versions of every technique here — seven config-generation prompts with `[brackets]` for your vendor, interfaces, and VLANs.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=ai-generate-network-configs)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=ai-generate-network-configs)**
 
 ---
 

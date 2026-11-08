@@ -5,6 +5,10 @@ import StatusBar from '../components/react/StatusBar';
 import FooterBar from '../components/react/FooterBar';
 import CopilotDock from '../components/react/CopilotDock';
 import TweaksPanel from '../components/react/TweaksPanel';
+import { PACK_PRICE, PACK_PROMPTS } from '../consts';
+
+// Price tag for the ASCII box; padStart right-aligns it so the border stays put at any price.
+const priceTag = `──── ${PACK_PRICE} ──── `;
 
 const packAscii = `┌─ PROMPT PACK v1 ────────────────────────────────────────────────────────┐
 │                                                                    │
@@ -38,7 +42,7 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
 │  ⚡  Quick-Fire            10 prompts                              │
 │     One-liners for common admin tasks — fast, no setup             │
 │                                                                    │
-│  packetpilot.ai/prompt-pack                        ──── $29 ──── │
+│  packetpilot.ai/prompt-pack${priceTag.padStart(38)}│
 └────────────────────────────────────────────────────────────────────┘`;
 ---
 
@@ -47,7 +51,7 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
   <head>
     <BaseHead
       title="Prompt Pack v1 — PacketPilot AI"
-      description="60 production-ready Claude prompts for network admins. Config generation, troubleshooting, Python automation, security audits, and more. $29."
+      description={`${PACK_PROMPTS} production-ready Claude prompts for network admins. Config generation, troubleshooting, Python automation, security audits, and more. ${PACK_PRICE}.`}
     />
   </head>
   <body>
@@ -67,7 +71,7 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
             <span class="ppc-section-bracket">[</span>prompt-pack.v1<span class="ppc-section-bracket">]</span>
           </div>
           <h1 class="ppc-hero-h1" style="max-width:20ch">
-            60 prompts.<br /><em class="ppc-hero-em">One PDF.</em> $29.
+            {PACK_PROMPTS} prompts.<br /><em class="ppc-hero-em">One PDF.</em> {PACK_PRICE}.
           </h1>
           <p class="ppc-hero-lede">
             Stop writing prompts from scratch every time you open Claude.
@@ -171,9 +175,9 @@ const packAscii = `┌─ PROMPT PACK v1 ─────────────
 
     <!-- Sticky CTA -->
     <div style="position:fixed;bottom:0;left:0;right:0;z-index:25;background:var(--ppc-bg-2);border-top:1px solid var(--ppc-border);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:20px">
-      <span class="mono muted" style="font-size:12px">60 prompts · PDF · lifetime updates</span>
+      <span class="mono muted" style="font-size:12px">{PACK_PROMPTS} prompts · PDF · lifetime updates</span>
       <a class="ppc-btn primary" href="https://packetpilotai.gumroad.com/l/vepip" target="_blank" rel="noopener">
-        <span class="mono">▸ get the pack · $29</span>
+        <span class="mono">▸ get the pack · {PACK_PRICE}</span>
       </a>
     </div>
 

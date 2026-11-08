@@ -225,7 +225,7 @@ The goal isn't to let AI run your firewall — it's to take the *parts of the au
 
 The pack includes ready-made firewall-audit prompts — shadow detection, implicit-deny gaps, overly broad permits — so you stop hand-writing the audit prompt every time.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=using-claude-to-audit-firewall-rules)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=using-claude-to-audit-firewall-rules)**
 
 ---
 

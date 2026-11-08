@@ -195,4 +195,4 @@ Showdown #02 — same three models, a different muscle: *"write a Netmiko script
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the next head-to-head when it ships.
 
-— **Want the structured prompts that score six-for-six?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=showdown-01-claude-vs-chatgpt-vs-gemini-bgp) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the structured prompts that score six-for-six?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=showdown-01-claude-vs-chatgpt-vs-gemini-bgp) — 60 production prompts for network admins, lifetime updates.

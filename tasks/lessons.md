@@ -99,3 +99,17 @@ On Astro's content-layer (`loader: glob`, Astro 5+/6), `CollectionEntry.slug` no
 - Cue: after any internal-linking work, grep the built `dist/` for `/undefined` and assert real target pages exist (`Test-Path dist/client/blog/<slug>/index.html`). That same check is what surfaced this.
 
 ---
+
+## 2026-11-07 — Count the PDF before touching any prompt count
+
+**What happened:**
+The Gumroad listing drifted to "54 prompts" (title "53+1"), a new cover said "40+", and the site said 60: three numbers, and nobody had counted the product. The approved plan was to align the site with Gumroad. Counting the PDF first showed 60 (50 numbered prompts in 9 categories + 10 quick-fire, 51–60). Gumroad's list had dropped the 5-prompt "Bonus Prompts" category and called AI-Assisted 6 instead of 7. Aligning to Gumroad would have made the site wrong.
+
+**Rule:**
+The PDF (`products/claude-prompt-pack-v1/`, gitignored) is the only source for counts: count it before changing a count anywhere. The site states price and count only through `PACK_PRICE` / `PACK_PROMPTS` in `src/consts.ts`; blog markdown never states the price.
+There is no PDF library on this PC (no pypdf, no poppler). The PDF is a Chrome/Skia print with Type0 fonts, so decode its text from the ToUnicode CMaps with stdlib Python (`zlib` + regex), and match headers on whitespace-stripped text because bold runs decode letter-spaced. The markdown beside the PDF is the same content (the PDF's embedded title is that file's name).
+
+**Why it matters:**
+A count that drops at checkout ("60" on the site, "54" on Gumroad) is a trust leak on the money path. Hardcoding price and count in 34 files is what let them drift; with one setting, the next change is one edit.
+
+---

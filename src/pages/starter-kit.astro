@@ -6,6 +6,7 @@ import FooterBar from '../components/react/FooterBar';
 import CopilotDock from '../components/react/CopilotDock';
 import TweaksPanel from '../components/react/TweaksPanel';
 import SubscribeForm from '../components/SubscribeForm.astro';
+import { PACK_PRICE, PACK_PROMPTS } from '../consts';
 
 const contextTemplate = `# Context for Claude
 
@@ -127,16 +128,16 @@ const moves = [
           </div>
         </section>
 
-        <!-- Soft $29 path -->
+        <!-- Soft paid path: the prompt pack -->
         <section class="ppc-section">
           <div class="ppc-pack" style="grid-template-columns:1fr">
             <div class="ppc-pack-right">
               <p class="ppc-pack-blurb">
                 Run a network or infrastructure for a living? The <strong>PacketPilot AI prompt pack</strong> goes
-                deeper — 60 field-tested prompts for audits, migrations, troubleshooting, and the 3am comms.
+                deeper — {PACK_PROMPTS} field-tested prompts for audits, migrations, troubleshooting, and the 3am comms.
               </p>
               <a class="ppc-btn ghost mono" href="https://packetpilotai.gumroad.com/l/vepip?utm_source=packetpilotai&utm_medium=page&utm_campaign=starter-kit" target="_blank" rel="noopener">
-                ▸ the full field pack <span class="muted">$29</span>
+                ▸ the full field pack <span class="muted">{PACK_PRICE}</span>
               </a>
             </div>
           </div>

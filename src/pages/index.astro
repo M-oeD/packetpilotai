@@ -1,6 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, PACK_PRICE, PACK_PROMPTS } from '../consts';
 import { getCollection } from 'astro:content';
 import { STREAM_LIST } from '../data/streams';
 import StatusBar from '../components/react/StatusBar';
@@ -16,6 +16,9 @@ import Nav from '../components/Nav.astro';
 const allPosts = await getCollection('blog');
 const published = allPosts.filter((p) => !p.data.draft);
 const publishedCount = published.length;
+
+// Price tag for the pack's ASCII box; padStart right-aligns it so the border stays put at any price.
+const priceTag = `──── ${PACK_PRICE} ──── `;
 
 // Newest post in a stream first: higher streamNum wins, then newer pubDate.
 const latestFirst = (a, b) => {
@@ -99,13 +102,13 @@ const streams = STREAM_LIST.map((s) => {
                   <span class="mono">▸ ls /blog</span>
                 </a>
                 <a class="ppc-btn ghost mono" href="https://packetpilotai.gumroad.com/l/vepip?utm_source=packetpilotai&utm_medium=home&utm_campaign=homepage-hero" target="_blank" rel="noopener">
-                  ▸ get prompt pack <span class="muted">$29</span>
+                  ▸ get prompt pack <span class="muted">{PACK_PRICE}</span>
                 </a>
               </div>
               <div class="ppc-hero-meta muted">
                 <span>{publishedCount} published</span>
                 <span class="sep">·</span>
-                <span>60 prompts</span>
+                <span>{PACK_PROMPTS} prompts</span>
                 <span class="sep">·</span>
                 <span>updated 2026-05-31</span>
               </div>
@@ -200,7 +203,7 @@ const streams = STREAM_LIST.map((s) => {
           <div class="ppc-section-title">
             <div>
               <div class="ppc-section-kicker mono"><span class="ppc-section-bracket">[</span>prompt-pack.v1<span class="ppc-section-bracket">]</span></div>
-              <h2 class="ppc-section-h2">60 prompts. One PDF. $29.</h2>
+              <h2 class="ppc-section-h2">{PACK_PROMPTS} prompts. One PDF. {PACK_PRICE}.</h2>
             </div>
             <div class="ppc-section-hint muted">ships now</div>
           </div>
@@ -219,7 +222,7 @@ const streams = STREAM_LIST.map((s) => {
 │  🎁  bonus                   ×  5 prompts      │
 │  ⚡  quick-fire              × 10 prompts      │
 │                                                │
-│  packetpilot.ai/pack            ──── $29 ──── │
+│  packetpilot.ai/pack${priceTag.padStart(26)}│
 └────────────────────────────────────────────────┘`}</pre>
             </div>
             <div class="ppc-pack-right">
@@ -234,7 +237,7 @@ const streams = STREAM_LIST.map((s) => {
                 <li><span class="ok">✓</span> lifetime updates · no subscription</li>
               </ul>
               <a class="ppc-btn primary" href="https://packetpilotai.gumroad.com/l/vepip?utm_source=packetpilotai&utm_medium=home&utm_campaign=homepage-pack" target="_blank" rel="noopener">
-                <span class="mono">▸ get the pack · $29</span>
+                <span class="mono">▸ get the pack · {PACK_PRICE}</span>
               </a>
             </div>
           </div>

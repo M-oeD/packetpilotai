@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ROADMAP, ROADMAP_NODE_COUNT } from '../../data/roadmap';
+import { PACK_PRICE, PACK_PROMPTS } from '../../consts';
 
 const STORE_KEY = 'ppc-roadmap-progress-v1';
 const SEGMENTS = 24;
@@ -163,7 +164,7 @@ export default function Roadmap() {
               </div>
 
               <div className="rm-con-foot">
-                <a href="/prompt-pack">60 field-tested prompts like this {'→'} the pack · $29</a>
+                <a href="/prompt-pack">{PACK_PROMPTS} field-tested prompts like this {'→'} the pack · {PACK_PRICE}</a>
               </div>
             </div>
           ) : (

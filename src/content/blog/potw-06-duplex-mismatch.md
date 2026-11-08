@@ -134,4 +134,4 @@ POTW #07 — an interface averaging a sleepy 8% utilization that drops packets a
 
 — **Subscribe to Packet Drop** (newsletter form below) to get the puzzle when it ships Friday.
 
-— **Want the prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=potw-06-duplex-mismatch) — 60 production prompts for network admins, $29, lifetime updates.
+— **Want the prompts ready-to-paste?** [Get the Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=potw-06-duplex-mismatch) — 60 production prompts for network admins, lifetime updates.

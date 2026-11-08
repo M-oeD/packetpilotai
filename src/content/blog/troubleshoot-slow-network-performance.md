@@ -223,7 +223,7 @@ Slow networks have causes. Follow the steps, and you'll find it — every time.
 
 The pack includes a systematic slow-network triage prompt that runs Claude top to bottom — DNS, RTT, link saturation, physical layer — against your specific environment.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=troubleshoot-slow-network-performance)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=troubleshoot-slow-network-performance)**
 
 ---
 

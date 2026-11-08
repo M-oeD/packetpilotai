@@ -270,7 +270,7 @@ Saturation isn't mysterious. It's one of: a host, an app, a schedule, or a capac
 
 The pack includes a WAN-saturation prompt that turns your `show ip cache flow` or NetFlow output into a ranked list of top talkers — plus the QoS or rate-limit fix to apply.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=find-what-saturates-your-wan)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=find-what-saturates-your-wan)**
 
 ---
 

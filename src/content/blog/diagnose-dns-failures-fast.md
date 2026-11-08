@@ -262,7 +262,7 @@ DNS has fingerprints. Follow them, and you'll have your answer before the user f
 
 The pack includes a DNS failure triage prompt that has Claude compare resolvers, separate NXDOMAIN from SERVFAIL, and pinpoint whether the problem is the record or the resolver.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=diagnose-dns-failures-fast)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=diagnose-dns-failures-fast)**
 
 ---
 

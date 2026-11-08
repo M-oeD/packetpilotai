@@ -231,7 +231,7 @@ Free tools have one trait the paid ones don't: they're still here next year, reg
 
 The pack includes prompts that turn raw MTR, Wireshark, and Nmap output into root-cause analysis — the tools find the problem, Claude explains it and recommends the fix.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=5-free-network-troubleshooting-tools-2026)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=5-free-network-troubleshooting-tools-2026)**
 
 ---
 

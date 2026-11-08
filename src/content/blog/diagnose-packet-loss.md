@@ -261,7 +261,7 @@ Packet loss has a cause. Work the steps, and you'll find it.
 
 The pack includes a structured packet-loss diagnosis prompt that walks Claude through your exact path — gateway, uplinks, interface counters — so you get targeted next steps instead of generic advice.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=diagnose-packet-loss)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=diagnose-packet-loss)**
 
 ---
 

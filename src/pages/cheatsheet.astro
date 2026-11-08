@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import { PACK_PROMPTS } from '../consts';
 
 const title = 'Network Admin CLI Cheatsheet — PacketPilot AI';
 const description = 'Essential CLI commands for network admins: Cisco IOS, Linux networking, packet capture, DNS debugging, and WAN analysis. Free — save or print.';
@@ -162,7 +163,7 @@ const sections = [
       <footer class="cs-footer no-print">
         <p class="cs-footer-text">
           More guides and tools at <a class="ppc-link" href="https://packetpilotai.com">packetpilotai.com</a>.
-          Get 60 AI prompts for network admins →
+          Get {PACK_PROMPTS} AI prompts for network admins →
           <a class="ppc-link" href="/prompt-pack">prompt-pack</a>
         </p>
       </footer>

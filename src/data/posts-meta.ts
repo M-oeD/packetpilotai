@@ -1,6 +1,8 @@
 // Display metadata for PostCards — supplements the content collection
 // (content collection provides article body + pubDate; this provides card-level data)
 
+import { PACK_PRICE, PACK_PROMPTS } from '../consts';
+
 export const POSTS_META: Record<string, {
   tags: string[];
   ascii: string[];
@@ -103,14 +105,14 @@ export const POSTS_META: Record<string, {
       '│ 🐍  Python Automation     ×6  │',
       '│ 🔒  Security & Auditing   ×5  │',
       '│ ⚡  Quick-Fire           ×10  │',
-      '└──────────────  $29  ──────────┘',
+      `└──────────────  ${PACK_PRICE}  ${'─'.repeat(Math.max(0, 13 - PACK_PRICE.length))}┘`,
     ],
     accent: 'accent',
     read: '5 min',
     faq: [
       {
         q: 'What is the PacketPilot Claude Prompt Pack?',
-        a: 'The PacketPilot Claude Prompt Pack is a collection of 60 pre-written prompts for network admins, organized by use case: config generation, troubleshooting, Python automation, security auditing, and documentation. It is a $29 PDF designed to save hours of prompt engineering.',
+        a: `The PacketPilot Claude Prompt Pack is a collection of ${PACK_PROMPTS} pre-written prompts for network admins, organized by use case: config generation, troubleshooting, Python automation, security auditing, and documentation. It is a ${PACK_PRICE} PDF designed to save hours of prompt engineering.`,
       },
       {
         q: 'What prompts are included for network administrators?',

@@ -247,6 +247,6 @@ Building and refining these context scaffolds for every task type — BGP, VLANs
 
 Every prompt in the pack includes a pre-built context section with `[brackets]` for your specifics. Fill them in, paste into Claude, get CLI-ready output on the first try.
 
-**[→ Get the Claude Prompt Pack — $29](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=why-claude-gives-wrong-network-configs)**
+**[→ Get the Claude Prompt Pack](/prompt-pack?utm_source=packetpilotai&utm_medium=blog&utm_campaign=why-claude-gives-wrong-network-configs)**
 
 60 prompts. One PDF. No Python required.

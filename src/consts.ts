@@ -25,3 +25,11 @@ export const TWITTER_HANDLE = '';
 // (it is exposed in the page's HTML for anyone to read), so committing it is
 // safe. The PUBLIC_GOOGLE_SITE_VERIFICATION env var, if set, overrides this.
 export const GOOGLE_SITE_VERIFICATION = 'CwHFqyMgKDxGipUsvqXzJ_kc-Bnb5zOaJkRVJx6gNzA';
+
+// The prompt pack: the one place the site states its price and prompt count. Pages, components
+// and POSTS_META read these; blog markdown can't import them, so posts never state the price.
+// PACK_PRICE must match the Gumroad listing (packetpilotai.gumroad.com/l/vepip).
+// PACK_PROMPTS is what the PDF contains: 50 numbered prompts in 9 categories + 10 quick-fire
+// (counted from the PDF itself, 2026-11-07).
+export const PACK_PRICE = '$18.54';
+export const PACK_PROMPTS = 60;
